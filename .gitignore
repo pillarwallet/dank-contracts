@@ -1,0 +1,4 @@
+.vscode
+config.js
+node_modules
+/erc721/build
