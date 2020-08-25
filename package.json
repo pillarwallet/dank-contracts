@@ -8,7 +8,11 @@
     "sol:721:abi": "solcjs --abi -o ./erc721/build --base-path ./erc721/build ./erc721/build/ERC721.sol --overwrite",
     "sol:721:bin": "solcjs --bin -o ./erc721/build --base-path ./erc721/build ./erc721/build/ERC721.sol --overwrite",
     "sol:721:merge": "sol-merger --export-plugin SPDXLicenseRemovePlugin \"./erc721/source/ERC721.sol\" ./erc721/build",
-    "compile:721": "npm run sol:721:merge && npm run sol:721:abi && npm run sol:721:bin"
+    "compile:721": "npm run sol:721:merge && npm run sol:721:abi && npm run sol:721:bin",
+    "sol:1155:abi": "solcjs --abi -o ./erc1155/build --base-path ./erc1155/build ./erc1155/build/ERC1155.sol --overwrite",
+    "sol:1155:bin": "solcjs --bin -o ./erc1155/build --base-path ./erc1155/build ./erc1155/build/ERC1155.sol --overwrite",
+    "sol:1155:merge": "sol-merger --export-plugin SPDXLicenseRemovePlugin \"./erc1155/source/ERC1155.sol\" ./erc1155/build",
+    "compile:1155": "npm run sol:1155:merge && npm run sol:1155:abi && npm run sol:1155:bin"
   },
   "author": "",
   "license": "ISC",

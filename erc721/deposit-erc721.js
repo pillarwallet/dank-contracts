@@ -1,5 +1,5 @@
 const { ethers, providers } = require('ethers');
-const config = require('./../config');
+const config = require('../config');
 const fs = require('fs');
 const path = require('path');
 const appRootPath = require('app-root-path');
@@ -15,12 +15,12 @@ const getERC721Abi = () => {
 };
 
 const abi = getERC721Abi();
-const mintMethod = abi.filter(m => m.name === 'publicMint')[0];
+const method = abi.filter(m => m.name === 'transferFrom')[0];
 
 async function main () {
   const encodedContractFunction = abiCoder.encodeFunctionCall(
-    mintMethod,
-    [config.owner, '0x2']
+    method,
+    [config.owner, config.erc1155Address, '0x2']
   );
 
   const wallet = new ethers.Wallet(config.privateKey, ethProvider);
