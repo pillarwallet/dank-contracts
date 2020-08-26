@@ -23,9 +23,9 @@ const contract = new ethers.Contract(
 );
 
 async function main () {
-  const depositOf = await contract.depositOf(config.erc721Address, '0x2');
-  console.info(`depositOf ${config.erc721Address}`, depositOf.toString());
-  const balanceOf = await contract.balanceOf(config.owner, '0x2');
+  const depositOf = await contract.dispensedOf(process.env.id);
+  console.info(`dispensedOf ${process.env.id}`, depositOf.toString());
+  const balanceOf = await contract.balanceOf(config.owner, process.env.id);
   console.info(`balanceOf ${config.owner}`, balanceOf.toString());
 }
 

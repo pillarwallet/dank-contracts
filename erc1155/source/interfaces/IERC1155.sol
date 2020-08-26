@@ -95,11 +95,11 @@ interface IERC1155 {
   function balanceOfBatch(address[] calldata _owners, uint256[] calldata _ids) external view returns (uint256[] memory);
 
   /**
-   * @notice Get the deposit of Token
+   * @notice Get the dispensed amount of ERC1155 tokens
    * @param _id     ID of the Token
-   * @return        Amount of tokens that were deposited on creation
+   * @return        Amount of ERC1155 tokens that were dispensed on deposit of ERC721 token _id
    */
-  function depositOf(address _operator, uint256 _id) external view returns (uint256);
+  function dispensedOf(uint256 _id) external view returns (uint256);
 
   /**
    * @notice Enable or disable approval for a third party ("operator") to manage all of caller's tokens

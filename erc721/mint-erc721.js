@@ -20,7 +20,7 @@ const mintMethod = abi.filter(m => m.name === 'publicMint')[0];
 async function main () {
   const encodedContractFunction = abiCoder.encodeFunctionCall(
     mintMethod,
-    [config.owner, '0x2']
+    [config.owner, process.env.id]
   );
 
   const wallet = new ethers.Wallet(config.privateKey, ethProvider);

@@ -2,7 +2,7 @@ pragma solidity ^0.6.8;
 
 import "./utils/SafeMath.sol";
 import "./interfaces/IERC1155TokenReceiver.sol";
-import "./interfaces/IERC721TokenReceiver.sol";
+import "./interfaces/IERC721TokenHolder.sol";
 import "./interfaces/IERC1155.sol";
 import "./utils/Address.sol";
 import "./utils/ERC165.sol";
@@ -11,7 +11,7 @@ import "./utils/ERC165.sol";
 /**
  * @dev Implementation of Multi-Token Standard contract
  */
-contract ERC1155 is IERC1155, ERC165, IERC721TokenReceiver {
+contract ERC1155 is IERC1155, ERC165, ERC721Holder {
   using SafeMath for uint256;
   using Address for address;
 
@@ -25,7 +25,7 @@ contract ERC1155 is IERC1155, ERC165, IERC721TokenReceiver {
 
   // Objects balances
   mapping (address => mapping(uint256 => uint256)) internal balances;
-  mapping (address => mapping(uint256 => uint256)) internal deposits; // ERC721 address => token id => amount of ERC1155 dispensed
+  mapping (uint256 => uint256) internal dispensed; // token id => amount of ERC1155 dispensed
 
   // Operator Functions
   mapping (address => mapping(address => bool)) internal operators;
@@ -227,10 +227,10 @@ contract ERC1155 is IERC1155, ERC165, IERC721TokenReceiver {
    * @return The _owner's balance of the Token type requested
    */
 
-  function depositOf(address _operator, uint256 _id)
+  function dispensedOf(uint256 _id)
     public override view returns (uint256)
   {
-    return deposits[_operator][_id];
+    return dispensed[_id];
   }
 
   /***********************************|
@@ -257,7 +257,7 @@ contract ERC1155 is IERC1155, ERC165, IERC721TokenReceiver {
    * @notice Called by contract from which tokens are transfered
    */
   function onERC721Received(
-      address operator,
+      address,
       address from,
       uint256 tokenId,
       bytes calldata
@@ -267,11 +267,11 @@ contract ERC1155 is IERC1155, ERC165, IERC721TokenReceiver {
 
       uint256 defaultAmount = 1000;
 
-      deposits[operator][tokenId] = defaultAmount;
+      dispensed[tokenId] = defaultAmount;
 
       _mint(owner, tokenId, defaultAmount, "");
 
-      return 0x150b7a02;
+      return this.onERC721Received.selector;
   }
 
   /****************************************|
