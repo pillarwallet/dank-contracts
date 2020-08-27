@@ -10,7 +10,7 @@ const ethProvider = new providers.JsonRpcProvider(
 );
 
 const getAbi = () => {
-  const json = fs.readFileSync(path.join(appRootPath.path, './erc1155/build/ERC1155.abi.json'));
+  const json = fs.readFileSync(path.join(appRootPath.path, './erc1155/build/_ERC1155_sol_ERC1155.abi'));
   return JSON.parse(json.toString());
 };
 
@@ -23,10 +23,13 @@ const contract = new ethers.Contract(
 );
 
 async function main () {
-  const depositOf = await contract.dispensedOf(process.env.id);
-  console.info(`dispensedOf ${process.env.id}`, depositOf.toString());
-  const balanceOf = await contract.balanceOf(config.owner, process.env.id);
-  console.info(`balanceOf ${config.owner}`, balanceOf.toString());
+  const packedParams = ethers.utils.solidityPack(['address', 'uint256'], [config.erc721Address, process.env.id])
+  const hash = ethers.utils.keccak256(packedParams);
+  console.info('computed has', hash);
+  const depositOf = await contract.dispensedOf(hash);
+  console.info(`dispensedOf ${hash}`, depositOf.toString());
+  const balanceOf = await contract.balanceOf(config.ownerAddress, hash);
+  console.info(`balanceOf ${config.ownerAddress}`, balanceOf.toString());
 }
 
 main();

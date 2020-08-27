@@ -13,12 +13,12 @@ interface IERC1155TokenReceiver {
    * Note: The token contract address is always the message sender
    * @param _operator  The address which called the `safeTransferFrom` function
    * @param _from      The address which previously owned the token
-   * @param _id        The id of the token being transferred
+   * @param _hash      Computed hash of erc721 contract address and its tokenId
    * @param _amount    The amount of tokens being transferred
    * @param _data      Additional data with no specified format
    * @return           `bytes4(keccak256("onERC1155Received(address,address,uint256,uint256,bytes)"))`
    */
-  function onERC1155Received(address _operator, address _from, uint256 _id, uint256 _amount, bytes calldata _data) external returns(bytes4);
+  function onERC1155Received(address _operator, address _from, bytes32 _hash, uint256 _amount, bytes calldata _data) external returns(bytes4);
 
   /**
    * @notice Handle the receipt of multiple ERC1155 token types
@@ -28,10 +28,10 @@ interface IERC1155TokenReceiver {
    * Note: The token contract address is always the message sender
    * @param _operator  The address which called the `safeBatchTransferFrom` function
    * @param _from      The address which previously owned the token
-   * @param _ids       An array containing ids of each token being transferred
+   * @param _hashes    Computed hash of erc721 contract address and its tokenId
    * @param _amounts   An array containing amounts of each token being transferred
    * @param _data      Additional data with no specified format
    * @return           `bytes4(keccak256("onERC1155BatchReceived(address,address,uint256[],uint256[],bytes)"))`
    */
-  function onERC1155BatchReceived(address _operator, address _from, uint256[] calldata _ids, uint256[] calldata _amounts, bytes calldata _data) external returns(bytes4);
+  function onERC1155BatchReceived(address _operator, address _from, bytes32[] calldata _hashes, uint256[] calldata _amounts, bytes calldata _data) external returns(bytes4);
 }

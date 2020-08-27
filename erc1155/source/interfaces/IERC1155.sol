@@ -15,7 +15,7 @@ interface IERC1155 {
    *   The total amount transferred from address 0x0 minus the total amount transferred to 0x0 may be used by clients and exchanges to be added to the "circulating supply" for a given token ID
    *   To broadcast the existence of a token ID with no initial balance, the contract SHOULD emit the TransferSingle event from `0x0` to `0x0`, with the token creator as `_operator`, and a `_amount` of 0
    */
-  event TransferSingle(address indexed _operator, address indexed _from, address indexed _to, uint256 _id, uint256 _amount);
+  event TransferSingle(address indexed _operator, address indexed _from, address indexed _to, bytes32 _hash, uint256 _amount);
 
   /**
    * @dev Either TransferSingle or TransferBatch MUST emit when tokens are transferred, including zero amount transfers as well as minting or burning
@@ -25,7 +25,7 @@ interface IERC1155 {
    *   The total amount transferred from address 0x0 minus the total amount transferred to 0x0 may be used by clients and exchanges to be added to the "circulating supply" for a given token ID
    *   To broadcast the existence of multiple token IDs with no initial balance, this SHOULD emit the TransferBatch event from `0x0` to `0x0`, with the token creator as `_operator`, and a `_amount` of 0
    */
-  event TransferBatch(address indexed _operator, address indexed _from, address indexed _to, uint256[] _ids, uint256[] _amounts);
+  event TransferBatch(address indexed _operator, address indexed _from, address indexed _to, bytes32[] _hash, uint256[] _amounts);
 
   /**
    * @dev MUST emit when an approval is updated
@@ -37,7 +37,7 @@ interface IERC1155 {
    *   URIs are defined in RFC 3986
    *   The URI MUST point a JSON file that conforms to the "ERC-1155 Metadata JSON Schema"
    */
-  event URI(string _amount, uint256 indexed _id);
+  event URI(string _amount, bytes32 indexed _hash);
 
 
   /****************************************|
@@ -54,11 +54,11 @@ interface IERC1155 {
     * When transfer is complete, this function MUST check if `_to` is a smart contract (code size > 0). If so, it MUST call `onERC1155Received` on `_to` and revert if the return amount is not `bytes4(keccak256("onERC1155Received(address,address,uint256,uint256,bytes)"))`
     * @param _from    Source address
     * @param _to      Target address
-    * @param _id      ID of the token type
+    * @param _hash    Computed hash of erc721 contract address and its tokenId
     * @param _amount  Transfered amount
     * @param _data    Additional data with no specified format, sent in call to `_to`
     */
-  function safeTransferFrom(address _from, address _to, uint256 _id, uint256 _amount, bytes calldata _data) external;
+  function safeTransferFrom(address _from, address _to, bytes32 _hash, uint256 _amount, bytes calldata _data) external;
 
   /**
     * @notice Send multiple types of Tokens from the _from address to the _to address (with safety call)
@@ -72,34 +72,34 @@ interface IERC1155 {
     * Transfers and events MUST occur in the array order they were submitted (_ids[0] before _ids[1], etc)
     * @param _from     Source addresses
     * @param _to       Target addresses
-    * @param _ids      IDs of each token type
+    * @param _hashes   Computed hash of erc721 contract address and its tokenId
     * @param _amounts  Transfer amounts per token type
     * @param _data     Additional data with no specified format, sent in call to `_to`
   */
-  function safeBatchTransferFrom(address _from, address _to, uint256[] calldata _ids, uint256[] calldata _amounts, bytes calldata _data) external;
+  function safeBatchTransferFrom(address _from, address _to, bytes32[] calldata _hashes, uint256[] calldata _amounts, bytes calldata _data) external;
 
   /**
    * @notice Get the balance of an account's Tokens
    * @param _owner  The address of the token holder
-   * @param _id     ID of the Token
+   * @param _hash   Computed hash of erc721 contract address and its tokenId
    * @return        The _owner's balance of the Token type requested
    */
-  function balanceOf(address _owner, uint256 _id) external view returns (uint256);
+  function balanceOf(address _owner, bytes32 _hash) external view returns (uint256);
 
   /**
    * @notice Get the balance of multiple account/token pairs
    * @param _owners The addresses of the token holders
-   * @param _ids    ID of the Tokens
+   * @param _hashes Computed hash of erc721 contract address and its tokenId
    * @return        The _owner's balance of the Token types requested (i.e. balance for each (owner, id) pair)
    */
-  function balanceOfBatch(address[] calldata _owners, uint256[] calldata _ids) external view returns (uint256[] memory);
+  function balanceOfBatch(address[] calldata _owners, bytes32[] calldata _hashes) external view returns (uint256[] memory);
 
   /**
    * @notice Get the dispensed amount of ERC1155 tokens
-   * @param _id     ID of the Token
+   * @param _hash   Computed hash of erc721 contract address and its tokenId
    * @return        Amount of ERC1155 tokens that were dispensed on deposit of ERC721 token _id
    */
-  function dispensedOf(uint256 _id) external view returns (uint256);
+  function dispensedOf(bytes32 _hash) external view returns (uint256);
 
   /**
    * @notice Enable or disable approval for a third party ("operator") to manage all of caller's tokens

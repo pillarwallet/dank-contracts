@@ -20,7 +20,7 @@ const method = abi.filter(m => m.name === 'safeTransferFrom')[0];
 async function main () {
   const encodedContractFunction = abiCoder.encodeFunctionCall(
     method,
-    [config.owner, config.erc1155Address, process.env.id]
+    [config.ownerAddress, config.erc1155Address, process.env.id]
   );
 
   const wallet = new ethers.Wallet(config.privateKey, ethProvider);
