@@ -9,15 +9,26 @@
     "sol:721:bin": "solcjs --bin -o ./erc721/build --base-path ./erc721/build ./erc721/build/ERC721.sol --overwrite",
     "sol:721:merge": "sol-merger --export-plugin SPDXLicenseRemovePlugin \"./erc721/source/ERC721.sol\" ./erc721/build",
     "compile:721": "npm run sol:721:merge && npm run sol:721:abi && npm run sol:721:bin",
+    
     "sol:1155:abi": "solcjs --abi -o ./erc1155/build --base-path ./erc1155/build ./erc1155/build/ERC1155.sol --overwrite",
     "sol:1155:bin": "solcjs --bin -o ./erc1155/build --base-path ./erc1155/build ./erc1155/build/ERC1155.sol --overwrite",
     "sol:1155:merge": "sol-merger --export-plugin SPDXLicenseRemovePlugin \"./erc1155/source/ERC1155.sol\" ./erc1155/build",
     "compile:1155": "npm run sol:1155:merge && npm run sol:1155:abi && npm run sol:1155:bin",
+
+    "sol:uniswap:abi": "solcjs --abi -o ./erc1155/build --base-path ./erc1155/build ./erc1155/build/ERC1155.sol --overwrite",
+    "sol:uniswap:bin": "solcjs --bin -o ./erc1155/build --base-path ./erc1155/build ./erc1155/build/ERC1155.sol --overwrite",
+    "sol:uniswap:merge": "sol-merger --export-plugin SPDXLicenseRemovePlugin \"./erc1155/source/ERC1155.sol\" ./erc1155/build",
+    "compile:uniswap": "npm run sol:1155:merge && npm run sol:1155:abi && npm run sol:1155:bin",
+    
     "deploy:721": "node ./erc721/deploy-erc721.js",
     "mint:721": "node ./erc721/mint-erc721.js",
     "deposit:721": "node ./erc721/deposit-erc721.js",
+    
     "stats:1155": "node ./erc1155/stats-erc1155.js",
     "deploy:1155": "node ./erc1155/deploy-erc1155.js",
+    
+    "deploy:uniswap": "node ./uniswap/deploy-uniswap.js",
+
     "deploy:all": "npm run deploy:1155 && npm run deploy:721",
     "compile:all": "npm run compile:1155 && npm run compile:721"
   },

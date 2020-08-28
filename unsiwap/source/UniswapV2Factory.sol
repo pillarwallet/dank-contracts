@@ -6,34 +6,35 @@ import './UniswapV2Pair.sol';
 contract UniswapV2Factory is IUniswapV2Factory {
     address public feeTo;
     address public feeToSetter;
+    address public stonkToken;
+    address public dispenser;
 
-    mapping(address => mapping(address => address)) public getPair;
+    mapping(bytes32 => address) public getPair; // all pairs are token/stonk (stonk is not used in mapping)
     address[] public allPairs;
 
-    event PairCreated(address indexed token0, address indexed token1, address pair, uint);
+    event PairCreated(bytes32 indexed tokenHash, address indexed stonkToken, address pair, uint);
 
-    constructor(address _feeToSetter) public {
+    constructor(address _feeToSetter, address _stonkToken, address _dispenser) public {
         feeToSetter = _feeToSetter;
+        stonkToken = _stonkToken
+        dispenser = _dispenser
     }
 
     function allPairsLength() external view returns (uint) {
         return allPairs.length;
     }
 
-    function createPair(uint256 tokenIdA, uint256 tokenIdB) external returns (address pair) {
-        require(tokenIdA != tokenIdB, 'UniswapV2: IDENTICAL_ADDRESSES');
-        (uint256 tokenId0, uint256 tokenId1) = tokenIdA < tokenIdB ? (tokenIdA, tokenIdB) : (tokenB, tokenA);
-        require(getPair[token0][token1] == address(0), 'UniswapV2: PAIR_EXISTS'); // single check is sufficient
+    function createPair(bytes32 tokenHash) external returns (address pair) {
+        require(getPair[tokenHash] == address(0), 'UniswapV2: PAIR_EXISTS'); // single check is sufficient
         bytes memory bytecode = type(UniswapV2Pair).creationCode;
-        bytes32 salt = keccak256(abi.encodePacked(token0, token1));
+        bytes32 salt = keccak256(abi.encodePacked(tokenHash));
         assembly {
             pair := create2(0, add(bytecode, 32), mload(bytecode), salt)
         }
-        IUniswapV2Pair(pair).initialize(token0, token1);
-        getPair[token0][token1] = pair;
-        getPair[token1][token0] = pair; // populate mapping in the reverse direction
+        IUniswapV2Pair(pair).initialize(tokenHash, stonkToken, dispenser);
+        getPair[tokenHash] = pair;
         allPairs.push(pair);
-        emit PairCreated(token0, token1, pair, allPairs.length);
+        emit PairCreated(tokenHash, stonkToken, pair, allPairs.length);
     }
 
     function setFeeTo(address _feeTo) external {
