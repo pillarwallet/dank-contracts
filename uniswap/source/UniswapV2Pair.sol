@@ -132,7 +132,7 @@ contract UniswapV2Pair is IUniswapV2Pair, UniswapV2ERC20 {
         require(liquidity > 0, 'UniswapV2: INSUFFICIENT_LIQUIDITY_MINTED');
         _mint(to, liquidity);
 
-        _update(balance0, balance1, _tokenReserve, _stonkReserve);
+        _update(tokenBalance, stonkBalance, _tokenReserve, _stonkReserve);
         if (feeOn) kLast = uint(reserve0).mul(reserve1); // reserve0 and reserve1 are up-to-date
         emit Mint(msg.sender, tokenAmount, stonkAmount);
     }
@@ -172,7 +172,7 @@ contract UniswapV2Pair is IUniswapV2Pair, UniswapV2ERC20 {
         address dispenser = IUniswapV2Factory(factory).dispenser();
 
         uint tokenBalance;
-        uint balance1;
+        uint stonkBalance;
         { // scope for _token{0,1}, avoids stack too deep errors
         address _tokenHash = tokenHash;
         address _stonkToken = IUniswapV2Factory(factory).stonkToken();

@@ -3,3 +3,4 @@ config.js
 node_modules
 /erc721/build
 /erc1155/build
+/uniswap/build
