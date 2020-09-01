@@ -26,7 +26,7 @@ contract UniswapV2Pair is IUniswapV2Pair, UniswapV2ERC20 {
 
     uint public tokenCumulativeLast;
     uint public stonkCumulativeLast;
-    uint public kLast; // reserve0 * reserve1, as of immediately after the most recent liquidity event
+    uint public kLast; // tokenReserve * stonkReserve, as of immediately after the most recent liquidity event
 
     uint private unlocked = 1;
     modifier lock() {
@@ -47,9 +47,9 @@ contract UniswapV2Pair is IUniswapV2Pair, UniswapV2ERC20 {
         require(success && (data.length == 0 || abi.decode(data, (bool))), 'UniswapV2: STONK_TRANSFER_FAILED');
     }
 
-    function _safeTokenTransfer(bytes32 tokenHash, address to, uint value) private {
+    function _safeTokenTransfer(bytes32 _tokenHash, address to, uint value) private {
         address dispenser = IUniswapV2Factory(factory).dispenser();
-        (bool success, bytes memory data) = dispenser.call(abi.encodeWithSelector(TOKEN_SELECTOR, address(this), to, tokenHash, value, ''));
+        (bool success, bytes memory data) = dispenser.call(abi.encodeWithSelector(TOKEN_SELECTOR, address(this), to, _tokenHash, value, ''));
         require(success && (data.length == 0 || abi.decode(data, (bool))), 'UniswapV2: TOKEN_TRANSFER_FAILED');
     }
 
@@ -115,9 +115,10 @@ contract UniswapV2Pair is IUniswapV2Pair, UniswapV2ERC20 {
     // this low-level function should be called from a contract which performs important safety checks
     function mint(address to) external lock returns (uint liquidity) {
         address dispenser = IUniswapV2Factory(factory).dispenser();
+        address stonkToken = IUniswapV2Factory(factory).stonkToken();
         (uint112 _tokenReserve, uint112 _stonkReserve,) = getReserves(); // gas savings
         uint tokenBalance = IERC1155(dispenser).balanceOf(address(this), tokenHash);
-        uint stonkBalance = IERC20(stonkBalance).balanceOf(address(this));
+        uint stonkBalance = IERC20(stonkToken).balanceOf(address(this));
         uint tokenAmount = tokenBalance.sub(_tokenReserve);
         uint stonkAmount = stonkBalance.sub(_stonkReserve);
 
@@ -133,7 +134,7 @@ contract UniswapV2Pair is IUniswapV2Pair, UniswapV2ERC20 {
         _mint(to, liquidity);
 
         _update(tokenBalance, stonkBalance, _tokenReserve, _stonkReserve);
-        if (feeOn) kLast = uint(reserve0).mul(reserve1); // reserve0 and reserve1 are up-to-date
+        if (feeOn) kLast = uint(tokenReserve).mul(stonkReserve); // tokenReserve and stonkReserve are up-to-date
         emit Mint(msg.sender, tokenAmount, stonkAmount);
     }
 
@@ -141,10 +142,10 @@ contract UniswapV2Pair is IUniswapV2Pair, UniswapV2ERC20 {
     function burn(address to) external lock returns (uint tokenAmount, uint stonkAmount) {
         address dispenser = IUniswapV2Factory(factory).dispenser();
         (uint112 _tokenReserve, uint112 _stonkReserve,) = getReserves(); // gas savings
-        address _tokenHash = tokenHash;                                // gas savings
+        bytes32 _tokenHash = tokenHash;                                // gas savings
         address _stonkToken = IUniswapV2Factory(factory).stonkToken();
         uint tokenBalance = IERC1155(dispenser).balanceOf(address(this), tokenHash);
-        uint stonkBalance = IERC20(stonkToken).balanceOf(address(this));
+        uint stonkBalance = IERC20(_stonkToken).balanceOf(address(this));
         uint liquidity = balanceOf[address(this)];
 
         bool feeOn = _mintFee(_tokenReserve, _stonkReserve);
@@ -157,10 +158,10 @@ contract UniswapV2Pair is IUniswapV2Pair, UniswapV2ERC20 {
         _safeTokenTransfer(_tokenHash, to, tokenAmount);
         _safeStonkTransfer(_stonkToken, to, stonkAmount);
         tokenBalance = IERC1155(dispenser).balanceOf(address(this), tokenHash);
-        stonkBalance = IERC20(stonkToken).balanceOf(address(this));
+        stonkBalance = IERC20(_stonkToken).balanceOf(address(this));
 
         _update(tokenBalance, stonkBalance, _tokenReserve, _stonkReserve);
-        if (feeOn) kLast = uint(tokenReserve).mul(stonkReserve); // reserve0 and reserve1 are up-to-date
+        if (feeOn) kLast = uint(tokenReserve).mul(stonkReserve); // tokenReserve and stonkReserve are up-to-date
         emit Burn(msg.sender, tokenAmount, stonkAmount, to);
     }
 
@@ -174,14 +175,14 @@ contract UniswapV2Pair is IUniswapV2Pair, UniswapV2ERC20 {
         uint tokenBalance;
         uint stonkBalance;
         { // scope for _token{0,1}, avoids stack too deep errors
-        address _tokenHash = tokenHash;
+        bytes32 _tokenHash = tokenHash;
         address _stonkToken = IUniswapV2Factory(factory).stonkToken();
         require(to != _stonkToken, 'UniswapV2: INVALID_TO');
         // TODO: rewrite transfer
-        if (tokenAmountOut > 0) _safeTokenTransfer(_tokenHash, to, tokenAmount); // optimistically transfer tokens
-        if (stonkAmountOut > 0) _safeStonkTransfer(_stonkToken, to, stonkAmount); // optimistically transfer tokens
+        if (tokenAmountOut > 0) _safeTokenTransfer(_tokenHash, to, tokenAmountOut); // optimistically transfer tokens
+        if (stonkAmountOut > 0) _safeStonkTransfer(_stonkToken, to, stonkAmountOut); // optimistically transfer tokens
         if (data.length > 0) IUniswapV2Callee(to).uniswapV2Call(msg.sender, tokenAmountOut, stonkAmountOut, data);
-        tokenBalance = IERC1155(dispenser).balanceOf(address(this), tokenHash);
+        tokenBalance = IERC1155(dispenser).balanceOf(address(this), _tokenHash);
         stonkBalance = IERC20(_stonkToken).balanceOf(address(this));
         }
         uint tokenAmountIn = tokenBalance > _tokenReserve - tokenAmountOut ? tokenBalance - (_tokenReserve - tokenAmountOut) : 0;
@@ -199,9 +200,10 @@ contract UniswapV2Pair is IUniswapV2Pair, UniswapV2ERC20 {
 
     // force balances to match reserves
     function skim(address to) external lock {
-        address _tokenHash = tokenHash; // gas savings
+        address _dispenser = IUniswapV2Factory(factory).dispenser();
         address _stonkToken = IUniswapV2Factory(factory).stonkToken();
-        _safeTokenTransfer(_tokenHash, to, IERC1155(dispenser).balanceOf(address(this), tokenHash).sub(tokenReserve));
+        bytes32 _tokenHash = tokenHash; // gas savings
+        _safeTokenTransfer(_tokenHash, to, IERC1155(_dispenser).balanceOf(address(this), _tokenHash).sub(tokenReserve));
         _safeStonkTransfer(_stonkToken, to, IERC20(_stonkToken).balanceOf(address(this)).sub(stonkReserve));
     }
 
@@ -209,6 +211,6 @@ contract UniswapV2Pair is IUniswapV2Pair, UniswapV2ERC20 {
     function sync() external lock {
         address dispenser = IUniswapV2Factory(factory).dispenser();
         address stonkToken = IUniswapV2Factory(factory).stonkToken();
-        _update(IERC1155(dispenser).balanceOf(address(this), tokenHash)), IERC20(stonkToken).balanceOf(address(this)), tokenReserve, stonkReserve);
+        _update(IERC1155(dispenser).balanceOf(address(this), tokenHash), IERC20(stonkToken).balanceOf(address(this)), tokenReserve, stonkReserve);
     }
 }

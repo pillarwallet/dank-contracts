@@ -16,25 +16,25 @@ contract UniswapV2Factory is IUniswapV2Factory {
 
     constructor(address _feeToSetter, address _stonkToken, address _dispenser) public {
         feeToSetter = _feeToSetter;
-        stonkToken = _stonkToken
-        dispenser = _dispenser
+        stonkToken = _stonkToken;
+        dispenser = _dispenser;
     }
 
     function allPairsLength() external view returns (uint) {
         return allPairs.length;
     }
 
-    function createPair(bytes32 tokenHash) external returns (address pair) {
-        require(getPair[tokenHash] == address(0), 'UniswapV2: PAIR_EXISTS'); // single check is sufficient
+    function createPair(bytes32 _tokenHash) external returns (address pair) {
+        require(getPair[_tokenHash] == address(0), 'UniswapV2: PAIR_EXISTS'); // single check is sufficient
         bytes memory bytecode = type(UniswapV2Pair).creationCode;
-        bytes32 salt = keccak256(abi.encodePacked(tokenHash));
+        bytes32 salt = keccak256(abi.encodePacked(_tokenHash));
         assembly {
             pair := create2(0, add(bytecode, 32), mload(bytecode), salt)
         }
-        IUniswapV2Pair(pair).initialize(tokenHash, stonkToken, dispenser);
-        getPair[tokenHash] = pair;
+        IUniswapV2Pair(pair).initialize(_tokenHash, stonkToken, dispenser);
+        getPair[_tokenHash] = pair;
         allPairs.push(pair);
-        emit PairCreated(tokenHash, stonkToken, pair, allPairs.length);
+        emit PairCreated(_tokenHash, stonkToken, pair, allPairs.length);
     }
 
     function setFeeTo(address _feeTo) external {
