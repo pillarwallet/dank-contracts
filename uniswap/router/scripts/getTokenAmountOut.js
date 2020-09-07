@@ -22,9 +22,10 @@ const routerContract = new ethers.Contract(
 );
 
 async function main () {
+  console.info('Uniswap Router: get token amount out')
   const stonkAmountIn = 50000000000;
   const tokenAmountOut = await routerContract.getTokenAmountOut(ethers.utils.hexlify(stonkAmountIn), process.env.tokenHash);
-  console.info('tokenAmountOut ', tokenAmountOut);
+  console.info('Amount: ', tokenAmountOut);
 }
 
 main();

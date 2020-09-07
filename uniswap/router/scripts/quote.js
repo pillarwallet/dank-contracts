@@ -27,7 +27,7 @@ const routerContract = new ethers.Contract(
 
 const pairAbi = getPairAbi();
 const pairContract = new ethers.Contract(
-  '0x93f38b466bFd2fAF9Fb173872dc3A39b551a08E2',
+  process.env.pair || config.pair,
   pairAbi,
   ethProvider
 );
