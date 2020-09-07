@@ -10,7 +10,7 @@ async function main () {
   const selector = ethers.utils.keccak256(ethers.utils.toUtf8Bytes('safeTransferFrom(address,address,bytes32,uint256,bytes)'));
   console.info('safeTransferFrom: ', selector.toString().slice(0, 10));
   const test = ethers.utils.keccak256(ethers.utils.toUtf8Bytes('transferFrom(address,address,uint256)'));
-  console.log('transferFrom: ', test.toString().slice(0, 10));
+  console.info('transferFrom: ', test.toString().slice(0, 10));
 }
 
 main();
