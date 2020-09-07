@@ -24,8 +24,8 @@ contract ERC1155 is IERC1155, ERC165, ERC721Holder {
   bytes4 constant internal ERC1155_BATCH_RECEIVED_VALUE = 0xbc197c81;
 
   // Objects balances
-  mapping (address => mapping(uint256 => uint256)) internal balances;
-  mapping (uint256 => uint256) internal dispensed; // token id => amount of ERC1155 dispensed
+  mapping (address => mapping(bytes32 => uint256)) internal balances;
+  mapping (bytes32 => uint256) internal dispensed; // token id => amount of ERC1155 dispensed
 
   // Operator Functions
   mapping (address => mapping(address => bool)) internal operators;
@@ -39,38 +39,61 @@ contract ERC1155 is IERC1155, ERC165, ERC721Holder {
    * @notice Transfers amount amount of an _id from the _from address to the _to address specified
    * @param _from    Source address
    * @param _to      Target address
-   * @param _id      ID of the token type
+   * @param _hash    Computed hash of erc721 contract address and its tokenId
    * @param _amount  Transfered amount
    * @param _data    Additional data with no specified format, sent in call to `_to`
    */
-  function safeTransferFrom(address _from, address _to, uint256 _id, uint256 _amount, bytes memory _data)
-    public override
+  function safeTransferFrom(address _from, address _to, bytes32 _hash, uint256 _amount, bytes memory _data)
+    public override returns (bool)
   {
     require((msg.sender == _from) || isApprovedForAll(_from, msg.sender), "ERC1155#safeTransferFrom: INVALID_OPERATOR");
     require(_to != address(0),"ERC1155#safeTransferFrom: INVALID_RECIPIENT");
     // require(_amount <= balances[_from][_id]) is not necessary since checked with safemath operations
 
-    _safeTransferFrom(_from, _to, _id, _amount);
-    _callonERC1155Received(_from, _to, _id, _amount, gasleft(), _data);
+    _safeTransferFrom(_from, _to, _hash, _amount);
+
+    // currently do not support contract receivers;
+    _callonERC1155Received(_from, _to, _hash, _amount, gasleft(), _data);
+
+    return true;
+  }
+
+  /**
+   * @notice Transfers amount amount of an _id from the _from address to the _to address specified
+   * @param _from    Source address
+   * @param _to      Target address
+   * @param _hash    Computed hash of erc721 contract address and its tokenId
+   * @param _amount  Transfered amount
+   */
+  function transferFrom(address _from, address _to, bytes32 _hash, uint256 _amount)
+    public override returns (bool)
+  {
+    require((msg.sender == _from) || isApprovedForAll(_from, msg.sender), "ERC1155#safeTransferFrom: INVALID_OPERATOR");
+    require(_to != address(0),"ERC1155#safeTransferFrom: INVALID_RECIPIENT");
+    // require(_amount <= balances[_from][_id]) is not necessary since checked with safemath operations
+
+    _safeTransferFrom(_from, _to, _hash, _amount);
+
+    return true;
   }
 
   /**
    * @notice Send multiple types of Tokens from the _from address to the _to address (with safety call)
    * @param _from     Source addresses
    * @param _to       Target addresses
-   * @param _ids      IDs of each token type
+   * @param _hashes   Computed hash of erc721 contract address and its tokenId
    * @param _amounts  Transfer amounts per token type
    * @param _data     Additional data with no specified format, sent in call to `_to`
    */
-  function safeBatchTransferFrom(address _from, address _to, uint256[] memory _ids, uint256[] memory _amounts, bytes memory _data)
+  function safeBatchTransferFrom(address _from, address _to, bytes32[] memory _hashes, uint256[] memory _amounts, bytes memory _data)
     public override
   {
     // Requirements
     require((msg.sender == _from) || isApprovedForAll(_from, msg.sender), "ERC1155#safeBatchTransferFrom: INVALID_OPERATOR");
     require(_to != address(0), "ERC1155#safeBatchTransferFrom: INVALID_RECIPIENT");
 
-    _safeBatchTransferFrom(_from, _to, _ids, _amounts);
-    _callonERC1155BatchReceived(_from, _to, _ids, _amounts, gasleft(), _data);
+    _safeBatchTransferFrom(_from, _to, _hashes, _amounts);
+    _callonERC1155BatchReceived(_from, _to, _hashes, _amounts, gasleft(), _data);
   }
 
 
@@ -82,29 +105,29 @@ contract ERC1155 is IERC1155, ERC165, ERC721Holder {
    * @notice Transfers amount amount of an _id from the _from address to the _to address specified
    * @param _from    Source address
    * @param _to      Target address
-   * @param _id      ID of the token type
+   * @param _hash    Computed hash of erc721 contract address and its tokenId
    * @param _amount  Transfered amount
    */
-  function _safeTransferFrom(address _from, address _to, uint256 _id, uint256 _amount)
+  function _safeTransferFrom(address _from, address _to, bytes32 _hash, uint256 _amount)
     internal
   {
     // Update balances
-    balances[_from][_id] = balances[_from][_id].sub(_amount); // Subtract amount
-    balances[_to][_id] = balances[_to][_id].add(_amount);     // Add amount
+    balances[_from][_hash] = balances[_from][_hash].sub(_amount); // Subtract amount
+    balances[_to][_hash] = balances[_to][_hash].add(_amount);     // Add amount
 
     // Emit event
-    emit TransferSingle(msg.sender, _from, _to, _id, _amount);
+    emit TransferSingle(msg.sender, _from, _to, _hash, _amount);
   }
 
   /**
    * @notice Verifies if receiver is contract and if so, calls (_to).onERC1155Received(...)
    */
-  function _callonERC1155Received(address _from, address _to, uint256 _id, uint256 _amount, uint256 _gasLimit, bytes memory _data)
+  function _callonERC1155Received(address _from, address _to, bytes32 _hash, uint256 _amount, uint256 _gasLimit, bytes memory _data)
     internal
   {
     // Check if recipient is contract
     if (_to.isContract()) {
-      bytes4 retval = IERC1155TokenReceiver(_to).onERC1155Received{gas: _gasLimit}(msg.sender, _from, _id, _amount, _data);
+      bytes4 retval = IERC1155TokenReceiver(_to).onERC1155Received{gas: _gasLimit}(msg.sender, _from, _hash, _amount, _data);
       require(retval == ERC1155_RECEIVED_VALUE, "ERC1155#_callonERC1155Received: INVALID_ON_RECEIVE_MESSAGE");
     }
   }
@@ -113,37 +136,37 @@ contract ERC1155 is IERC1155, ERC165, ERC721Holder {
    * @notice Send multiple types of Tokens from the _from address to the _to address (with safety call)
    * @param _from     Source addresses
    * @param _to       Target addresses
-   * @param _ids      IDs of each token type
+   * @param _hashes   Computed hash of erc721 contract address and its tokenId
    * @param _amounts  Transfer amounts per token type
    */
-  function _safeBatchTransferFrom(address _from, address _to, uint256[] memory _ids, uint256[] memory _amounts)
+  function _safeBatchTransferFrom(address _from, address _to, bytes32[] memory _hashes, uint256[] memory _amounts)
     internal
   {
-    require(_ids.length == _amounts.length, "ERC1155#_safeBatchTransferFrom: INVALID_ARRAYS_LENGTH");
+    require(_hashes.length == _amounts.length, "ERC1155#_safeBatchTransferFrom: INVALID_ARRAYS_LENGTH");
 
     // Number of transfer to execute
-    uint256 nTransfer = _ids.length;
+    uint256 nTransfer = _hashes.length;
 
     // Executing all transfers
     for (uint256 i = 0; i < nTransfer; i++) {
       // Update storage balance of previous bin
-      balances[_from][_ids[i]] = balances[_from][_ids[i]].sub(_amounts[i]);
-      balances[_to][_ids[i]] = balances[_to][_ids[i]].add(_amounts[i]);
+      balances[_from][_hashes[i]] = balances[_from][_hashes[i]].sub(_amounts[i]);
+      balances[_to][_hashes[i]] = balances[_to][_hashes[i]].add(_amounts[i]);
     }
 
     // Emit event
-    emit TransferBatch(msg.sender, _from, _to, _ids, _amounts);
+    emit TransferBatch(msg.sender, _from, _to, _hashes, _amounts);
   }
 
   /**
    * @notice Verifies if receiver is contract and if so, calls (_to).onERC1155BatchReceived(...)
    */
-  function _callonERC1155BatchReceived(address _from, address _to, uint256[] memory _ids, uint256[] memory _amounts, uint256 _gasLimit, bytes memory _data)
+  function _callonERC1155BatchReceived(address _from, address _to, bytes32[] memory _hashes, uint256[] memory _amounts, uint256 _gasLimit, bytes memory _data)
     internal
   {
     // Pass data if recipient is contract
     if (_to.isContract()) {
-      bytes4 retval = IERC1155TokenReceiver(_to).onERC1155BatchReceived{gas: _gasLimit}(msg.sender, _from, _ids, _amounts, _data);
+      bytes4 retval = IERC1155TokenReceiver(_to).onERC1155BatchReceived{gas: _gasLimit}(msg.sender, _from, _hashes, _amounts, _data);
       require(retval == ERC1155_BATCH_RECEIVED_VALUE, "ERC1155#_callonERC1155BatchReceived: INVALID_ON_RECEIVE_MESSAGE");
     }
   }
@@ -186,32 +209,32 @@ contract ERC1155 is IERC1155, ERC165, ERC721Holder {
   /**
    * @notice Get the balance of an account's Tokens
    * @param _owner  The address of the token holder
-   * @param _id     ID of the Token
+   * @param _hash    Computed hash of erc721 contract address and its tokenId
    * @return The _owner's balance of the Token type requested
    */
-  function balanceOf(address _owner, uint256 _id)
+  function balanceOf(address _owner, bytes32 _hash)
     public override view returns (uint256)
   {
-    return balances[_owner][_id];
+    return balances[_owner][_hash];
   }
 
   /**
    * @notice Get the balance of multiple account/token pairs
    * @param _owners The addresses of the token holders
-   * @param _ids    ID of the Tokens
+   * @param _hashes Computed hash of erc721 contract address and its tokenId
    * @return        The _owner's balance of the Token types requested (i.e. balance for each (owner, id) pair)
    */
-  function balanceOfBatch(address[] memory _owners, uint256[] memory _ids)
+  function balanceOfBatch(address[] memory _owners, bytes32[] memory _hashes)
     public override view returns (uint256[] memory)
   {
-    require(_owners.length == _ids.length, "ERC1155#balanceOfBatch: INVALID_ARRAY_LENGTH");
+    require(_owners.length == _hashes.length, "ERC1155#balanceOfBatch: INVALID_ARRAY_LENGTH");
 
     // Variables
     uint256[] memory batchBalances = new uint256[](_owners.length);
 
     // Iterate over each owner and token ID
     for (uint256 i = 0; i < _owners.length; i++) {
-      batchBalances[i] = balances[_owners[i]][_ids[i]];
+      batchBalances[i] = balances[_owners[i]][_hashes[i]];
     }
 
     return batchBalances;
@@ -223,14 +246,14 @@ contract ERC1155 is IERC1155, ERC165, ERC721Holder {
 
   /**
    * @notice Get the balance of an account's Tokens
-   * @param _id     ID of the Token
+   * @param _hash    Computed hash of erc721 contract address and its tokenId
    * @return The _owner's balance of the Token type requested
    */
 
-  function dispensedOf(uint256 _id)
+  function dispensedOf(bytes32 _hash)
     public override view returns (uint256)
   {
-    return dispensed[_id];
+    return dispensed[_hash];
   }
 
   /***********************************|
@@ -263,13 +286,16 @@ contract ERC1155 is IERC1155, ERC165, ERC721Holder {
       bytes calldata
   ) external override returns (bytes4) {
 
-      address owner = from;
-
+      // TODO later allow custom
       uint256 defaultAmount = 1000;
 
-      dispensed[tokenId] = defaultAmount;
+      // msg.sender = erc721 contract address
+      bytes32 uniqueHash = keccak256(abi.encodePacked(msg.sender, tokenId));
 
-      _mint(owner, tokenId, defaultAmount, "");
+      dispensed[uniqueHash] = defaultAmount;
+
+      // from = erc721 owner address
+      _mint(from, uniqueHash, defaultAmount, "");
 
       return this.onERC721Received.selector;
   }
@@ -281,20 +307,20 @@ contract ERC1155 is IERC1155, ERC165, ERC721Holder {
   /**
    * @notice Mint _amount of tokens of a given id
    * @param _to      The address to mint tokens to
-   * @param _id      Token id to mint
+   * @param _hash     Hash of erc721 contract address and its tokenId
    * @param _amount  The amount to be minted
    * @param _data    Data to pass if receiver is contract
    */
-  function _mint(address _to, uint256 _id, uint256 _amount, bytes memory _data)
+  function _mint(address _to, bytes32 _hash, uint256 _amount, bytes memory _data)
     internal
   {
     // Add _amount
-    balances[_to][_id] = balances[_to][_id].add(_amount);
+    balances[_to][_hash] = balances[_to][_hash].add(_amount);
 
     // Emit event
-    emit TransferSingle(msg.sender, address(0x0), _to, _id, _amount);
+    emit TransferSingle(msg.sender, address(0x0), _to, _hash, _amount);
 
     // Calling onReceive method if recipient is contract
-    _callonERC1155Received(address(0x0), _to, _id, _amount, gasleft(), _data);
+    _callonERC1155Received(address(0x0), _to, _hash, _amount, gasleft(), _data);
   }
 }

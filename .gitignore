@@ -3,3 +3,8 @@ config.js
 node_modules
 /erc721/build
 /erc1155/build
+/erc20/build
+/uniswap/router/build
+/uniswap/factory/build
+/uniswap/router/node_modules
+/uniswap/factory/node_modules
