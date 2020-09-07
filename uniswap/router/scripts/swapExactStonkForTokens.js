@@ -30,7 +30,7 @@ async function main () {
       ethers.utils.hexlify(minTokenAmountOut),
       process.env.tokenHash,
       config.traderAddress,
-      new Date().valueOf() + (1000 * 60 * 60 * 10), // hours
+      new Date().valueOf() + (1000 * 60 * 60 * 10), // 10 hours
     ]
   );
 

@@ -3,7 +3,6 @@ const config = require('../../../config');
 const fs = require('fs');
 const path = require('path');
 const appRootPath = require('app-root-path');
-// const abiCoder = require('web3-eth-abi');
 
 const ethProvider = new providers.JsonRpcProvider(
   config.eth_provider,

@@ -29,7 +29,7 @@ async function main () {
       0x0,
       0x0,
       config.ownerAddress,
-      new Date().valueOf() + (1000 * 60 * 60 * 10), // hours
+      new Date().valueOf() + (1000 * 60 * 60 * 10), // 10 hours
     ]
   );
 
