@@ -3,7 +3,6 @@ const config = require('../../../config');
 const fs = require('fs');
 const path = require('path');
 const appRootPath = require('app-root-path');
-const abiCoder = require('web3-eth-abi');
 
 const ethProvider = new providers.JsonRpcProvider(
   config.eth_provider,
@@ -15,7 +14,7 @@ const getRouterAbi = () => {
 };
 
 const getPairAbi = () => {
-  const json = fs.readFileSync(path.join(appRootPath.path, './build/__build_UniswapV2Factory_sol_UniswapV2Pair.abi'));
+  const json = fs.readFileSync(path.join(appRootPath.path, '../factory/build/__build_UniswapV2Factory_sol_UniswapV2Pair.abi'));
   return JSON.parse(json.toString());
 };
 
@@ -34,9 +33,14 @@ const pairContract = new ethers.Contract(
 );
 
 async function main () {
+  console.info('Pair quote');
   const reserves = await pairContract.getReserves();
   const [tokenReserve, stonkReserve] = reserves;
-  const stonkInputAmount = 10000000000;
+  console.info('Pair reserves: ')
+  console.info('Token: ', tokenReserve)
+  console.info('STNK: ', stonkReserve)
+  const stonkInputAmount = ethers.BigNumber.from(10).pow(16);
+  console.info('STNK input: ', stonkInputAmount)
   const quote = await routerContract.quote(stonkInputAmount, stonkReserve, tokenReserve);
   console.info('Quote ', quote);
 }
