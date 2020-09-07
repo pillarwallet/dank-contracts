@@ -44,7 +44,7 @@ contract ERC1155 is IERC1155, ERC165, ERC721Holder {
    * @param _data    Additional data with no specified format, sent in call to `_to`
    */
   function safeTransferFrom(address _from, address _to, bytes32 _hash, uint256 _amount, bytes memory _data)
-    public override
+    public override returns (bool)
   {
     require((msg.sender == _from) || isApprovedForAll(_from, msg.sender), "ERC1155#safeTransferFrom: INVALID_OPERATOR");
     require(_to != address(0),"ERC1155#safeTransferFrom: INVALID_RECIPIENT");
@@ -54,6 +54,27 @@ contract ERC1155 is IERC1155, ERC165, ERC721Holder {
 
     // currently do not support contract receivers;
     _callonERC1155Received(_from, _to, _hash, _amount, gasleft(), _data);
+
+    return true;
+  }
+
+  /**
+   * @notice Transfers amount amount of an _id from the _from address to the _to address specified
+   * @param _from    Source address
+   * @param _to      Target address
+   * @param _hash    Computed hash of erc721 contract address and its tokenId
+   * @param _amount  Transfered amount
+   */
+  function transferFrom(address _from, address _to, bytes32 _hash, uint256 _amount)
+    public override returns (bool)
+  {
+    require((msg.sender == _from) || isApprovedForAll(_from, msg.sender), "ERC1155#safeTransferFrom: INVALID_OPERATOR");
+    require(_to != address(0),"ERC1155#safeTransferFrom: INVALID_RECIPIENT");
+    // require(_amount <= balances[_from][_id]) is not necessary since checked with safemath operations
+
+    _safeTransferFrom(_from, _to, _hash, _amount);
+
+    return true;
   }
 
   /**

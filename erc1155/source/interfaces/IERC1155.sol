@@ -58,8 +58,9 @@ interface IERC1155 {
     * @param _amount  Transfered amount
     * @param _data    Additional data with no specified format, sent in call to `_to`
     */
-  function safeTransferFrom(address _from, address _to, bytes32 _hash, uint256 _amount, bytes calldata _data) external;
+  function safeTransferFrom(address _from, address _to, bytes32 _hash, uint256 _amount, bytes calldata _data) external returns (bool);
 
+  function transferFrom(address _from, address _to, bytes32 _hash, uint256 _amount) external returns (bool);
   /**
     * @notice Send multiple types of Tokens from the _from address to the _to address (with safety call)
     * @dev MUST emit TransferBatch event on success
