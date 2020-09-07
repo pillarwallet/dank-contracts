@@ -16,7 +16,7 @@ const getAbi = () => {
 
 const abi = getAbi();
 const contract = new ethers.Contract(
-  '0x93f38b466bFd2fAF9Fb173872dc3A39b551a08E2',
+  process.env.pair || config.pair,
   abi,
   ethProvider
 );
