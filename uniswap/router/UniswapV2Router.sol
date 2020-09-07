@@ -113,22 +113,22 @@ contract UniswapV2Router is IUniswapV2Router {
    
     // **** SWAP ****
     // requires the initial amount to have already been sent to the first pair
-    function _swapToToken(uint amountOut, bytes32 tokenHash, address _to) internal virtual {
+    function _swapToTokens(uint _tokenAmountOut, bytes32 tokenHash, address _to) internal virtual {
       address pair = IUniswapV2Factory(factory).getPair(tokenHash);
-      (uint tokenAmountOut, uint stonkAmountOut) = (amountOut, uint(0));
+      (uint tokenAmountOut, uint stonkAmountOut) = (_tokenAmountOut, uint(0));
       IUniswapV2Pair(pair).swap(
           tokenAmountOut, stonkAmountOut, _to, new bytes(0)
       );
     }
 
-    function _swapToStonk(uint amountOut, bytes32 tokenHash, address _to) internal virtual {
-      (uint tokenAmountOut, uint stonkAmountOut) = (uint(0), amountOut);
+    function _swapToStonks(uint _stonkAmountOut, bytes32 tokenHash, address _to) internal virtual {
+      (uint tokenAmountOut, uint stonkAmountOut) = (uint(0), _stonkAmountOut);
       IUniswapV2Pair(UniswapV2Library.pairFor(factory, tokenHash)).swap(
           tokenAmountOut, stonkAmountOut, _to, new bytes(0)
       );
     }
 
-    function swapExactStonkForTokens(
+    function swapExactStonksForTokens(
       uint stonkAmountIn,
       uint tokenAmountOutMin,
       bytes32 tokenHash,
@@ -138,42 +138,63 @@ contract UniswapV2Router is IUniswapV2Router {
       address stonkToken = IUniswapV2Factory(factory).stonkToken();
       address pair = IUniswapV2Factory(factory).getPair(tokenHash);
       tokenAmountOut = UniswapV2Library.getTokenAmountOut(pair, stonkAmountIn);
-      require(tokenAmountOut >= tokenAmountOutMin, 'UniswapV2Router: INSUFFICIENT_OUTPUT_AMOUNT');
+      require(tokenAmountOut >= tokenAmountOutMin, 'UniswapV2Router: INSUFFICIENT_OUTPUT_AMOUNT_TOKEN');
       TransferHelper.safeTransferFrom(
         stonkToken, msg.sender, pair, stonkAmountIn
       );
-      _swapToToken(tokenAmountOut, tokenHash, to);
+      _swapToTokens(tokenAmountOut, tokenHash, to);
     }
 
-    // TODO temporarily disabled for testing
-    // function swapExactTokensForTokens(
-    //     uint amountIn,
-    //     uint amountOutMin,
-    //     address[] calldata path,
-    //     address to,
-    //     uint deadline
-    // ) external virtual override ensure(deadline) returns (uint[] memory amounts) {
-    //     amounts = UniswapV2Library.getAmountsOut(factory, amountIn, path);
-    //     require(amounts[amounts.length - 1] >= amountOutMin, 'UniswapV2Router: INSUFFICIENT_OUTPUT_AMOUNT');
-    //     TransferHelper.safeTransferFrom(
-    //         path[0], msg.sender, UniswapV2Library.pairFor(factory, path[0], path[1]), amounts[0]
-    //     );
-    //     _swap(amounts, path, to);
-    // }
-    // function swapTokensForExactTokens(
-    //     uint amountOut,
-    //     uint amountInMax,
-    //     address[] calldata path,
-    //     address to,
-    //     uint deadline
-    // ) external virtual override ensure(deadline) returns (uint[] memory amounts) {
-    //     amounts = UniswapV2Library.getAmountsIn(factory, amountOut, path);
-    //     require(amounts[0] <= amountInMax, 'UniswapV2Router: EXCESSIVE_INPUT_AMOUNT');
-    //     TransferHelper.safeTransferFrom(
-    //         path[0], msg.sender, UniswapV2Library.pairFor(factory, path[0], path[1]), amounts[0]
-    //     );
-    //     _swap(amounts, path, to);
-    // }
+    function swapStonksForExactTokens(
+        uint tokenAmountOut,
+        uint stonkAmountInMax,
+        bytes32 tokenHash,
+        address to,
+        uint deadline
+    ) external virtual override ensure(deadline) returns (uint stonkAmountIn) {
+        address stonkToken = IUniswapV2Factory(factory).stonkToken();
+        address pair = IUniswapV2Factory(factory).getPair(tokenHash);
+        stonkAmountIn = UniswapV2Library.getStonkAmountIn(pair, tokenAmountOut);
+        require(stonkAmountIn <= stonkAmountInMax, 'UniswapV2Router: EXCESSIVE_INPUT_AMOUNT_STONK');
+        TransferHelper.safeTransferFrom(
+            stonkToken, msg.sender, pair, stonkAmountIn
+        );
+        _swapToTokens(tokenAmountOut, tokenHash, to);
+    }
+
+    function swapExactTokensForStonks(
+      uint tokenAmountIn,
+      uint stonkAmountOutMin,
+      bytes32 tokenHash,
+      address to,
+      uint deadline
+    ) external virtual override ensure(deadline) returns (uint stonkAmountOut) {
+      address pair = IUniswapV2Factory(factory).getPair(tokenHash);
+      stonkAmountOut = UniswapV2Library.getStonkAmountOut(pair, tokenAmountIn);
+      require(stonkAmountOut >= stonkAmountOutMin, 'UniswapV2Router: INSUFFICIENT_OUTPUT_AMOUNT_STONK');
+      address dispenser = IUniswapV2Factory(factory).dispenser();
+      TransferHelper.safeTransferFromERC1155(
+        dispenser, tokenHash, msg.sender, pair, tokenAmountIn
+      );
+      _swapToStonks(stonkAmountOut, tokenHash, to);
+    }
+
+    function swapTokensForExactStonks(
+        uint stonkAmountOut,
+        uint tokenAmountInMax,
+        bytes32 tokenHash,
+        address to,
+        uint deadline
+    ) external virtual override ensure(deadline) returns (uint tokenAmountIn) {
+        address pair = IUniswapV2Factory(factory).getPair(tokenHash);
+        tokenAmountIn = UniswapV2Library.getTokenAmountIn(pair, stonkAmountOut);
+        require(tokenAmountIn <= tokenAmountInMax, 'UniswapV2Router: EXCESSIVE_INPUT_AMOUNT_TOKEN');
+        address dispenser = IUniswapV2Factory(factory).dispenser();
+        TransferHelper.safeTransferFromERC1155(
+            dispenser, tokenHash, msg.sender, pair, tokenAmountIn
+        );
+        _swapToStonks(stonkAmountOut, tokenHash, to);
+    }
    
     // // **** SWAP (supporting fee-on-transfer tokens) ****
     // // requires the initial amount to have already been sent to the first pair

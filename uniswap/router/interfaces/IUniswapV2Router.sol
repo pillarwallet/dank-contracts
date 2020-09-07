@@ -29,13 +29,34 @@ interface IUniswapV2Router {
         uint deadline,
         bool approveMax, uint8 v, bytes32 r, bytes32 s
     ) external returns (uint tokenAmount, uint stonkAmount);
-    function swapExactStonkForTokens(
-        uint amountIn,
-        uint amountOutMin,
+    function swapExactStonksForTokens(
+        uint stonkAmountIn,
+        uint tokenAmountOutMin,
         bytes32 tokenHash,
         address to,
         uint deadline
-    ) external returns (uint amountOut);
+    ) external returns (uint tokenAmountOut);
+    function swapStonksForExactTokens(
+        uint tokenAmountOut,
+        uint stonkAmountInMax,
+        bytes32 tokenHash,
+        address to,
+        uint deadline
+    ) external returns (uint stonkAmountIn);
+    function swapExactTokensForStonks(
+        uint tokenAmountIn,
+        uint stonkAmountOutMin,
+        bytes32 tokenHash,
+        address to,
+        uint deadline
+    ) external returns (uint stonkAmountOut);
+    function swapTokensForExactStonks(
+        uint stonkAmountOut,
+        uint tokenAmountInMax,
+        bytes32 tokenHash,
+        address to,
+        uint deadline
+    ) external returns (uint tokenAmountIn);
     // function swapTokensForExactTokens(
     //     uint amountOut,
     //     uint amountInMax,
