@@ -23,8 +23,9 @@ const contract = new ethers.Contract(
 );
 
 async function main () {
+  console.info('UNISWAP router params')
   const factory = await contract.factory();
-  console.log('factory', factory);
+  console.info('factory: ', factory);
 }
 
 main();
