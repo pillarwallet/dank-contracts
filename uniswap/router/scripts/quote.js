@@ -37,12 +37,12 @@ async function main () {
   const reserves = await pairContract.getReserves();
   const [tokenReserve, stonkReserve] = reserves;
   console.info('Pair reserves: ')
-  console.info('Token: ', tokenReserve)
-  console.info('STNK: ', stonkReserve)
-  const stonkInputAmount = ethers.BigNumber.from(10).pow(16);
-  console.info('STNK input: ', stonkInputAmount)
+  console.info('Token: ', tokenReserve.toString())
+  console.info('STNK: ', stonkReserve.toString())
+  const stonkInputAmount = ethers.BigNumber.from(1024);
+  console.info('STNK input: ', stonkInputAmount.toString())
   const quote = await routerContract.quote(stonkInputAmount, stonkReserve, tokenReserve);
-  console.info('Quote ', quote);
+  console.info('Quote ', quote.toString());
 }
 
 main();

@@ -29,25 +29,40 @@ interface IUniswapV2Router {
         uint deadline,
         bool approveMax, uint8 v, bytes32 r, bytes32 s
     ) external returns (uint tokenAmount, uint stonkAmount);
-    function swapExactStonkForTokens(
-        uint amountIn,
-        uint amountOutMin,
+    function swapExactStonksForTokens(
+        uint stonkAmountIn,
+        uint tokenAmountOutMin,
         bytes32 tokenHash,
         address to,
         uint deadline
-    ) external returns (uint amountOut);
-    // function swapTokensForExactTokens(
-    //     uint amountOut,
-    //     uint amountInMax,
-    //     address[] calldata path,
-    //     address to,
-    //     uint deadline
-    // ) external returns (uint[] memory amounts);
+    ) external returns (uint tokenAmountOut);
+    function swapStonksForExactTokens(
+        uint tokenAmountOut,
+        uint stonkAmountInMax,
+        bytes32 tokenHash,
+        address to,
+        uint deadline
+    ) external returns (uint stonkAmountIn);
+    function swapExactTokensForStonks(
+        uint tokenAmountIn,
+        uint stonkAmountOutMin,
+        bytes32 tokenHash,
+        address to,
+        uint deadline
+    ) external returns (uint stonkAmountOut);
+    function swapTokensForExactStonks(
+        uint stonkAmountOut,
+        uint tokenAmountInMax,
+        bytes32 tokenHash,
+        address to,
+        uint deadline
+    ) external returns (uint tokenAmountIn);
 
     function quote(uint amountA, uint reserveA, uint reserveB) external pure returns (uint amountB);
     function getAmountOut(uint amountIn, uint reserveIn, uint reserveOut) external pure returns (uint amountOut);
     function getAmountIn(uint amountOut, uint reserveIn, uint reserveOut) external pure returns (uint amountIn);
-    function getTokenAmountOut(uint amountIn, bytes32 tokenHash) external view returns (uint amountOut);
+    function getTokenAmountOut(uint stonkAmountIn, bytes32 tokenHash) external view returns (uint amountOut);
+    function getStonkAmountOut(uint tokenAmountIn, bytes32 tokenHash) external view returns (uint amountOut);
     // function getAmountsIn(uint amountOut, address[] calldata path) external view returns (uint[] memory amounts);
 
     // Uniswap 02 TEMPORARILY DISABLED as is unnecessary functionality

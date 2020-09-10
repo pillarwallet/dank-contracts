@@ -14,7 +14,6 @@ const getAbi = () => {
 };
 
 const abi = getAbi();
-
 const contract = new ethers.Contract(
   config.uniswapRouter,
   abi,

@@ -49,9 +49,9 @@ library UniswapV2Library {
     }
 
     // performs chained getAmountOut calculations on any number of pairs
-    function getStonkAmountOut(address pair, uint amountIn) internal view returns (uint amountOut) {
+    function getStonkAmountOut(address pair, uint tokenAmountIn) internal view returns (uint amountOut) {
         (uint tokenReserve, uint stonkReserve) = getReserves(pair);
-        amountOut = getAmountOut(amountIn, tokenReserve, stonkReserve);
+        amountOut = getAmountOut(tokenAmountIn, tokenReserve, stonkReserve);
     }
 
     function getTokenAmountOut(address pair, uint stonkAmountIn) internal view returns (uint tokenAmountOut) {
@@ -59,14 +59,13 @@ library UniswapV2Library {
         tokenAmountOut = getAmountOut(stonkAmountIn, stonkReserve, tokenReserve);
     }
 
-    // performs chained getAmountIn calculations on any number of pairs
-    // function getAmountsIn(address factory, uint amountOut, address[] memory path) internal view returns (uint[] memory amounts) {
-    //     require(path.length >= 2, 'UniswapV2Library: INVALID_PATH');
-    //     amounts = new uint[](path.length);
-    //     amounts[amounts.length - 1] = amountOut;
-    //     for (uint i = path.length - 1; i > 0; i--) {
-    //         (uint reserveIn, uint reserveOut) = getReserves(factory, path[i - 1], path[i]);
-    //         amounts[i - 1] = getAmountIn(amounts[i], reserveIn, reserveOut);
-    //     }
-    // }
+    function getStonkAmountIn(address pair, uint tokenAmountOut) internal view returns (uint stonkAmountIn) {
+        (uint tokenReserve, uint stonkReserve) = getReserves(pair);
+        stonkAmountIn = getAmountIn(tokenAmountOut, stonkReserve, tokenReserve);
+    }
+
+    function getTokenAmountIn(address pair, uint stonkAmountOut) internal view returns (uint tokenAmountIn) {
+        (uint tokenReserve, uint stonkReserve) = getReserves(pair);
+        tokenAmountIn = getAmountIn(stonkAmountOut, tokenReserve, stonkReserve);
+    }
 }

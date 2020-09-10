@@ -201,8 +201,6 @@ contract UniswapV2Pair is IUniswapV2Pair, UniswapV2ERC20 {
 
     // force balances to match reserves
     function skim(address to) external lock {
-        // address _dispenser = IUniswapV2Factory(factory).dispenser();
-        // address _stonkToken = IUniswapV2Factory(factory).stonkToken();
         bytes32 _tokenHash = tokenHash; // gas savings
         _safeTokenTransfer(_tokenHash, to, IERC1155(dispenser).balanceOf(address(this), _tokenHash).sub(tokenReserve));
         _safeStonkTransfer(stonkToken, to, IERC20(stonkToken).balanceOf(address(this)).sub(stonkReserve));
@@ -210,8 +208,6 @@ contract UniswapV2Pair is IUniswapV2Pair, UniswapV2ERC20 {
 
     // force reserves to match balances
     function sync() external lock {
-        // address dispenser = IUniswapV2Factory(factory).dispenser();
-        // address stonkToken = IUniswapV2Factory(factory).stonkToken();
         _update(IERC1155(dispenser).balanceOf(address(this), tokenHash), IERC20(stonkToken).balanceOf(address(this)), tokenReserve, stonkReserve);
     }
 }

@@ -219,7 +219,7 @@ contract ERC20 is Context, IERC20 {
 
     // TODO: minting mechanism for testing remove after completed
 
-    function mint(address account, uint256 amount) external returns (bool) {
+    function mint(address account, uint256 amount) external override returns (bool) {
       _mint(account, amount);
       return true;
     }
