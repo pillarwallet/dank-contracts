@@ -3,7 +3,6 @@ const config = require('../../../config');
 const fs = require('fs');
 const path = require('path');
 const appRootPath = require('app-root-path');
-const abiCoder = require('web3-eth-abi');
 
 const ethProvider = new providers.JsonRpcProvider(
   config.eth_provider,
@@ -22,8 +21,10 @@ const contract = new ethers.Contract(
 );
 
 async function main () {
+  console.info('Pair reserves');
   const reserves = await contract.getReserves();
-  console.info('Reserves', reserves);
+  console.info('Token: ', reserves[0].toString());
+  console.info('Stonk: ', reserves[1].toString());
 }
 
 main();

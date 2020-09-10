@@ -18,12 +18,12 @@ const abi = getAbi();
 const method = abi.filter(m => m.name === 'addLiquidity')[0];
 
 async function main () {
-  const stonkAmountDeposit = 100000000000;
-  const tokenAmountDeposit = 10;
+  const stonkAmountDeposit = ethers.BigNumber.from(10).pow(11);
+  const tokenAmountDeposit = ethers.BigNumber.from(10).pow(11).mul(2);
   const encodedContractFunction = abiCoder.encodeFunctionCall(
     method,
     [
-      process.env.tokenHash,
+      process.env.tokenHash || config.tokenHash,
       ethers.utils.hexlify(tokenAmountDeposit),
       ethers.utils.hexlify(stonkAmountDeposit),
       0x0,

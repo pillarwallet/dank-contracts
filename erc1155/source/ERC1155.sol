@@ -287,7 +287,7 @@ contract ERC1155 is IERC1155, ERC165, ERC721Holder {
   ) external override returns (bytes4) {
 
       // TODO later allow custom
-      uint256 defaultAmount = 1000;
+      uint256 defaultAmount = 10**18;
 
       // msg.sender = erc721 contract address
       bytes32 uniqueHash = keccak256(abi.encodePacked(msg.sender, tokenId));

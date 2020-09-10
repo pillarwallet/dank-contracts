@@ -20,10 +20,10 @@ const method = abi.filter(m => m.name === 'createPair')[0];
 async function main () {
   const encodedContractFunction = abiCoder.encodeFunctionCall(
     method,
-    [process.env.tokenHash]
+    [process.env.tokenHash || config.tokenHash]
   );
 
-  const wallet = new ethers.Wallet(config.OwnerPrivateKey, ethProvider);
+  const wallet = new ethers.Wallet(config.ownerPrivateKey, ethProvider);
   const transactionCountPromise = await wallet.getTransactionCount();
 
   const result = await wallet.sendTransaction({

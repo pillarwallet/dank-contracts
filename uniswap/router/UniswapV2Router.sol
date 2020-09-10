@@ -123,7 +123,8 @@ contract UniswapV2Router is IUniswapV2Router {
 
     function _swapToStonks(uint _stonkAmountOut, bytes32 tokenHash, address _to) internal virtual {
       (uint tokenAmountOut, uint stonkAmountOut) = (uint(0), _stonkAmountOut);
-      IUniswapV2Pair(UniswapV2Library.pairFor(factory, tokenHash)).swap(
+      address pair = IUniswapV2Factory(factory).getPair(tokenHash);
+      IUniswapV2Pair(pair).swap(
           tokenAmountOut, stonkAmountOut, _to, new bytes(0)
       );
     }
@@ -191,7 +192,7 @@ contract UniswapV2Router is IUniswapV2Router {
         require(tokenAmountIn <= tokenAmountInMax, 'UniswapV2Router: EXCESSIVE_INPUT_AMOUNT_TOKEN');
         address dispenser = IUniswapV2Factory(factory).dispenser();
         TransferHelper.safeTransferFromERC1155(
-            dispenser, tokenHash, msg.sender, pair, tokenAmountIn
+          dispenser, tokenHash, msg.sender, pair, tokenAmountIn
         );
         _swapToStonks(stonkAmountOut, tokenHash, to);
     }
@@ -259,7 +260,7 @@ contract UniswapV2Router is IUniswapV2Router {
         return UniswapV2Library.getAmountIn(amountOut, reserveIn, reserveOut);
     }
 
-    function getTokenAmountOut(uint amountIn, bytes32 tokenHash)
+    function getTokenAmountOut(uint stonkAmountIn, bytes32 tokenHash)
         public
         view
         virtual
@@ -267,7 +268,18 @@ contract UniswapV2Router is IUniswapV2Router {
         returns (uint amountOut)
     {
         address pair = IUniswapV2Factory(factory).getPair(tokenHash);
-        return UniswapV2Library.getTokenAmountOut(pair, amountIn);
+        return UniswapV2Library.getTokenAmountOut(pair, stonkAmountIn);
+    }
+
+      function getStonkAmountOut(uint tokenAmountIn, bytes32 tokenHash)
+        public
+        view
+        virtual
+        override
+        returns (uint amountOut)
+    {
+        address pair = IUniswapV2Factory(factory).getPair(tokenHash);
+        return UniswapV2Library.getStonkAmountOut(pair, tokenAmountIn);
     }
 
     // TODO currently unnecessary until initial working trade is made

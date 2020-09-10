@@ -61,7 +61,8 @@ interface IUniswapV2Router {
     function quote(uint amountA, uint reserveA, uint reserveB) external pure returns (uint amountB);
     function getAmountOut(uint amountIn, uint reserveIn, uint reserveOut) external pure returns (uint amountOut);
     function getAmountIn(uint amountOut, uint reserveIn, uint reserveOut) external pure returns (uint amountIn);
-    function getTokenAmountOut(uint amountIn, bytes32 tokenHash) external view returns (uint amountOut);
+    function getTokenAmountOut(uint stonkAmountIn, bytes32 tokenHash) external view returns (uint amountOut);
+    function getStonkAmountOut(uint tokenAmountIn, bytes32 tokenHash) external view returns (uint amountOut);
     // function getAmountsIn(uint amountOut, address[] calldata path) external view returns (uint[] memory amounts);
 
     // Uniswap 02 TEMPORARILY DISABLED as is unnecessary functionality

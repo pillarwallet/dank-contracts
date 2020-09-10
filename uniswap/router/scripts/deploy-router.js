@@ -13,7 +13,6 @@ const getAbi = () => {
   return JSON.parse(json.toString());
 };
 
-
 const getBin = () => {
   let bin = ''
   try {
@@ -40,7 +39,7 @@ async function main () {
   }  
 
 
-  let wallet = new ethers.Wallet(config.OwnerPrivateKey, ethProvider);
+  let wallet = new ethers.Wallet(config.ownerPrivateKey, ethProvider);
   const contractFactory = new ethers.ContractFactory(abi, bin || remixBin.object, wallet);
   const result = await contractFactory.deploy(config.uniswapFactory);
   if (result && result.deployTransaction) {

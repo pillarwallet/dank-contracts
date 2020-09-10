@@ -23,7 +23,7 @@ library TransferHelper {
     }
 
     function safeTransferFromERC1155(address dispenser, bytes32 tokenHash, address from, address to, uint value) internal {
-        //  bytes4(keccak256(bytes('safeTransferFrom(address,address,bytes32,uint256,bytes)')));
+        //  bytes4(keccak256(bytes('transferFrom(address,address,bytes32,uint256)')));
         (bool success, bytes memory data) = dispenser.call(abi.encodeWithSelector(0x7fe68381, from, to, tokenHash, value));
         require(success && (data.length == 0 || abi.decode(data, (bool))), 'TransferHelper: TRANSFER_FROM_FAILED');
     }

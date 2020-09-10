@@ -40,7 +40,7 @@ async function main () {
   }  
 
 
-  let wallet = new ethers.Wallet(config.OwnerPrivateKey, ethProvider);
+  let wallet = new ethers.Wallet(config.ownerPrivateKey, ethProvider);
   const contractFactory = new ethers.ContractFactory(abi, bin || remixBin.object, wallet);
   const result = await contractFactory.deploy(config.ownerAddress, config.erc20Address, config.erc1155Address);
   if (result && result.deployTransaction) {

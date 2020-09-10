@@ -13,6 +13,7 @@
     "deploy:uniswap-router": "node ./scripts/deploy-router.js",
     "createPair": "node ./scripts/create-pair.js",
     "getPair": "node ./scripts/get-pair.js",
+    "approve:pair": "node ./scripts/approve.js",
     "getReserves": "node ./scripts/get-reserves.js",
     "getFactoryParams": "node ./scripts/get-factory-params.js"
   },
