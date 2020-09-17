@@ -18,8 +18,9 @@ contract UniswapV2Router is IUniswapV2Router {
         _;
     }
 
-    event LogAddress(address logAddress);
-    event LogUint(uint logUint);
+    event LiquidityAdded(uint liquidity, uint stonkAmount, uint tokenAmount);
+    event LiquidityRemoved(uint liquidity, uint stonkAmount, uint tokenAmount);
+    event Swap(uint stonkAmount, uint tokenAmount);
 
     constructor(address _factory) public {
         factory = _factory;
@@ -64,19 +65,13 @@ contract UniswapV2Router is IUniswapV2Router {
         uint deadline
     ) external virtual override ensure(deadline) returns (uint tokenAmount, uint stonkAmount, uint liquidity) {
         address stonkToken = IUniswapV2Factory(factory).stonkToken();
-        emit LogAddress(stonkToken);
         address dispenser = IUniswapV2Factory(factory).dispenser();
-        emit LogAddress(dispenser);
         address pair = IUniswapV2Factory(factory).getPair(tokenHash);
-        emit LogAddress(pair);
         (tokenAmount, stonkAmount) = _addLiquidity(tokenHash, tokenAmountDesired, stonkAmountDesired, tokenAmountMin, stonkAmountMin);
-        emit LogUint(tokenAmount);
-        emit LogUint(stonkAmount);
         TransferHelper.safeTransferFromERC1155(dispenser, tokenHash, msg.sender, pair, tokenAmount);
-        emit LogUint(0);
         TransferHelper.safeTransferFrom(stonkToken, msg.sender, pair, stonkAmount);
-        emit LogUint(1);
         liquidity = IUniswapV2Pair(pair).mint(to);
+        emit LiquidityAdded(liquidity, stonkAmount, tokenAmount);
     }
    
 
@@ -94,6 +89,7 @@ contract UniswapV2Router is IUniswapV2Router {
         (tokenAmount, stonkAmount) = IUniswapV2Pair(pair).burn(to);
         require(tokenAmount >= tokenAmountMin, 'UniswapV2Router: INSUFFICIENT_A_AMOUNT');
         require(stonkAmount >= stonkAmountMin, 'UniswapV2Router: INSUFFICIENT_B_AMOUNT');
+        emit LiquidityRemoved(liquidity, stonkAmount, tokenAmount);
     }
     
     function removeLiquidityWithPermit(
@@ -144,6 +140,7 @@ contract UniswapV2Router is IUniswapV2Router {
         stonkToken, msg.sender, pair, stonkAmountIn
       );
       _swapToTokens(tokenAmountOut, tokenHash, to);
+      emit Swap(stonkAmountIn, tokenAmountOut);
     }
 
     function swapStonksForExactTokens(
@@ -161,6 +158,7 @@ contract UniswapV2Router is IUniswapV2Router {
             stonkToken, msg.sender, pair, stonkAmountIn
         );
         _swapToTokens(tokenAmountOut, tokenHash, to);
+        emit Swap(stonkAmountIn, tokenAmountOut);
     }
 
     function swapExactTokensForStonks(
@@ -178,6 +176,7 @@ contract UniswapV2Router is IUniswapV2Router {
         dispenser, tokenHash, msg.sender, pair, tokenAmountIn
       );
       _swapToStonks(stonkAmountOut, tokenHash, to);
+      emit Swap(stonkAmountOut, tokenAmountIn);
     }
 
     function swapTokensForExactStonks(
@@ -195,6 +194,7 @@ contract UniswapV2Router is IUniswapV2Router {
           dispenser, tokenHash, msg.sender, pair, tokenAmountIn
         );
         _swapToStonks(stonkAmountOut, tokenHash, to);
+        emit Swap(stonkAmountOut, tokenAmountIn);
     }
    
     // // **** SWAP (supporting fee-on-transfer tokens) ****
@@ -271,7 +271,7 @@ contract UniswapV2Router is IUniswapV2Router {
         return UniswapV2Library.getTokenAmountOut(pair, stonkAmountIn);
     }
 
-      function getStonkAmountOut(uint tokenAmountIn, bytes32 tokenHash)
+    function getStonkAmountOut(uint tokenAmountIn, bytes32 tokenHash)
         public
         view
         virtual
@@ -283,13 +283,25 @@ contract UniswapV2Router is IUniswapV2Router {
     }
 
     // TODO currently unnecessary until initial working trade is made
-    // function getAmountsIn(uint amountOut, address[] memory path)
-    //     public
-    //     view
-    //     virtual
-    //     override
-    //     returns (uint[] memory amounts)
-    // {
-    //     return UniswapV2Library.getAmountsIn(factory, amountOut, path);
-    // }
+    function getStonkAmountIn(uint tokenAmountOut, bytes32 tokenHash)
+      public
+      view
+      virtual
+      override
+      returns (uint amountOut)
+    {
+      address pair = IUniswapV2Factory(factory).getPair(tokenHash);
+      return UniswapV2Library.getStonkAmountIn(pair, tokenAmountOut);
+    }
+
+    function getTokenAmountIn(uint stonkAmountOut, bytes32 tokenHash)
+      public
+      view
+      virtual
+      override
+      returns (uint amountOut)
+    {
+      address pair = IUniswapV2Factory(factory).getPair(tokenHash);
+      return UniswapV2Library.getTokenAmountIn(pair, stonkAmountOut);
+    }
 }
