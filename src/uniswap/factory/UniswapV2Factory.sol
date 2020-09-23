@@ -54,7 +54,7 @@ contract UniswapV2Factory is IUniswapV2Factory {
 
     function setFeeToSetter(address feeToSetter) external virtual override {
         require(msg.sender == _feeToSetter, 'UniswapV2: FORBIDDEN');
-        _feeToSetter = _feeToSetter;
+        _feeToSetter = feeToSetter;
     }
 
     function dispenser() public view override returns (address) {

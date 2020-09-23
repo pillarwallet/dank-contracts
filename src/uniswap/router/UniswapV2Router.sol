@@ -5,6 +5,7 @@ pragma solidity ^0.6.6;
 import "./IUniswapV2Router.sol";
 import "../factory/interfaces/IUniswapV2Factory.sol";
 import "../factory/interfaces/IUniswapV2Pair.sol";
+import "../factory/interfaces/IUniswapV2ERC20.sol";
 import "../factory/lib/UniswapV2Library.sol";
 
 import "../../common/utils/TransferHelper.sol";
@@ -29,7 +30,7 @@ contract UniswapV2Router is IUniswapV2Router {
         _factory = factory;
     }
 
-    function factory() public pure override returns (address) {
+    function factory() public view override returns (address) {
         return _factory;
     }
 
@@ -92,7 +93,7 @@ contract UniswapV2Router is IUniswapV2Router {
         uint deadline
     ) public virtual override ensure(deadline) returns (uint tokenAmount, uint stonkAmount) {
         address pair = IUniswapV2Factory(_factory).getPair(tokenHash);
-        IUniswapV2Pair(pair).transferFrom(msg.sender, pair, liquidity); // send liquidity to pair
+        IUniswapV2ERC20(pair).transferFrom(msg.sender, pair, liquidity); // send liquidity to pair
         (tokenAmount, stonkAmount) = IUniswapV2Pair(pair).burn(to);
         require(tokenAmount >= tokenAmountMin, 'UniswapV2Router: INSUFFICIENT_A_AMOUNT');
         require(stonkAmount >= stonkAmountMin, 'UniswapV2Router: INSUFFICIENT_B_AMOUNT');
@@ -110,7 +111,7 @@ contract UniswapV2Router is IUniswapV2Router {
     ) external virtual override returns (uint tokenAmount, uint stonkAmount) {
         address pair = UniswapV2Library.pairFor(_factory, tokenHash);
         uint value = approveMax ? uint(-1) : liquidity;
-        IUniswapV2Pair(pair).permit(msg.sender, address(this), value, deadline, v, r, s);
+        IUniswapV2ERC20(pair).permit(msg.sender, address(this), value, deadline, v, r, s);
         (tokenAmount, stonkAmount) = removeLiquidity(tokenHash, liquidity, tokenAmountMin, stonkAmountMin, to, deadline);
     }
 

@@ -3,7 +3,7 @@
 pragma solidity ^0.6.6;
 
 interface IUniswapV2Router {
-    function factory() external pure returns (address);
+    function factory() external view returns (address);
 
     function addLiquidity(
        bytes32 tokenHash,
