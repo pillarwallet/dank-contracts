@@ -7,7 +7,7 @@ const {
   // sendTraderEncodedFunction
 } = require('../../shared');
 
-const networkId = config.networkId;
+const { networkId } = config;
 const abi = getContractAbi(ContractNames.UniswapV2Pair);
 const uniswapRouter = getContractAddress(ContractNames.UniswapV2Router, networkId);
 const method = abi.filter(m => m.name === 'approve')[0];

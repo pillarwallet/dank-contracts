@@ -6,7 +6,7 @@ const {
   sendTraderEncodedFunction
 } = require('../shared');
 
-const networkId = config.networkId;
+const { networkId } = config;
 const abi = getContractAbi(ContractNames.ERC1155);
 const uniswapRouter = getContractAddress(ContractNames.UniswapV2Router, networkId);
 const erc1155Address = getContractAddress(ContractNames.ERC1155, networkId);

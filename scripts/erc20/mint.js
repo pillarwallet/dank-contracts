@@ -3,7 +3,7 @@ const config = require('../../config');
 const { ContractNames, getContractAddress, getContractAbi } = require('../../build/');
 const { sendOwnerEncodedFunction } = require('../shared');
 
-const networkId = config.networkId;
+const { networkId } = config;
 const abi = getContractAbi(ContractNames.ERC20);
 const erc20Address = getContractAddress(ContractNames.ERC20, networkId);
 const mintMethod = abi.filter(m => m.name === 'mint')[0];

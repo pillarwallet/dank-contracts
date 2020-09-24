@@ -3,7 +3,7 @@ const config = require('../../../config');
 const { ContractNames, getContractAddress, getContractAbi } = require('../../build/');
 const { ethProvider } = require('../../shared');
 
-const networkId = config.networkId;
+const { networkId } = config;
 const routerAbi = getContractAbi(ContractNames.UniswapV2Router);
 const pairAbi = getContractAbi(ContractNames.UniswapV2Pair);
 const uniswapRouter = getContractAddress(ContractNames.UniswapV2Router, networkId);

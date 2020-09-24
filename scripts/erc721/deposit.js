@@ -3,7 +3,7 @@ const config = require('../../config');
 const { ContractNames, getContractAddress, getContractAbi } = require('../../build/');
 const { sendOwnerEncodedFunction } = require('../shared');
 
-const networkId = config.networkId;
+const { networkId } = config;
 const abi = getContractAbi(ContractNames.ERC721);
 const erc721Address = getContractAddress(ContractNames.ERC721, networkId);
 const erc1155Address = getContractAddress(ContractNames.ERC1155, networkId);

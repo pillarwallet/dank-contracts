@@ -4,7 +4,7 @@ const config = require('../../../config');
 const { ContractNames, getContractAddress, getContractAbi } = require('../../build/');
 const { sendOwnerEncodedFunction } = require('../../shared');
 
-const networkId = config.networkId;
+const { networkId } = config;
 const abi = getContractAbi(ContractNames.UniswapV2Router);
 const uniswapRouter = getContractAddress(ContractNames.UniswapV2Router, networkId);
 const method = abi.filter(m => m.name === 'removeLiquidity')[0];
