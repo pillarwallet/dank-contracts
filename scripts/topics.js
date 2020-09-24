@@ -6,7 +6,7 @@ const convertToKeccak = (s) => {
 }
 
 async function main() {
-	console.info('Topics router');
+	console.info('calculated topics');
 	
 	// router
 	console.info('Uniswap Router--------');
