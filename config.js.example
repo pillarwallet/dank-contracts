@@ -1,0 +1,8 @@
+module.exports = {
+  networkId: 1337,
+  eth_provider: 'http://127.0.0.1:8545',
+  ownerPrivateKey: '',
+  ownerAddress: '',
+  traderPrivateKey: '',
+  traderAddress: '',
+};
