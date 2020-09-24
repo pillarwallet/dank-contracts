@@ -1,29 +1,24 @@
-const { ethers, providers } = require('ethers');
+const { ethers } = require('ethers');
 const config = require('../../../config');
-const fs = require('fs');
-const path = require('path');
-const appRootPath = require('app-root-path');
+const { ContractNames, getContractAddress, getContractAbi } = require('../../build/');
+const { ethProvider } = require('../../shared');
 
-const ethProvider = new providers.JsonRpcProvider(
-  config.eth_provider,
-);
+const networkId = config.networkId;
+const abi = getContractAbi(ContractNames.UniswapV2Router);
+const uniswapRouter = getContractAddress(ContractNames.UniswapV2Router, networkId);
 
-const getAbi = () => {
-  const json = fs.readFileSync(path.join(appRootPath.path, './build/__build_UniswapV2Router_sol_UniswapV2Router.abi'));
-  return JSON.parse(json.toString());
-};
-
-const abi = getAbi();
 const contract = new ethers.Contract(
-  config.uniswapRouter,
+  uniswapRouter,
   abi,
   ethProvider
 );
 
-async function main () {
+async function main() {
   console.info('Uniswap router params')
   const factory = await contract.factory();
   console.info('factory: ', factory);
 }
 
-main();
+main()
+  .catch((err) => console.error(err))
+  .finally(() => process.exit());

@@ -1,27 +1,19 @@
-const { ethers, providers } = require('ethers');
-const config = require('../config');
-const fs = require('fs');
-const path = require('path');
-const appRootPath = require('app-root-path');
+const { ethers } = require('ethers');
+const config = require('../../config');
+const { ContractNames, getContractAddress, getContractAbi } = require('../../build/');
+const { ethProvider } = require('../shared');
 
-const ethProvider = new providers.JsonRpcProvider(
-  config.eth_provider,
-);
-
-const getAbi = () => {
-  const json = fs.readFileSync(path.join(appRootPath.path, './erc20/build/_ERC20_sol_ERC20.abi'));
-  return JSON.parse(json.toString());
-};
-
-const abi = getAbi();
+const networkId = config.networkId;
+const abi = getContractAbi(ContractNames.ERC20);
+const erc20Address = getContractAddress(ContractNames.ERC20, networkId);
 
 const contract = new ethers.Contract(
-  config.erc20Address,
+  erc20Address,
   abi,
   ethProvider
 );
 
-async function main () {
+async function main() {
   console.info('STONK balances');
   const ownerBalance = await contract.balanceOf(config.ownerAddress);
   console.info(`Owner: `, ownerBalance.toString());
@@ -29,4 +21,6 @@ async function main () {
   console.info(`Trader: `, traderBalance.toString());
 }
 
-main();
+main()
+  .catch((err) => console.error(err))
+  .finally(() => process.exit());

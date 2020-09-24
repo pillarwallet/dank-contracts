@@ -1,22 +1,15 @@
 const { ethers } = require('ethers');
-const config = require('../../../config');
-const fs = require('fs');
-const path = require('path');
-const appRootPath = require('app-root-path');
 const abiCoder = require('web3-eth-abi');
-const {
-  sendOwnerEncodedFunction,
-} = require('../../../utils');
+const config = require('../../../config');
+const { ContractNames, getContractAddress, getContractAbi } = require('../../build/');
+const { sendOwnerEncodedFunction } = require('../../shared');
 
-const getAbi = () => {
-  const json = fs.readFileSync(path.join(appRootPath.path, './build/__build_UniswapV2Router_sol_UniswapV2Router.abi'));
-  return JSON.parse(json.toString());
-};
-
-const abi = getAbi();
+const networkId = config.networkId;
+const abi = getContractAbi(ContractNames.UniswapV2Router);
+const uniswapRouter = getContractAddress(ContractNames.UniswapV2Router, networkId);
 const method = abi.filter(m => m.name === 'removeLiquidity')[0];
 
-async function main () {
+async function main() {
   const allLiquidity = ethers.BigNumber.from(141421355237);
   const encodedContractFunction = abiCoder.encodeFunctionCall(
     method,
@@ -30,7 +23,10 @@ async function main () {
     ]
   );
 
-  sendOwnerEncodedFunction(encodedContractFunction, config.uniswapRouter)
+  const result = await sendOwnerEncodedFunction(encodedContractFunction, uniswapRouter);
+  console.info(result);
 }
 
-main();
+main()
+  .catch((err) => console.error(err))
+  .finally(() => process.exit());

@@ -1,33 +1,27 @@
-const { ethers, providers } = require('ethers');
-const config = require('../config');
-const fs = require('fs');
-const path = require('path');
-const appRootPath = require('app-root-path');
-const abiCoder = require('web3-eth-abi');
+const { ethers } = require('ethers');
+const config = require('../../config');
+const { ContractNames, getContractAddress, getContractAbi } = require('../../build/');
+const { ethProvider } = require('../shared');
 
-const ethProvider = new providers.JsonRpcProvider(
-  config.eth_provider,
-);
-
-const getAbi = () => {
-  const json = fs.readFileSync(path.join(appRootPath.path, './erc20/build/_ERC20_sol_ERC20.abi'));
-  return JSON.parse(json.toString());
-};
-
-const abi = getAbi();
+const networkId = config.networkId;
+const abi = getContractAbi(ContractNames.ERC20);
+const erc20Address = getContractAddress(ContractNames.ERC20, networkId);
+const uniswapRouter = getContractAddress(ContractNames.UniswapV2Router, networkId);
 
 const contract = new ethers.Contract(
-  config.erc20Address,
+  erc20Address,
   abi,
   ethProvider
 );
 
-async function main () {
+async function main() {
   console.info('Uniswap router allowance');
-  const ownerAllowance = await contract.allowance(config.ownerAddress, config.uniswapRouter);
+  const ownerAllowance = await contract.allowance(config.ownerAddress, uniswapRouter);
   console.info(`Owner: `, ownerAllowance.toString());
-  const traderAllowance = await contract.allowance(config.traderAddress, config.uniswapRouter);
+  const traderAllowance = await contract.allowance(config.traderAddress, uniswapRouter);
   console.info(`Trader: `, traderAllowance.toString());
 }
 
-main();
+main()
+  .catch((err) => console.error(err))
+  .finally(() => process.exit());
