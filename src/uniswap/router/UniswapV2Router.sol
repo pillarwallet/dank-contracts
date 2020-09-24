@@ -15,7 +15,7 @@ import "../../erc20/IERC20.sol";
 contract UniswapV2Router is IUniswapV2Router {
     using SafeMath for uint256;
 
-    address private _factory;
+    address private immutable _factory;
 
     modifier ensure(uint deadline) {
         require(deadline >= block.timestamp, 'UniswapV2Router: EXPIRED');
