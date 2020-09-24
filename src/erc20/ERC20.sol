@@ -221,6 +221,7 @@ contract ERC20 is Context, IERC20 {
 
     function mint(address account, uint256 amount) external override returns (bool) {
       _mint(account, amount);
+			emit Mint(account, amount);
       return true;
     }
 
