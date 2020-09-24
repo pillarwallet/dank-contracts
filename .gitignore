@@ -1,10 +1,24 @@
-.vscode
+# OS
+.DS_Store
+
+# IDEs
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
 config.js
+
+# node
 node_modules
-/erc721/build
-/erc1155/build
-/erc20/build
-/uniswap/router/build
-/uniswap/factory/build
-/uniswap/router/node_modules
-/uniswap/factory/node_modules
+
+# truffle
+compiled
