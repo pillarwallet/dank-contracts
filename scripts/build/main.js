@@ -1,4 +1,4 @@
-const { resolve, join, basename } = require('path');
+const { resolve, join } = require('path');
 const { readdir, readJSON, writeFile } = require('fs-extra');
 const { utils: { solidityKeccak256 } } = require('ethers');
 const templates = require('./templates');
