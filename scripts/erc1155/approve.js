@@ -1,29 +1,27 @@
-const fs = require('fs');
-const path = require('path');
-const appRootPath = require('app-root-path');
 const abiCoder = require('web3-eth-abi');
-const config = require('../config');
+const config = require('../../config');
+const { ContractNames, getContractAddress, getContractAbi } = require('../../build/');
 const {
   sendOwnerEncodedFunction,
   sendTraderEncodedFunction
-} = require('../utils');
+} = require('../shared');
 
-const getAbi = () => {
-  const json = fs.readFileSync(path.join(appRootPath.path, './erc1155/build/_ERC1155_sol_ERC1155.abi'));
-  return JSON.parse(json.toString());
-};
-
-const abi = getAbi();
+const { networkId } = config;
+const abi = getContractAbi(ContractNames.ERC1155);
+const uniswapRouter = getContractAddress(ContractNames.UniswapV2Router, networkId);
+const erc1155Address = getContractAddress(ContractNames.ERC1155, networkId);
 const method = abi.filter(m => m.name === 'setApprovalForAll')[0];
 
-async function main () {
+async function main() {
   const encodedContractFunction = abiCoder.encodeFunctionCall(
     method,
-    [config.uniswapRouter, true]
+    [uniswapRouter, true]
   );
 
-  await sendOwnerEncodedFunction(encodedContractFunction, config.erc1155Address);
-  await sendTraderEncodedFunction(encodedContractFunction, config.erc1155Address);
+  await sendOwnerEncodedFunction(encodedContractFunction, erc1155Address);
+  await sendTraderEncodedFunction(encodedContractFunction, erc1155Address);
 }
 
-main();
+main()
+  .catch((err) => console.error(err))
+  .finally(() => process.exit());

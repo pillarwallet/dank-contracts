@@ -41,5 +41,6 @@ module.exports = {
   transactionParams,
   sendOwnerEncodedFunction,
   sendTraderEncodedFunction,
-  sendEncodedFunction
+  sendEncodedFunction,
+  ethProvider,
 };

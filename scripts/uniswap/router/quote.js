@@ -1,38 +1,25 @@
-const { ethers, providers } = require('ethers');
+const { ethers } = require('ethers');
 const config = require('../../../config');
-const fs = require('fs');
-const path = require('path');
-const appRootPath = require('app-root-path');
+const { ContractNames, getContractAddress, getContractAbi } = require('../../build/');
+const { ethProvider } = require('../../shared');
 
-const ethProvider = new providers.JsonRpcProvider(
-  config.eth_provider,
-);
+const { networkId } = config;
+const routerAbi = getContractAbi(ContractNames.UniswapV2Router);
+const pairAbi = getContractAbi(ContractNames.UniswapV2Pair);
+const uniswapRouter = getContractAddress(ContractNames.UniswapV2Router, networkId);
 
-const getRouterAbi = () => {
-  const json = fs.readFileSync(path.join(appRootPath.path, './build/__build_UniswapV2Router_sol_UniswapV2Router.abi'));
-  return JSON.parse(json.toString());
-};
-
-const getPairAbi = () => {
-  const json = fs.readFileSync(path.join(appRootPath.path, '../factory/build/__build_UniswapV2Factory_sol_UniswapV2Pair.abi'));
-  return JSON.parse(json.toString());
-};
-
-const routerAbi = getRouterAbi();
 const routerContract = new ethers.Contract(
-  config.uniswapRouter,
+  uniswapRouter,
   routerAbi,
   ethProvider
 );
-
-const pairAbi = getPairAbi();
 const pairContract = new ethers.Contract(
   process.env.pair || config.pair,
   pairAbi,
   ethProvider
 );
 
-async function main () {
+async function main() {
   console.info('Pair quote');
   const reserves = await pairContract.getReserves();
   const [tokenReserve, stonkReserve] = reserves;
@@ -45,4 +32,6 @@ async function main () {
   console.info('Quote ', quote.toString());
 }
 
-main();
+main()
+  .catch((err) => console.error(err))
+  .finally(() => process.exit());

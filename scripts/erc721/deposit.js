@@ -1,41 +1,24 @@
-const { ethers, providers } = require('ethers');
-const config = require('../config');
-const fs = require('fs');
-const path = require('path');
-const appRootPath = require('app-root-path');
 const abiCoder = require('web3-eth-abi');
+const config = require('../../config');
+const { ContractNames, getContractAddress, getContractAbi } = require('../../build/');
+const { sendOwnerEncodedFunction } = require('../shared');
 
-const ethProvider = new providers.JsonRpcProvider(
-  config.eth_provider,
-);
-
-const getAbi = () => {
-  const json = fs.readFileSync(path.join(appRootPath.path, './erc721/build/_ERC721_sol_ERC721.abi'));
-  return JSON.parse(json.toString());
-};
-
-const abi = getAbi();
+const { networkId } = config;
+const abi = getContractAbi(ContractNames.ERC721);
+const erc721Address = getContractAddress(ContractNames.ERC721, networkId);
+const erc1155Address = getContractAddress(ContractNames.ERC1155, networkId);
 const method = abi.filter(m => m.name === 'safeTransferFrom')[0];
 
-async function main () {
+async function main() {
   const encodedContractFunction = abiCoder.encodeFunctionCall(
     method,
-    [config.ownerAddress, config.erc1155Address, process.env.id]
+    [config.ownerAddress, erc1155Address, process.env.id]
   );
 
-  const wallet = new ethers.Wallet(config.ownerPrivateKey, ethProvider);
-  const transactionCountPromise = await wallet.getTransactionCount();
-
-  const result = await wallet.sendTransaction({
-    to: config.erc721Address,
-    nonce: transactionCountPromise,
-    gasLimit: '0x5F5E10',
-    gasPrice: '0xa',
-    data: encodedContractFunction,
-    value: 0,
-    chainId: config.networkId,
-  });
+  const result = await sendOwnerEncodedFunction(encodedContractFunction, erc721Address);
   console.info(result);
 }
 
-main();
+main()
+  .catch((err) => console.error(err))
+  .finally(() => process.exit());

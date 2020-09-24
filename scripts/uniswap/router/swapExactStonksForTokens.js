@@ -1,22 +1,15 @@
-const { ethers, providers } = require('ethers');
-const config = require('../../../config');
-const fs = require('fs');
-const path = require('path');
-const appRootPath = require('app-root-path');
+const { ethers } = require('ethers');
 const abiCoder = require('web3-eth-abi');
-const {
-  sendTraderEncodedFunction
-} = require('../../../utils');
+const config = require('../../../config');
+const { ContractNames, getContractAddress, getContractAbi } = require('../../build/');
+const { sendTraderEncodedFunction } = require('../../shared');
 
-const getAbi = () => {
-  const json = fs.readFileSync(path.join(appRootPath.path, './build/__build_UniswapV2Router_sol_UniswapV2Router.abi'));
-  return JSON.parse(json.toString());
-};
-
-const abi = getAbi();
+const { networkId } = config;
+const abi = getContractAbi(ContractNames.UniswapV2Router);
+const uniswapRouter = getContractAddress(ContractNames.UniswapV2Router, networkId);
 const method = abi.filter(m => m.name === 'swapExactStonksForTokens')[0];
 
-async function main () {
+async function main() {
   const stonkAmountIn = ethers.BigNumber.from(10).pow(5);
   const minTokenAmountOut = ethers.BigNumber.from(10).pow(5).mul(2).sub(10000);
   const encodedContractFunction = abiCoder.encodeFunctionCall(
@@ -30,7 +23,10 @@ async function main () {
     ]
   );
 
-  await sendTraderEncodedFunction(encodedContractFunction, config.uniswapRouter);
+  const result = await sendTraderEncodedFunction(encodedContractFunction, uniswapRouter);
+  console.info(result);
 }
 
-main();
+main()
+  .catch((err) => console.error(err))
+  .finally(() => process.exit());
