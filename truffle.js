@@ -24,7 +24,7 @@ function createNetwork(name, id) {
   return {
     [name]: {
       provider,
-      gas: 2500000,
+      gas: 5000000,
       network_id: `${id}`,
     },
   };
