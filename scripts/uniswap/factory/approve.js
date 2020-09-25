@@ -1,32 +1,28 @@
 const { ethers } = require('ethers');
-const fs = require('fs');
-const path = require('path');
-const appRootPath = require('app-root-path');
 const abiCoder = require('web3-eth-abi');
 const config = require('../../../config');
+const { ContractNames, getContractAddress, getContractAbi } = require('../../build/');
 const {
   sendOwnerEncodedFunction,
   // sendTraderEncodedFunction
-} = require('../../../utils');
+} = require('../../shared');
 
-
-const getAbi = () => {
-  const json = fs.readFileSync(path.join(appRootPath.path, './build/__build_UniswapV2Factory_sol_UniswapV2Pair.abi'));
-  return JSON.parse(json.toString());
-};
-
-const abi = getAbi();
+const { networkId } = config;
+const abi = getContractAbi(ContractNames.UniswapV2Pair);
+const uniswapRouter = getContractAddress(ContractNames.UniswapV2Router, networkId);
 const method = abi.filter(m => m.name === 'approve')[0];
 
-async function main () {
+async function main() {
   console.info('Approving uniswap router for UNI-V2');
   const encodedContractFunction = abiCoder.encodeFunctionCall(
     method,
-    [config.uniswapRouter, ethers.utils.hexlify(ethers.constants.MaxUint256)]
+    [uniswapRouter, ethers.utils.hexlify(ethers.constants.MaxUint256)]
   );
 
-  await sendOwnerEncodedFunction(encodedContractFunction, config.pair);
+  await sendOwnerEncodedFunction(encodedContractFunction, process.env.pair || config.pair);
   // await sendTraderEncodedFunction(encodedContractFunction, config.erc20Address);
 }
 
-main();
+main()
+  .catch((err) => console.error(err))
+  .finally(() => process.exit());

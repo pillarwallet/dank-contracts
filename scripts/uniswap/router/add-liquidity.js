@@ -1,23 +1,15 @@
-const { ethers, providers } = require('ethers');
-const config = require('../../../config');
-const fs = require('fs');
-const path = require('path');
-const appRootPath = require('app-root-path');
+const { ethers } = require('ethers');
 const abiCoder = require('web3-eth-abi');
+const config = require('../../../config');
+const { ContractNames, getContractAddress, getContractAbi } = require('../../build/');
+const { sendOwnerEncodedFunction } = require('../../shared');
 
-const ethProvider = new providers.JsonRpcProvider(
-  config.eth_provider,
-);
-
-const getAbi = () => {
-  const json = fs.readFileSync(path.join(appRootPath.path, './build/__build_UniswapV2Router_sol_UniswapV2Router.abi'));
-  return JSON.parse(json.toString());
-};
-
-const abi = getAbi();
+const { networkId } = config;
+const abi = getContractAbi(ContractNames.UniswapV2Router);
+const uniswapRouter = getContractAddress(ContractNames.UniswapV2Router, networkId);
 const method = abi.filter(m => m.name === 'addLiquidity')[0];
 
-async function main () {
+async function main() {
   const stonkAmountDeposit = ethers.BigNumber.from(10).pow(11);
   const tokenAmountDeposit = ethers.BigNumber.from(10).pow(11).mul(2);
   const encodedContractFunction = abiCoder.encodeFunctionCall(
@@ -33,19 +25,10 @@ async function main () {
     ]
   );
 
-  const wallet = new ethers.Wallet(config.ownerPrivateKey, ethProvider);
-  const transactionCountPromise = await wallet.getTransactionCount();
-
-  const result = await wallet.sendTransaction({
-    to: config.uniswapRouter,
-    nonce: transactionCountPromise,
-    gasLimit: '0x5F5E10',
-    gasPrice: '0xa',
-    data: encodedContractFunction,
-    value: 0,
-    chainId: config.networkId,
-  });
+  const result = await sendOwnerEncodedFunction(encodedContractFunction, uniswapRouter);
   console.info(result);
 }
 
-main();
+main()
+  .catch((err) => console.error(err))
+  .finally(() => process.exit());
