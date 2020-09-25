@@ -308,7 +308,7 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata, IERC721Enumerable 
 
     function publicMint(address to, uint256 tokenId) public {
         _safeMint(to, tokenId, "");
-				emit Mint(to, tokenId);
+        emit Mint(to, tokenId);
     }
 
     /**

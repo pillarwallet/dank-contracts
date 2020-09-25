@@ -25,9 +25,9 @@ contract UniswapV2Router is IUniswapV2Router {
     event LiquidityAdded(address sender, bytes32 tokenHash, uint liquidity, uint stonkAmount, uint tokenAmount);
     event LiquidityRemoved(address sender, bytes32 tokenHash, uint liquidity, uint stonkAmount, uint tokenAmount);
     event SwapStonksToExactTokens(address sender, bytes32 tokenHash, uint stonkAmount, uint tokenAmount);
-		event SwapTokensToExactStonks(address sender, bytes32 tokenHash, uint stonkAmount, uint tokenAmount);
-		event SwapExactTokensToStonks(address sender, bytes32 tokenHash, uint stonkAmount, uint tokenAmount);
-		event SwapExactStonksToTokens(address sender, bytes32 tokenHash, uint stonkAmount, uint tokenAmount);
+    event SwapTokensToExactStonks(address sender, bytes32 tokenHash, uint stonkAmount, uint tokenAmount);
+    event SwapExactTokensToStonks(address sender, bytes32 tokenHash, uint stonkAmount, uint tokenAmount);
+    event SwapExactStonksToTokens(address sender, bytes32 tokenHash, uint stonkAmount, uint tokenAmount);
 
     constructor(address factory) public {
         _factory = factory;

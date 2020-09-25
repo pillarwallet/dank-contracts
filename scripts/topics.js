@@ -40,7 +40,7 @@ async function main() {
 	// factory
 	console.info('Uniswap Factory--------');
 	const createPair = convertToKeccak('PairCreated(address,bytes32,address,address,uint256)')
-  console.info('CreatePair', createPair);
+	console.info('CreatePair', createPair);
 
 }
 

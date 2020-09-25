@@ -92,10 +92,10 @@ interface IERC20 {
      */
     event Approval(address indexed owner, address indexed spender, uint256 value);
 
-		/**
+    /**
      * @dev Emitted when minting new tokens
      * a call to {mint}. `to` is the destination.
      */
-		event Mint(address to, uint256 amount);
+    event Mint(address to, uint256 amount);
 
 }
