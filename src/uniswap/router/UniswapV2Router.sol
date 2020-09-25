@@ -22,9 +22,12 @@ contract UniswapV2Router is IUniswapV2Router {
         _;
     }
 
-    event LiquidityAdded(uint liquidity, uint stonkAmount, uint tokenAmount);
-    event LiquidityRemoved(uint liquidity, uint stonkAmount, uint tokenAmount);
-    event Swap(uint stonkAmount, uint tokenAmount);
+    event LiquidityAdded(address sender, bytes32 tokenHash, uint liquidity, uint stonkAmount, uint tokenAmount);
+    event LiquidityRemoved(address sender, bytes32 tokenHash, uint liquidity, uint stonkAmount, uint tokenAmount);
+    event SwapStonksToExactTokens(address sender, bytes32 tokenHash, uint stonkAmount, uint tokenAmount);
+    event SwapTokensToExactStonks(address sender, bytes32 tokenHash, uint stonkAmount, uint tokenAmount);
+    event SwapExactTokensToStonks(address sender, bytes32 tokenHash, uint stonkAmount, uint tokenAmount);
+    event SwapExactStonksToTokens(address sender, bytes32 tokenHash, uint stonkAmount, uint tokenAmount);
 
     constructor(address factory) public {
         _factory = factory;
@@ -79,7 +82,7 @@ contract UniswapV2Router is IUniswapV2Router {
         TransferHelper.safeTransferFromERC1155(dispenser, tokenHash, msg.sender, pair, tokenAmount);
         TransferHelper.safeTransferFrom(stonkToken, msg.sender, pair, stonkAmount);
         liquidity = IUniswapV2Pair(pair).mint(to);
-        emit LiquidityAdded(liquidity, stonkAmount, tokenAmount);
+        emit LiquidityAdded(msg.sender, tokenHash, liquidity, stonkAmount, tokenAmount);
     }
 
 
@@ -97,7 +100,7 @@ contract UniswapV2Router is IUniswapV2Router {
         (tokenAmount, stonkAmount) = IUniswapV2Pair(pair).burn(to);
         require(tokenAmount >= tokenAmountMin, 'UniswapV2Router: INSUFFICIENT_A_AMOUNT');
         require(stonkAmount >= stonkAmountMin, 'UniswapV2Router: INSUFFICIENT_B_AMOUNT');
-        emit LiquidityRemoved(liquidity, stonkAmount, tokenAmount);
+        emit LiquidityRemoved(msg.sender, tokenHash, liquidity, stonkAmount, tokenAmount);
     }
 
     function removeLiquidityWithPermit(
@@ -148,7 +151,7 @@ contract UniswapV2Router is IUniswapV2Router {
         stonkToken, msg.sender, pair, stonkAmountIn
       );
       _swapToTokens(tokenAmountOut, tokenHash, to);
-      emit Swap(stonkAmountIn, tokenAmountOut);
+      emit SwapExactStonksToTokens(msg.sender, tokenHash, stonkAmountIn, tokenAmountOut);
     }
 
     function swapStonksForExactTokens(
@@ -166,7 +169,7 @@ contract UniswapV2Router is IUniswapV2Router {
             stonkToken, msg.sender, pair, stonkAmountIn
         );
         _swapToTokens(tokenAmountOut, tokenHash, to);
-        emit Swap(stonkAmountIn, tokenAmountOut);
+        emit SwapStonksToExactTokens(msg.sender, tokenHash, stonkAmountIn, tokenAmountOut);
     }
 
     function swapExactTokensForStonks(
@@ -184,7 +187,7 @@ contract UniswapV2Router is IUniswapV2Router {
         dispenser, tokenHash, msg.sender, pair, tokenAmountIn
       );
       _swapToStonks(stonkAmountOut, tokenHash, to);
-      emit Swap(stonkAmountOut, tokenAmountIn);
+      emit SwapExactTokensToStonks(msg.sender, tokenHash, stonkAmountOut, tokenAmountIn);
     }
 
     function swapTokensForExactStonks(
@@ -202,7 +205,7 @@ contract UniswapV2Router is IUniswapV2Router {
           dispenser, tokenHash, msg.sender, pair, tokenAmountIn
         );
         _swapToStonks(stonkAmountOut, tokenHash, to);
-        emit Swap(stonkAmountOut, tokenAmountIn);
+        emit SwapTokensToExactStonks(msg.sender, tokenHash, stonkAmountOut, tokenAmountIn);
     }
 
     // // **** SWAP (supporting fee-on-transfer tokens) ****

@@ -24,6 +24,11 @@ interface IERC721 is IERC165 {
     event ApprovalForAll(address indexed owner, address indexed operator, bool approved);
 
     /**
+     * @dev Emitted when minting new token ID
+     */
+    event Mint(address to, uint256 tokenId);
+
+    /**
      * @dev Returns the number of tokens in ``owner``'s account.
      */
     function balanceOf(address owner) external view returns (uint256 balance);

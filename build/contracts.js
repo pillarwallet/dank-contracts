@@ -3,7 +3,7 @@
 module.exports = {
   "Address": {
     "abi": [],
-    "byteCodeHash": "0xa14f93d8ecdbcded32989a4cbb66bf26de96de90346d9245cb8e8c53498a8599",
+    "byteCodeHash": "0xdfc06fa2f33a4888b83b895141612dbe9c1403258b38ce77410dde8a79bfed43",
     "addresses": {}
   },
   "Context": {
@@ -13,7 +13,7 @@ module.exports = {
   },
   "CustomAddress": {
     "abi": [],
-    "byteCodeHash": "0x8bbba48faa9b92f2e76228f69484c10e375421372ae370d32622d03ab8df9533",
+    "byteCodeHash": "0x7d6a76c1d872d9bf540902dc15815085434c8e5de61baa3d123393d0b7c941e9",
     "addresses": {}
   },
   "CustomERC165": {
@@ -435,9 +435,10 @@ module.exports = {
         "type": "function"
       }
     ],
-    "byteCodeHash": "0xed6d8583ec54d83d9d447f8e3e8b0d20a9d81193febaccb42e94f4902c47f253",
+    "byteCodeHash": "0x9962f41b875cde68f21eb88bf7e0d56664e8c61a0bb81167aa686ded203861ba",
     "addresses": {
-      "1337": "0xd480f10aFFc5498A1f3c94c2706Bd94fAff480Bf"
+      "1337": "0xd480f10aFFc5498A1f3c94c2706Bd94fAff480Bf",
+      "5777": "0x983E97032731e2CA84B2254463D3996ca2835de9"
     }
   },
   "ERC165": {
@@ -506,6 +507,25 @@ module.exports = {
           }
         ],
         "name": "Approval",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "internalType": "address",
+            "name": "to",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "amount",
+            "type": "uint256"
+          }
+        ],
+        "name": "Mint",
         "type": "event"
       },
       {
@@ -784,9 +804,10 @@ module.exports = {
         "type": "function"
       }
     ],
-    "byteCodeHash": "0x2712251dc213be7087eb8fe269865d4b682d7c298e817ef7c2a7d1489010f154",
+    "byteCodeHash": "0x2c85d7606777d153674a4232d77c2a4089b4eec0285a2e636fc60becbc8bc460",
     "addresses": {
-      "1337": "0x5e03ACBDFBc600A74D4EfA4cbbB67746f66aA53a"
+      "1337": "0x5e03ACBDFBc600A74D4EfA4cbbB67746f66aA53a",
+      "5777": "0xC1E5dcCc9efbC8D4376d5e51E6cAa6F22366C9a5"
     }
   },
   "ERC721": {
@@ -855,6 +876,25 @@ module.exports = {
           }
         ],
         "name": "ApprovalForAll",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "internalType": "address",
+            "name": "to",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "tokenId",
+            "type": "uint256"
+          }
+        ],
+        "name": "Mint",
         "type": "event"
       },
       {
@@ -1183,11 +1223,6 @@ module.exports = {
             "internalType": "uint256",
             "name": "tokenId",
             "type": "uint256"
-          },
-          {
-            "internalType": "bytes",
-            "name": "_data",
-            "type": "bytes"
           }
         ],
         "name": "safeTransferFrom",
@@ -1211,6 +1246,11 @@ module.exports = {
             "internalType": "uint256",
             "name": "tokenId",
             "type": "uint256"
+          },
+          {
+            "internalType": "bytes",
+            "name": "_data",
+            "type": "bytes"
           }
         ],
         "name": "safeTransferFrom",
@@ -1237,9 +1277,10 @@ module.exports = {
         "type": "function"
       }
     ],
-    "byteCodeHash": "0xb632dab1c3877742775d8ef6a51cb0509b244365f4afa28fb92479625c0ba979",
+    "byteCodeHash": "0x62e426d6308a30ae12a0fedf1321b80ac08e82a30b05cf0648fc406b947561a0",
     "addresses": {
-      "1337": "0x9Ab6A7b17379353Ba8c6c6b70C8D38aDA5F28C16"
+      "1337": "0x9Ab6A7b17379353Ba8c6c6b70C8D38aDA5F28C16",
+      "5777": "0x8eE2DC3B20Ad8f62E9EC9fD31CF65a980dDEf7D8"
     }
   },
   "ERC721Holder": {
@@ -1279,17 +1320,17 @@ module.exports = {
         "type": "function"
       }
     ],
-    "byteCodeHash": "0x2f5207d7bd1bd97b25343ee1a2648e70d08dd7cc4bedf573f0b4bf0b6693edb8",
+    "byteCodeHash": "0x2c25f40e233a7fd8279e439053922b4420c1b02dce9bfe3dbed44dddf0e3c551",
     "addresses": {}
   },
   "EnumerableMap": {
     "abi": [],
-    "byteCodeHash": "0x1742e4abce85ff0309154430de92d4688282881f7532c2881dabd20d297137c4",
+    "byteCodeHash": "0xfcd8658c2d953edae8b95afca925863ce265321b5ce2b6d421530f9df3905027",
     "addresses": {}
   },
   "EnumerableSet": {
     "abi": [],
-    "byteCodeHash": "0x4985011c06546502e1b79b9a9556e1e56d3a4778091b67b1cf74125fc7b72166",
+    "byteCodeHash": "0x6c9b64e3aa5c34318c22a1701ad2698b251f77d53a2fe0f619a7b789b91d435b",
     "addresses": {}
   },
   "IERC1155": {
@@ -1771,6 +1812,25 @@ module.exports = {
         "anonymous": false,
         "inputs": [
           {
+            "indexed": false,
+            "internalType": "address",
+            "name": "to",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "amount",
+            "type": "uint256"
+          }
+        ],
+        "name": "Mint",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
             "indexed": true,
             "internalType": "address",
             "name": "from",
@@ -2042,6 +2102,25 @@ module.exports = {
           }
         ],
         "name": "ApprovalForAll",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "internalType": "address",
+            "name": "to",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "tokenId",
+            "type": "uint256"
+          }
+        ],
+        "name": "Mint",
         "type": "event"
       },
       {
@@ -2333,6 +2412,25 @@ module.exports = {
           }
         ],
         "name": "ApprovalForAll",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "internalType": "address",
+            "name": "to",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "tokenId",
+            "type": "uint256"
+          }
+        ],
+        "name": "Mint",
         "type": "event"
       },
       {
@@ -2680,6 +2778,25 @@ module.exports = {
           }
         ],
         "name": "ApprovalForAll",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "internalType": "address",
+            "name": "to",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "tokenId",
+            "type": "uint256"
+          }
+        ],
+        "name": "Mint",
         "type": "event"
       },
       {
@@ -4493,7 +4610,7 @@ module.exports = {
   },
   "Math": {
     "abi": [],
-    "byteCodeHash": "0x888cfd53813565e99212e79d85a7c6ab84faf3818793b5598f3b0c863ee3b7c8",
+    "byteCodeHash": "0x90129fca7b4edf2973063fcec66ed0d1e690979fdafedc759b9eeabceda1f6a1",
     "addresses": {}
   },
   "Migrations": {
@@ -4558,29 +4675,30 @@ module.exports = {
         "type": "function"
       }
     ],
-    "byteCodeHash": "0x29e0c3ad755612541e9d159f4a293c4e4f989a38efd9594c780c6575da57ad30",
+    "byteCodeHash": "0x3935b80fbe2aaad3975be6a4725926f3f258e11622332df728843837c013e96d",
     "addresses": {
-      "1337": "0x0465912b0Dc9CaEbE77B2a7a5DaC77c538D1Dd2F"
+      "1337": "0x0465912b0Dc9CaEbE77B2a7a5DaC77c538D1Dd2F",
+      "5777": "0xBEEeD57C89D4A270D36bcc6F1c50294AAe0b50d4"
     }
   },
   "SafeMath": {
     "abi": [],
-    "byteCodeHash": "0xbb770794cfa5b13eb967fb86ddb6057598d0d7d3c3a4615776d39b4cfca6f743",
+    "byteCodeHash": "0x19ab3c178e72cc6bbd98b3264882f224d631bfcc6ec91b0fcff5934ca0a7b2ef",
     "addresses": {}
   },
   "Strings": {
     "abi": [],
-    "byteCodeHash": "0x6f2f774298e8f1eb7f9121f42c99789b8648b201fcd69d4ff34d58f578f09067",
+    "byteCodeHash": "0xa2ddac68f76cf0d52fb85f43f89195675d570dcaadde81f12b734487d115e174",
     "addresses": {}
   },
   "TransferHelper": {
     "abi": [],
-    "byteCodeHash": "0x7f54b89d6b2c18405ff0eaf6aa39c147f00f879d58fb25e47b4b5f3d2b6a7fff",
+    "byteCodeHash": "0xcc9c231b1b5a876494766285889bd1d72acd86ea4b73a0960e6fdb2599ec5bb8",
     "addresses": {}
   },
   "UQ112x112": {
     "abi": [],
-    "byteCodeHash": "0x8e3d0b1dc9a6d98dce5577aeba1b5d80582fdf4426e4f1313f3e824bba6417ed",
+    "byteCodeHash": "0xce4f17154a300b91db2119fd0f8dd7be2df2934c962f42469ac075e181162516",
     "addresses": {}
   },
   "UniswapV2ERC20": {
@@ -4901,7 +5019,7 @@ module.exports = {
         "type": "function"
       }
     ],
-    "byteCodeHash": "0xfd7fd21cc1237bb569ef752c66b1b74b1a98dc256a131309fad4767070a9c292",
+    "byteCodeHash": "0x65eee89fefc44ad26be89479b40ad743077a3f09260490ad8902d82af5691cc2",
     "addresses": {}
   },
   "UniswapV2Factory": {
@@ -4926,6 +5044,43 @@ module.exports = {
         ],
         "stateMutability": "nonpayable",
         "type": "constructor"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "internalType": "address",
+            "name": "sender",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "bytes32",
+            "name": "tokenHash",
+            "type": "bytes32"
+          },
+          {
+            "indexed": false,
+            "internalType": "address",
+            "name": "stonkToken",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "address",
+            "name": "pair",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "name": "PairCreated",
+        "type": "event"
       },
       {
         "anonymous": false,
@@ -5114,14 +5269,15 @@ module.exports = {
         "constant": true
       }
     ],
-    "byteCodeHash": "0x6cb402a5169fd7957e3ee926fdc7d01846ba8308495ec7a1c914c73a77852a68",
+    "byteCodeHash": "0x5b7d7dd7c0947104d225e05bae687f5587d39148e5e07515d9c13a0c903896e3",
     "addresses": {
-      "1337": "0x8D45A125B703aDAA31f095BCD7Bb3F82CCE60B39"
+      "1337": "0x8D45A125B703aDAA31f095BCD7Bb3F82CCE60B39",
+      "5777": "0x92180BBd914C48B99B3d9943e305D1C1BA9EbE92"
     }
   },
   "UniswapV2Library": {
     "abi": [],
-    "byteCodeHash": "0x5c71acaafbd3ea73832b4ba8d788da92b365a67564a196cf8b9b907b142e652c",
+    "byteCodeHash": "0xff0878b9c109a61651178cc43e0906e1e118bd9db3fbe12d0f0ec7c4a5965077",
     "addresses": {}
   },
   "UniswapV2Pair": {
@@ -5801,7 +5957,7 @@ module.exports = {
         "type": "function"
       }
     ],
-    "byteCodeHash": "0x94269a281831e00bf989c5fdd8bf225ca30f793761eff499bfe4a691752ce9a4",
+    "byteCodeHash": "0xeb81e5a4ab75b5cce565ab53c5e0697f1c15972b4f6b87eeff2c1818d7d2ae79",
     "addresses": {}
   },
   "UniswapV2Router": {
@@ -5820,6 +5976,18 @@ module.exports = {
       {
         "anonymous": false,
         "inputs": [
+          {
+            "indexed": false,
+            "internalType": "address",
+            "name": "sender",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "bytes32",
+            "name": "tokenHash",
+            "type": "bytes32"
+          },
           {
             "indexed": false,
             "internalType": "uint256",
@@ -5847,6 +6015,18 @@ module.exports = {
         "inputs": [
           {
             "indexed": false,
+            "internalType": "address",
+            "name": "sender",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "bytes32",
+            "name": "tokenHash",
+            "type": "bytes32"
+          },
+          {
+            "indexed": false,
             "internalType": "uint256",
             "name": "liquidity",
             "type": "uint256"
@@ -5872,6 +6052,18 @@ module.exports = {
         "inputs": [
           {
             "indexed": false,
+            "internalType": "address",
+            "name": "sender",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "bytes32",
+            "name": "tokenHash",
+            "type": "bytes32"
+          },
+          {
+            "indexed": false,
             "internalType": "uint256",
             "name": "stonkAmount",
             "type": "uint256"
@@ -5883,7 +6075,100 @@ module.exports = {
             "type": "uint256"
           }
         ],
-        "name": "Swap",
+        "name": "SwapExactStonksToTokens",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "internalType": "address",
+            "name": "sender",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "bytes32",
+            "name": "tokenHash",
+            "type": "bytes32"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "stonkAmount",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "tokenAmount",
+            "type": "uint256"
+          }
+        ],
+        "name": "SwapExactTokensToStonks",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "internalType": "address",
+            "name": "sender",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "bytes32",
+            "name": "tokenHash",
+            "type": "bytes32"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "stonkAmount",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "tokenAmount",
+            "type": "uint256"
+          }
+        ],
+        "name": "SwapStonksToExactTokens",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "internalType": "address",
+            "name": "sender",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "bytes32",
+            "name": "tokenHash",
+            "type": "bytes32"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "stonkAmount",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "tokenAmount",
+            "type": "uint256"
+          }
+        ],
+        "name": "SwapTokensToExactStonks",
         "type": "event"
       },
       {
@@ -6424,9 +6709,10 @@ module.exports = {
         "constant": true
       }
     ],
-    "byteCodeHash": "0xd570563dea2022b0756959a2386b7a6afd58d26d49fab4256d5632803d91f7ba",
+    "byteCodeHash": "0xec0e1c049ec4712968d915f6ee354672df3827ecaeee7b650575748192d86634",
     "addresses": {
-      "1337": "0xe4854facc59003806Aa4472829Aecdd9F39B88D7"
+      "1337": "0xe4854facc59003806Aa4472829Aecdd9F39B88D7",
+      "5777": "0xD746ecA57CD6E3913E71FF583831E4bD6f42bd49"
     }
   }
 };

@@ -14,7 +14,7 @@ contract UniswapV2Factory is IUniswapV2Factory {
     mapping(bytes32 => address) private _getPair; // all pairs are token/stonk (stonk is not used in mapping)
     address[] private _allPairs;
 
-    event PairCreated(bytes32 indexed tokenHash, address indexed stonkToken, address pair, uint);
+    event PairCreated(address sender, bytes32 tokenHash, address stonkToken, address pair, uint);
 
     constructor(address feeToSetter, address stonkToken, address dispenser) public {
         _feeToSetter = feeToSetter;
@@ -44,7 +44,7 @@ contract UniswapV2Factory is IUniswapV2Factory {
         IUniswapV2Pair(pair).initialize(tokenHash, _dispenser, _stonkToken);
         _getPair[tokenHash] = pair;
         _allPairs.push(pair);
-        emit PairCreated(tokenHash, _stonkToken, pair, _allPairs.length);
+        emit PairCreated(msg.sender, tokenHash, _stonkToken, pair, _allPairs.length);
     }
 
     function setFeeTo(address feeTo) external virtual override {
