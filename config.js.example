@@ -5,6 +5,6 @@ module.exports = {
   ownerAddress: '',
   traderPrivateKey: '',
   traderAddress: '',
-  tokenHash: '', // fractionlized erc721 token hash
+  tokenHash: '', // fractionized erc721 token hash
   pair: '', // uniswap pair
 };
