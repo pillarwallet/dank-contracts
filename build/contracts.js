@@ -438,7 +438,7 @@ module.exports = {
     "byteCodeHash": "0x9962f41b875cde68f21eb88bf7e0d56664e8c61a0bb81167aa686ded203861ba",
     "addresses": {
       "100": "0x5434D6b137Ae5e5541f99Df8A55c689aD744EEec",
-      "1337": "0xd480f10aFFc5498A1f3c94c2706Bd94fAff480Bf",
+      "1337": "0xc24DfC7A2ec23Bc5b2AcAAC4940f5cdA624Ebd6B",
       "5777": "0x983E97032731e2CA84B2254463D3996ca2835de9"
     }
   },
@@ -808,7 +808,7 @@ module.exports = {
     "byteCodeHash": "0x057a39df5be14c8238ae1d2bcd0b3b9826312597c6cf8b78199fd34a7ddcd231",
     "addresses": {
       "100": "0x8d7bc38024ed7D8d17200c6F4102F3b249e2821B",
-      "1337": "0x5e03ACBDFBc600A74D4EfA4cbbB67746f66aA53a",
+      "1337": "0xE859C7e29837FA19248bffeADe14F9fE76dDBeC6",
       "5777": "0xC1E5dcCc9efbC8D4376d5e51E6cAa6F22366C9a5"
     }
   },
@@ -1282,7 +1282,7 @@ module.exports = {
     "byteCodeHash": "0x209a58c5f5523209962e9de24cc25635eb8ad305cc1fe7fd167376cea37cc2da",
     "addresses": {
       "100": "0x031fD5aD214Ec34e6D94f7a0a56341d9cFc7f823",
-      "1337": "0x9Ab6A7b17379353Ba8c6c6b70C8D38aDA5F28C16",
+      "1337": "0xd8442BE7714D3726CF7dEfad849d84efAB340510",
       "5777": "0x8eE2DC3B20Ad8f62E9EC9fD31CF65a980dDEf7D8"
     }
   },
@@ -4681,7 +4681,7 @@ module.exports = {
     "byteCodeHash": "0x3935b80fbe2aaad3975be6a4725926f3f258e11622332df728843837c013e96d",
     "addresses": {
       "100": "0x456E6A5734Ac11eE856e703e583B3fC67FD3b8dD",
-      "1337": "0x0465912b0Dc9CaEbE77B2a7a5DaC77c538D1Dd2F",
+      "1337": "0xb0E05e76B0A6E3fDEfa19C57354593F52138FC14",
       "5777": "0xBEEeD57C89D4A270D36bcc6F1c50294AAe0b50d4"
     }
   },
@@ -5276,7 +5276,7 @@ module.exports = {
     "byteCodeHash": "0x51b23dda9ad433403f5be2f61cfa691e02c194dc44546c70cc852dd5ba7d8fa0",
     "addresses": {
       "100": "0xc9b9c9ad34C7FABda7A5408E4AaDE0e16DDC7579",
-      "1337": "0x8D45A125B703aDAA31f095BCD7Bb3F82CCE60B39",
+      "1337": "0x1a7cC6941d61e0638afDd82BCcab894E6250b99B",
       "5777": "0x92180BBd914C48B99B3d9943e305D1C1BA9EbE92"
     }
   },
@@ -6717,7 +6717,7 @@ module.exports = {
     "byteCodeHash": "0x06f921fa13c14effef81344e9e77f267e849d8ebec7a388b6d0d2e0021448cd4",
     "addresses": {
       "100": "0x34E5298F19872868aE173d63FC93d1f1493D485f",
-      "1337": "0xe4854facc59003806Aa4472829Aecdd9F39B88D7",
+      "1337": "0x8EF08fCaFcc0C829fc9d24FBB96e6a8776a5fbEb",
       "5777": "0xD746ecA57CD6E3913E71FF583831E4bD6f42bd49"
     }
   }
