@@ -112,7 +112,7 @@ contract UniswapV2Router is IUniswapV2Router {
         uint deadline,
         bool approveMax, uint8 v, bytes32 r, bytes32 s
     ) external virtual override returns (uint tokenAmount, uint stonkAmount) {
-        address pair = UniswapV2Library.pairFor(_factory, tokenHash);
+        address pair = IUniswapV2Factory(_factory).getPair(tokenHash);
         uint value = approveMax ? uint(-1) : liquidity;
         IUniswapV2ERC20(pair).permit(msg.sender, address(this), value, deadline, v, r, s);
         (tokenAmount, stonkAmount) = removeLiquidity(tokenHash, liquidity, tokenAmountMin, stonkAmountMin, to, deadline);
