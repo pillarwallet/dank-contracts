@@ -3,7 +3,7 @@
 module.exports = {
   "Address": {
     "abi": [],
-    "byteCodeHash": "0xdfc06fa2f33a4888b83b895141612dbe9c1403258b38ce77410dde8a79bfed43",
+    "byteCodeHash": "0xdd9fe6f60957ddf50a3ee3d7cfcba4ef988a530f0608a528eedc5fc0a2ed18f5",
     "addresses": {}
   },
   "Context": {
@@ -13,7 +13,7 @@ module.exports = {
   },
   "CustomAddress": {
     "abi": [],
-    "byteCodeHash": "0x7d6a76c1d872d9bf540902dc15815085434c8e5de61baa3d123393d0b7c941e9",
+    "byteCodeHash": "0xc8c1febe555ab1dc9c509aeb86e4f4c74a1727672dc201a663538a9cd162526b",
     "addresses": {}
   },
   "CustomERC165": {
@@ -435,7 +435,7 @@ module.exports = {
         "type": "function"
       }
     ],
-    "byteCodeHash": "0x9962f41b875cde68f21eb88bf7e0d56664e8c61a0bb81167aa686ded203861ba",
+    "byteCodeHash": "0x5744464d345e80de0e8af6fe590169fa1d6e5bf934d9ccf9c4784fb3cd1cc405",
     "addresses": {
       "100": "0x5434D6b137Ae5e5541f99Df8A55c689aD744EEec",
       "1337": "0xc24DfC7A2ec23Bc5b2AcAAC4940f5cdA624Ebd6B",
@@ -805,7 +805,7 @@ module.exports = {
         "type": "function"
       }
     ],
-    "byteCodeHash": "0x057a39df5be14c8238ae1d2bcd0b3b9826312597c6cf8b78199fd34a7ddcd231",
+    "byteCodeHash": "0xcb308b068cc531a1a240079b6380fbe20e2d7a580cf024b48d2f2c3986c3a676",
     "addresses": {
       "100": "0x8d7bc38024ed7D8d17200c6F4102F3b249e2821B",
       "1337": "0xE859C7e29837FA19248bffeADe14F9fE76dDBeC6",
@@ -1279,7 +1279,7 @@ module.exports = {
         "type": "function"
       }
     ],
-    "byteCodeHash": "0x209a58c5f5523209962e9de24cc25635eb8ad305cc1fe7fd167376cea37cc2da",
+    "byteCodeHash": "0xb5a15eb4089898634f283c0f7c8a53ae91b8fe30bca1f8437c886ff0c3069e6a",
     "addresses": {
       "100": "0x031fD5aD214Ec34e6D94f7a0a56341d9cFc7f823",
       "1337": "0xd8442BE7714D3726CF7dEfad849d84efAB340510",
@@ -1323,17 +1323,17 @@ module.exports = {
         "type": "function"
       }
     ],
-    "byteCodeHash": "0x2c25f40e233a7fd8279e439053922b4420c1b02dce9bfe3dbed44dddf0e3c551",
+    "byteCodeHash": "0x04b8f948f7a986abae8038af4232efbea044e32ce3b3b64ec002a335d5b10fea",
     "addresses": {}
   },
   "EnumerableMap": {
     "abi": [],
-    "byteCodeHash": "0xfcd8658c2d953edae8b95afca925863ce265321b5ce2b6d421530f9df3905027",
+    "byteCodeHash": "0xa34966286189c5cd7519e03f45aef22aa1e871362585bd0b2c4ba79816a5ddc6",
     "addresses": {}
   },
   "EnumerableSet": {
     "abi": [],
-    "byteCodeHash": "0x6c9b64e3aa5c34318c22a1701ad2698b251f77d53a2fe0f619a7b789b91d435b",
+    "byteCodeHash": "0x9a7b56afd46c54e5e26433df375c95cce3994587e5dd7e5c08b477dc27cac6e0",
     "addresses": {}
   },
   "IERC1155": {
@@ -4613,7 +4613,7 @@ module.exports = {
   },
   "Math": {
     "abi": [],
-    "byteCodeHash": "0x90129fca7b4edf2973063fcec66ed0d1e690979fdafedc759b9eeabceda1f6a1",
+    "byteCodeHash": "0x0cc04d12a5bd6c5a79f45c2104e2e1fa809515c8998ee05789ce9a817c972b22",
     "addresses": {}
   },
   "Migrations": {
@@ -4678,7 +4678,7 @@ module.exports = {
         "type": "function"
       }
     ],
-    "byteCodeHash": "0x3935b80fbe2aaad3975be6a4725926f3f258e11622332df728843837c013e96d",
+    "byteCodeHash": "0x3bfcb2a53b8a18ea9a07bf6689153a2b41a29d9348c593f0bb56fe9e54a75e02",
     "addresses": {
       "100": "0x456E6A5734Ac11eE856e703e583B3fC67FD3b8dD",
       "1337": "0xb0E05e76B0A6E3fDEfa19C57354593F52138FC14",
@@ -4687,22 +4687,22 @@ module.exports = {
   },
   "SafeMath": {
     "abi": [],
-    "byteCodeHash": "0x19ab3c178e72cc6bbd98b3264882f224d631bfcc6ec91b0fcff5934ca0a7b2ef",
+    "byteCodeHash": "0x926f44eebe399ff2da06071f195f20d25fc566c74ebaa3c72e48221bfaef1853",
     "addresses": {}
   },
   "Strings": {
     "abi": [],
-    "byteCodeHash": "0xa2ddac68f76cf0d52fb85f43f89195675d570dcaadde81f12b734487d115e174",
+    "byteCodeHash": "0x5719133098c1f2fbca76c9dfa1e3f8c2f612c83adff8243246f8fa9acc04c876",
     "addresses": {}
   },
   "TransferHelper": {
     "abi": [],
-    "byteCodeHash": "0xcc9c231b1b5a876494766285889bd1d72acd86ea4b73a0960e6fdb2599ec5bb8",
+    "byteCodeHash": "0xaddd69383c3a15b6f66262b011d45060e928ab5610ad859b86ea22b52974c2b9",
     "addresses": {}
   },
   "UQ112x112": {
     "abi": [],
-    "byteCodeHash": "0xce4f17154a300b91db2119fd0f8dd7be2df2934c962f42469ac075e181162516",
+    "byteCodeHash": "0xeebdac40e4ec4fe22e0a7ecf127a9225a1fcbed21a008ddaf237f0a678c3a091",
     "addresses": {}
   },
   "UniswapV2ERC20": {
@@ -5023,7 +5023,7 @@ module.exports = {
         "type": "function"
       }
     ],
-    "byteCodeHash": "0x65eee89fefc44ad26be89479b40ad743077a3f09260490ad8902d82af5691cc2",
+    "byteCodeHash": "0x39472f519803338a5375c971ae8dbeb95647c369df2b4b841f26a13824dc7251",
     "addresses": {}
   },
   "UniswapV2Factory": {
@@ -5273,7 +5273,7 @@ module.exports = {
         "constant": true
       }
     ],
-    "byteCodeHash": "0x51b23dda9ad433403f5be2f61cfa691e02c194dc44546c70cc852dd5ba7d8fa0",
+    "byteCodeHash": "0xd236f612ab28512993c4222645956a285c636b6dbe3d5ee0a37aa3ecce19eb94",
     "addresses": {
       "100": "0xc9b9c9ad34C7FABda7A5408E4AaDE0e16DDC7579",
       "1337": "0x1a7cC6941d61e0638afDd82BCcab894E6250b99B",
@@ -5282,7 +5282,7 @@ module.exports = {
   },
   "UniswapV2Library": {
     "abi": [],
-    "byteCodeHash": "0xff0878b9c109a61651178cc43e0906e1e118bd9db3fbe12d0f0ec7c4a5965077",
+    "byteCodeHash": "0x05c446272067e581a5f0cfaa797429927e2cecefdb33a17d3234c2898af1765c",
     "addresses": {}
   },
   "UniswapV2Pair": {
@@ -5962,7 +5962,7 @@ module.exports = {
         "type": "function"
       }
     ],
-    "byteCodeHash": "0xbc77ebbe29dbb9bc229422477788d93616d9ebb7158119c08d0fa2142ea8d09c",
+    "byteCodeHash": "0x96b665d7d744c82cc539b78e129f01735dd54d2762446a8d61796c80e2093a72",
     "addresses": {}
   },
   "UniswapV2Router": {
@@ -6714,7 +6714,7 @@ module.exports = {
         "constant": true
       }
     ],
-    "byteCodeHash": "0x06f921fa13c14effef81344e9e77f267e849d8ebec7a388b6d0d2e0021448cd4",
+    "byteCodeHash": "0x45f8ee97a69ac419109c391b0a6b3be41503714e00c7307ad5ae79dfaee47cf5",
     "addresses": {
       "100": "0x34E5298F19872868aE173d63FC93d1f1493D485f",
       "1337": "0x8EF08fCaFcc0C829fc9d24FBB96e6a8776a5fbEb",

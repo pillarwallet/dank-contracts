@@ -55,7 +55,7 @@
     "request-promise-native": "1.0.8",
     "sol-merger": "3.1.0",
     "solc": "0.6.12",
-    "truffle": "5.1.45",
+    "truffle": "5.1.48",
     "truffle-privatekey-provider": "1.5.0",
     "web3-eth-abi": "1.2.6"
   }
