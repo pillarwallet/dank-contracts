@@ -5,9 +5,10 @@
   "main": "./build/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "node ./scripts/build",
-    "postbuild": "npm run results",
+    "build": "node ./scripts/build && npm run results",
     "results": "node ./scripts/build/results.js",
+    "etherspot:build": "node ./scripts/build && npm run etherspot:results",
+    "etherspot:results": "node ./scripts/build/etherspot-results.js",
     "erc20:mint": "node ./scripts/erc20/mint.js",
     "erc20:approve": "node ./scripts/erc20/approve.js",
     "erc20:allowance": "node ./scripts/erc20/allowance.js",
@@ -43,7 +44,8 @@
     "truffle:migrate:goerli": "truffle migrate --network=goerli && npm run build",
     "truffle:migrate:kovan": "truffle migrate --network=kovan && npm run build",
     "truffle:migrate:xdai": "truffle migrate --network=xdai && npm run build",
-    "truffle:migrate:local": "truffle migrate --network=local --reset && npm run build"
+    "truffle:migrate:local": "truffle migrate --network=local --reset && npm run build",
+    "truffle:migrate:etherspot": "truffle migrate --network=local --reset && npm run etherspot:build"
   },
   "author": "",
   "license": "ISC",
