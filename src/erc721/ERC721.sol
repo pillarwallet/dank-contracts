@@ -299,15 +299,14 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata, IERC721Enumerable 
      * @dev Public unlimited minting for development purposes TODO: REMOVE AFTER DONE
      *
      * Requirements:
-     d*
+     *
      * - `tokenId` must not exist.
-     * - If `to` refers to a smart contract, it must implement {IERC721Receiver-onERC721Received}, which is called upon a safe transfer.
      *
      * Emits a {Transfer} event.
      */
 
     function publicMint(address to, uint256 tokenId) public {
-        _safeMint(to, tokenId, "");
+        _mint(to, tokenId);
         emit Mint(to, tokenId);
     }
 

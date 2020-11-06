@@ -3,10 +3,10 @@
 pragma solidity ^0.6.8;
 
 import "../common/math/SafeMath.sol";
+import "../common/utils/Address.sol";
 import "./interfaces/IERC1155TokenReceiver.sol";
 import "../erc721/ERC721TokenHolder.sol";
 import "./interfaces/IERC1155.sol";
-import "./utils/CustomAddress.sol";
 import "./utils/CustomERC165.sol";
 
 
@@ -15,7 +15,7 @@ import "./utils/CustomERC165.sol";
  */
 contract ERC1155 is IERC1155, CustomERC165, ERC721Holder {
   using SafeMath for uint256;
-  using CustomAddress for address;
+  using Address for address;
 
   /***********************************|
   |        Variables and Events       |
@@ -279,7 +279,7 @@ contract ERC1155 is IERC1155, CustomERC165, ERC721Holder {
   |__________________________________*/
 
   /**
-   * @notice Called by contract from which tokens are transfered
+   * @notice Called by contract from which tokens are transferred
    */
   function onERC721Received(
       address,
@@ -321,8 +321,5 @@ contract ERC1155 is IERC1155, CustomERC165, ERC721Holder {
 
     // Emit event
     emit TransferSingle(msg.sender, address(0x0), _to, _hash, _amount);
-
-    // Calling onReceive method if recipient is contract
-    _callonERC1155Received(address(0x0), _to, _hash, _amount, gasleft(), _data);
   }
 }
