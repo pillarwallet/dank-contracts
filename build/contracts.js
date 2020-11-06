@@ -307,7 +307,8 @@ module.exports = {
           }
         ],
         "stateMutability": "view",
-        "type": "function"
+        "type": "function",
+        "constant": true
       },
       {
         "inputs": [
@@ -331,7 +332,8 @@ module.exports = {
           }
         ],
         "stateMutability": "view",
-        "type": "function"
+        "type": "function",
+        "constant": true
       },
       {
         "inputs": [
@@ -355,7 +357,8 @@ module.exports = {
           }
         ],
         "stateMutability": "view",
-        "type": "function"
+        "type": "function",
+        "constant": true
       },
       {
         "inputs": [
@@ -374,7 +377,8 @@ module.exports = {
           }
         ],
         "stateMutability": "view",
-        "type": "function"
+        "type": "function",
+        "constant": true
       },
       {
         "inputs": [
@@ -393,7 +397,8 @@ module.exports = {
           }
         ],
         "stateMutability": "pure",
-        "type": "function"
+        "type": "function",
+        "constant": true
       },
       {
         "inputs": [
@@ -435,7 +440,7 @@ module.exports = {
       "100": "0x5434D6b137Ae5e5541f99Df8A55c689aD744EEec",
       "1337": "0xc24DfC7A2ec23Bc5b2AcAAC4940f5cdA624Ebd6B",
       "5777": "0x983E97032731e2CA84B2254463D3996ca2835de9",
-      "9999": "0x5dEEc2E23572581a2e3e81E8B98B60957644C3bc"
+      "9999": "0xc24DfC7A2ec23Bc5b2AcAAC4940f5cdA624Ebd6B"
     }
   },
   "ERC165": {
@@ -561,7 +566,8 @@ module.exports = {
           }
         ],
         "stateMutability": "view",
-        "type": "function"
+        "type": "function",
+        "constant": true
       },
       {
         "inputs": [],
@@ -574,7 +580,8 @@ module.exports = {
           }
         ],
         "stateMutability": "view",
-        "type": "function"
+        "type": "function",
+        "constant": true
       },
       {
         "inputs": [],
@@ -587,7 +594,8 @@ module.exports = {
           }
         ],
         "stateMutability": "view",
-        "type": "function"
+        "type": "function",
+        "constant": true
       },
       {
         "inputs": [],
@@ -600,7 +608,8 @@ module.exports = {
           }
         ],
         "stateMutability": "view",
-        "type": "function"
+        "type": "function",
+        "constant": true
       },
       {
         "inputs": [
@@ -619,7 +628,8 @@ module.exports = {
           }
         ],
         "stateMutability": "view",
-        "type": "function"
+        "type": "function",
+        "constant": true
       },
       {
         "inputs": [
@@ -667,7 +677,8 @@ module.exports = {
           }
         ],
         "stateMutability": "view",
-        "type": "function"
+        "type": "function",
+        "constant": true
       },
       {
         "inputs": [
@@ -800,7 +811,7 @@ module.exports = {
       "100": "0x8d7bc38024ed7D8d17200c6F4102F3b249e2821B",
       "1337": "0xE859C7e29837FA19248bffeADe14F9fE76dDBeC6",
       "5777": "0xC1E5dcCc9efbC8D4376d5e51E6cAa6F22366C9a5",
-      "9999": "0x74C51a1901a15E8040421639a71f234CF80F33A1"
+      "9999": "0xE859C7e29837FA19248bffeADe14F9fE76dDBeC6"
     }
   },
   "ERC721": {
@@ -932,7 +943,8 @@ module.exports = {
           }
         ],
         "stateMutability": "view",
-        "type": "function"
+        "type": "function",
+        "constant": true
       },
       {
         "inputs": [
@@ -951,7 +963,8 @@ module.exports = {
           }
         ],
         "stateMutability": "view",
-        "type": "function"
+        "type": "function",
+        "constant": true
       },
       {
         "inputs": [
@@ -970,7 +983,8 @@ module.exports = {
           }
         ],
         "stateMutability": "view",
-        "type": "function"
+        "type": "function",
+        "constant": true
       },
       {
         "inputs": [],
@@ -983,7 +997,8 @@ module.exports = {
           }
         ],
         "stateMutability": "view",
-        "type": "function"
+        "type": "function",
+        "constant": true
       },
       {
         "inputs": [],
@@ -996,7 +1011,8 @@ module.exports = {
           }
         ],
         "stateMutability": "view",
-        "type": "function"
+        "type": "function",
+        "constant": true
       },
       {
         "inputs": [
@@ -1015,7 +1031,8 @@ module.exports = {
           }
         ],
         "stateMutability": "view",
-        "type": "function"
+        "type": "function",
+        "constant": true
       },
       {
         "inputs": [],
@@ -1028,7 +1045,8 @@ module.exports = {
           }
         ],
         "stateMutability": "view",
-        "type": "function"
+        "type": "function",
+        "constant": true
       },
       {
         "inputs": [
@@ -1052,7 +1070,8 @@ module.exports = {
           }
         ],
         "stateMutability": "view",
-        "type": "function"
+        "type": "function",
+        "constant": true
       },
       {
         "inputs": [],
@@ -1065,7 +1084,8 @@ module.exports = {
           }
         ],
         "stateMutability": "view",
-        "type": "function"
+        "type": "function",
+        "constant": true
       },
       {
         "inputs": [
@@ -1084,7 +1104,8 @@ module.exports = {
           }
         ],
         "stateMutability": "view",
-        "type": "function"
+        "type": "function",
+        "constant": true
       },
       {
         "inputs": [
@@ -1121,7 +1142,8 @@ module.exports = {
           }
         ],
         "stateMutability": "view",
-        "type": "function"
+        "type": "function",
+        "constant": true
       },
       {
         "inputs": [
@@ -1163,7 +1185,8 @@ module.exports = {
           }
         ],
         "stateMutability": "view",
-        "type": "function"
+        "type": "function",
+        "constant": true
       },
       {
         "inputs": [
@@ -1263,7 +1286,7 @@ module.exports = {
       "100": "0x031fD5aD214Ec34e6D94f7a0a56341d9cFc7f823",
       "1337": "0xd8442BE7714D3726CF7dEfad849d84efAB340510",
       "5777": "0x8eE2DC3B20Ad8f62E9EC9fD31CF65a980dDEf7D8",
-      "9999": "0x320003825F7eee8bb2B9Bf3717C69ea07F32306F"
+      "9999": "0xd8442BE7714D3726CF7dEfad849d84efAB340510"
     }
   },
   "ERC721Holder": {
@@ -4614,7 +4637,8 @@ module.exports = {
           }
         ],
         "stateMutability": "view",
-        "type": "function"
+        "type": "function",
+        "constant": true
       },
       {
         "inputs": [],
@@ -4627,7 +4651,8 @@ module.exports = {
           }
         ],
         "stateMutability": "view",
-        "type": "function"
+        "type": "function",
+        "constant": true
       },
       {
         "inputs": [
@@ -4661,7 +4686,7 @@ module.exports = {
       "100": "0x456E6A5734Ac11eE856e703e583B3fC67FD3b8dD",
       "1337": "0xb0E05e76B0A6E3fDEfa19C57354593F52138FC14",
       "5777": "0xBEEeD57C89D4A270D36bcc6F1c50294AAe0b50d4",
-      "9999": "0x2A96B457533F6744AA292e3a7823a5E40Cf78e7d"
+      "9999": "0xb0E05e76B0A6E3fDEfa19C57354593F52138FC14"
     }
   },
   "SafeMath": {
@@ -5113,7 +5138,8 @@ module.exports = {
           }
         ],
         "stateMutability": "view",
-        "type": "function"
+        "type": "function",
+        "constant": true
       },
       {
         "inputs": [
@@ -5132,7 +5158,8 @@ module.exports = {
           }
         ],
         "stateMutability": "view",
-        "type": "function"
+        "type": "function",
+        "constant": true
       },
       {
         "inputs": [],
@@ -5145,7 +5172,8 @@ module.exports = {
           }
         ],
         "stateMutability": "view",
-        "type": "function"
+        "type": "function",
+        "constant": true
       },
       {
         "inputs": [
@@ -5203,7 +5231,8 @@ module.exports = {
           }
         ],
         "stateMutability": "view",
-        "type": "function"
+        "type": "function",
+        "constant": true
       },
       {
         "inputs": [],
@@ -5216,7 +5245,8 @@ module.exports = {
           }
         ],
         "stateMutability": "view",
-        "type": "function"
+        "type": "function",
+        "constant": true
       },
       {
         "inputs": [],
@@ -5229,7 +5259,8 @@ module.exports = {
           }
         ],
         "stateMutability": "view",
-        "type": "function"
+        "type": "function",
+        "constant": true
       },
       {
         "inputs": [],
@@ -5242,7 +5273,8 @@ module.exports = {
           }
         ],
         "stateMutability": "view",
-        "type": "function"
+        "type": "function",
+        "constant": true
       }
     ],
     "byteCodeHash": "0x29d0217d31b9db9ba92fde6b0aa952be3cf6389f03dc2a4bb2ea1f14039fe781",
@@ -5250,7 +5282,7 @@ module.exports = {
       "100": "0xc9b9c9ad34C7FABda7A5408E4AaDE0e16DDC7579",
       "1337": "0x1a7cC6941d61e0638afDd82BCcab894E6250b99B",
       "5777": "0x92180BBd914C48B99B3d9943e305D1C1BA9EbE92",
-      "9999": "0xA5CbbaDe8A99F8Ae210D29039eB0b18F3E4826B7"
+      "9999": "0x1a7cC6941d61e0638afDd82BCcab894E6250b99B"
     }
   },
   "UniswapV2Library": {
@@ -6160,7 +6192,8 @@ module.exports = {
           }
         ],
         "stateMutability": "view",
-        "type": "function"
+        "type": "function",
+        "constant": true
       },
       {
         "inputs": [
@@ -6522,7 +6555,8 @@ module.exports = {
           }
         ],
         "stateMutability": "pure",
-        "type": "function"
+        "type": "function",
+        "constant": true
       },
       {
         "inputs": [
@@ -6551,7 +6585,8 @@ module.exports = {
           }
         ],
         "stateMutability": "pure",
-        "type": "function"
+        "type": "function",
+        "constant": true
       },
       {
         "inputs": [
@@ -6580,7 +6615,8 @@ module.exports = {
           }
         ],
         "stateMutability": "pure",
-        "type": "function"
+        "type": "function",
+        "constant": true
       },
       {
         "inputs": [
@@ -6604,7 +6640,8 @@ module.exports = {
           }
         ],
         "stateMutability": "view",
-        "type": "function"
+        "type": "function",
+        "constant": true
       },
       {
         "inputs": [
@@ -6628,7 +6665,8 @@ module.exports = {
           }
         ],
         "stateMutability": "view",
-        "type": "function"
+        "type": "function",
+        "constant": true
       },
       {
         "inputs": [
@@ -6652,7 +6690,8 @@ module.exports = {
           }
         ],
         "stateMutability": "view",
-        "type": "function"
+        "type": "function",
+        "constant": true
       },
       {
         "inputs": [
@@ -6676,7 +6715,8 @@ module.exports = {
           }
         ],
         "stateMutability": "view",
-        "type": "function"
+        "type": "function",
+        "constant": true
       }
     ],
     "byteCodeHash": "0xd41411dec5f8e0876d5ac768f432d4ece2cc8591922cfe92d8151f11b7ad574e",
@@ -6684,7 +6724,7 @@ module.exports = {
       "100": "0x34E5298F19872868aE173d63FC93d1f1493D485f",
       "1337": "0x8EF08fCaFcc0C829fc9d24FBB96e6a8776a5fbEb",
       "5777": "0xD746ecA57CD6E3913E71FF583831E4bD6f42bd49",
-      "9999": "0xB0bf4E43aBd9acb79C42e3764De97Bbf502AD915"
+      "9999": "0x8EF08fCaFcc0C829fc9d24FBB96e6a8776a5fbEb"
     }
   }
 };
