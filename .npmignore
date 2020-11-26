@@ -1,3 +1,9 @@
 /*
+!/artifacts
 !/build
+/build/contracts-localhost.json
+!/deploy
+!/deployments
+/deployments/localhost
+!/src
 !/LICENSE

@@ -20,6 +20,7 @@ config.js
 # node
 node_modules
 
-# truffle
-compiled
+# hardhat
 .hardhat
+deployments/localhost/
+build/contracts-localhost.json

@@ -43,10 +43,10 @@ const config = {
   },
   paths: {
     sources: 'src',
-    cache: './.hardhat/cache',
-    artifacts: './.hardhat/artifacts',
-    deploy: './deploy',
-    deployments: './.hardhat/deployments',
+    cache: '.hardhat/cache',
+    artifacts: '.hardhat/artifacts',
+    deploy: 'deploy',
+    deployments: 'deployments',
   },
 };
 
