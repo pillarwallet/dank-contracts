@@ -1,7 +1,7 @@
 {
   "name": "@dank-memes/contracts",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.0.1",
+  "description": "Smart contracts for Dank Memes",
   "main": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -35,6 +35,7 @@
     "hardhat:compile": "hardhat compile",
     "hardhat:start:node": "hardhat node --no-deploy",
     "hardhat:start:full": "hardhat node --export build/contracts-localhost.json",
+    "hardhat:deploy:local": "hardhat deploy --reset --export build/contracts-localhost.json --network localhost",
     "hardhat:deploy:watch": "hardhat deploy --reset --watch --export build/contracts-localhost.json --network localhost",
     "hardhat:artifacts": "hardhat run scripts/artifacts.js --network localhost"
   },

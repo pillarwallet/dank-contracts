@@ -5,12 +5,12 @@ const config = require('../config');
 
 async function main() {
   const all = await deployments.all();
-  await fsExtra.remove(config.artifactsPath2);
-  await fsExtra.ensureDir(config.artifactsPath2);
+  await fsExtra.remove(config.artifactsPath);
+  await fsExtra.ensureDir(config.artifactsPath);
 
   for(const contractName of Object.keys(all)) {
     const artifact = await deployments.getArtifact(contractName);
-    const artifactPath = path.join(config.artifactsPath2, `${contractName}.json`);
+    const artifactPath = path.join(config.artifactsPath, `${contractName}.json`);
     await fsExtra.writeJSON(artifactPath, artifact, {
       spaces: 2,
     });
