@@ -8,17 +8,18 @@ import "../../common/math/SafeMath.sol";
 contract UniswapV2ERC20 is IUniswapV2ERC20 {
     using SafeMath for uint;
 
-    string private constant _name = 'Uniswap V2';
-    string private constant _symbol = 'UNI-V2';
-    uint8 private constant _decimals = 18;
-    uint  private _totalSupply;
-    mapping(address => uint) private _balanceOf;
-    mapping(address => mapping(address => uint)) private _allowance;
+    string public constant override name = 'Uniswap V2';
+    string public constant override symbol = 'UNI-V2';
+    uint8 public constant override decimals = 18;
+    uint  public override totalSupply;
 
-    bytes32 private _DOMAIN_SEPARATOR;
+    mapping(address => uint) public override balanceOf;
+    mapping(address => mapping(address => uint)) public override allowance;
+
+    bytes32 public override DOMAIN_SEPARATOR;
     // keccak256("Permit(address owner,address spender,uint256 value,uint256 nonce,uint256 deadline)");
-    bytes32 private constant _PERMIT_TYPEHASH = 0x6e71edae12b1b97f4d1f60370fef10105fa2faae0126114a169c64845d6126c9;
-    mapping(address => uint) private _nonces;
+    bytes32 public constant override PERMIT_TYPEHASH = 0x6e71edae12b1b97f4d1f60370fef10105fa2faae0126114a169c64845d6126c9;
+    mapping(address => uint) public override nonces;
 
     event Approval(address indexed owner, address indexed spender, uint value);
     event Transfer(address indexed from, address indexed to, uint value);
@@ -28,10 +29,10 @@ contract UniswapV2ERC20 is IUniswapV2ERC20 {
         assembly {
             chainId := chainid()
         }
-        _DOMAIN_SEPARATOR = keccak256(
+        DOMAIN_SEPARATOR = keccak256(
             abi.encode(
                 keccak256('EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)'),
-                keccak256(bytes(_name)),
+                keccak256(bytes(name)),
                 keccak256(bytes('1')),
                 chainId,
                 address(this)
@@ -39,62 +40,26 @@ contract UniswapV2ERC20 is IUniswapV2ERC20 {
         );
     }
 
-    function name() public view override returns (string memory) {
-        return _name;
-    }
-
-    function symbol() public view override returns (string memory) {
-        return _symbol;
-    }
-
-    function decimals() public view override returns (uint8) {
-        return _decimals;
-    }
-
-    function totalSupply() public view override returns (uint) {
-        return _totalSupply;
-    }
-
-    function balanceOf(address account) public view override returns (uint) {
-        return _balanceOf[account];
-    }
-
-    function allowance(address owner, address spender) public view override returns (uint) {
-        return _allowance[owner][spender];
-    }
-
-    function DOMAIN_SEPARATOR() public view override virtual returns (bytes32) {
-        return _DOMAIN_SEPARATOR;
-    }
-
-    function PERMIT_TYPEHASH() public view override returns (bytes32) {
-        return _PERMIT_TYPEHASH;
-    }
-
-    function nonces(address owner) public view override returns (uint) {
-        return _nonces[owner];
-    }
-
     function _mint(address to, uint value) internal {
-        _totalSupply = _totalSupply.add(value);
-        _balanceOf[to] = _balanceOf[to].add(value);
+        totalSupply = totalSupply.add(value);
+        balanceOf[to] = balanceOf[to].add(value);
         emit Transfer(address(0), to, value);
     }
 
     function _burn(address from, uint value) internal {
-        _balanceOf[from] = _balanceOf[from].sub(value);
-        _totalSupply = _totalSupply.sub(value);
+        balanceOf[from] = balanceOf[from].sub(value);
+        totalSupply = totalSupply.sub(value);
         emit Transfer(from, address(0), value);
     }
 
     function _approve(address owner, address spender, uint value) private {
-        _allowance[owner][spender] = value;
+        allowance[owner][spender] = value;
         emit Approval(owner, spender, value);
     }
 
     function _transfer(address from, address to, uint value) private {
-        _balanceOf[from] = _balanceOf[from].sub(value);
-        _balanceOf[to] = _balanceOf[to].add(value);
+        balanceOf[from] = balanceOf[from].sub(value);
+        balanceOf[to] = balanceOf[to].add(value);
         emit Transfer(from, to, value);
     }
 
@@ -109,8 +74,8 @@ contract UniswapV2ERC20 is IUniswapV2ERC20 {
     }
 
     function transferFrom(address from, address to, uint value) public virtual override returns (bool) {
-        if (_allowance[from][msg.sender] != uint(-1)) {
-            _allowance[from][msg.sender] = _allowance[from][msg.sender].sub(value);
+        if (allowance[from][msg.sender] != uint(-1)) {
+            allowance[from][msg.sender] = allowance[from][msg.sender].sub(value);
         }
         _transfer(from, to, value);
         return true;
@@ -121,8 +86,8 @@ contract UniswapV2ERC20 is IUniswapV2ERC20 {
         bytes32 digest = keccak256(
             abi.encodePacked(
                 '\x19\x01',
-                _DOMAIN_SEPARATOR,
-                keccak256(abi.encode(_PERMIT_TYPEHASH, owner, spender, value, _nonces[owner]++, deadline))
+                DOMAIN_SEPARATOR,
+                keccak256(abi.encode(PERMIT_TYPEHASH, owner, spender, value, nonces[owner]++, deadline))
             )
         );
         address recoveredAddress = ecrecover(digest, v, r, s);

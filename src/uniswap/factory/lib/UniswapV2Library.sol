@@ -20,8 +20,8 @@ library UniswapV2Library {
     }
 
     // fetches and sorts the reserves for a pair
-    function getReserves(address pair) internal view returns (uint tokenReserve, uint stonkReserve) {
-        (tokenReserve, stonkReserve,) = IUniswapV2Pair(pair).getReserves();
+    function getReserves(address pair) internal view returns (uint reserveA, uint reserveB) {
+        (reserveA, reserveB,) = IUniswapV2Pair(pair).getReserves();
     }
 
     // given some amount of an asset and pair reserves, returns an equivalent amount of the other asset
@@ -51,23 +51,23 @@ library UniswapV2Library {
     }
 
     // performs chained getAmountOut calculations on any number of pairs
-    function getStonkAmountOut(address pair, uint tokenAmountIn) internal view returns (uint amountOut) {
-        (uint tokenReserve, uint stonkReserve) = getReserves(pair);
-        amountOut = getAmountOut(tokenAmountIn, tokenReserve, stonkReserve);
+    function getBaseTokenAmountOut(address pair, uint otherTokenAmountIn) internal view returns (uint amountOut) {
+        (uint reserveA, uint reserveB) = getReserves(pair);
+        amountOut = getAmountOut(otherTokenAmountIn, reserveA, reserveB);
     }
 
-    function getTokenAmountOut(address pair, uint stonkAmountIn) internal view returns (uint tokenAmountOut) {
-        (uint tokenReserve, uint stonkReserve) = getReserves(pair);
-        tokenAmountOut = getAmountOut(stonkAmountIn, stonkReserve, tokenReserve);
+    function getTokenAmountOut(address pair, uint baseTokenAmountIn) internal view returns (uint tokenAmountOut) {
+        (uint reserveA, uint reserveB) = getReserves(pair);
+        tokenAmountOut = getAmountOut(baseTokenAmountIn, reserveB, reserveA);
     }
 
-    function getStonkAmountIn(address pair, uint tokenAmountOut) internal view returns (uint stonkAmountIn) {
-        (uint tokenReserve, uint stonkReserve) = getReserves(pair);
-        stonkAmountIn = getAmountIn(tokenAmountOut, stonkReserve, tokenReserve);
+    function getBaseTokenAmountIn(address pair, uint otherTokenAmountOut) internal view returns (uint baseTokenAmountIn) {
+        (uint reserveA, uint reserveB) = getReserves(pair);
+        baseTokenAmountIn = getAmountIn(otherTokenAmountOut, reserveB, reserveA);
     }
 
-    function getTokenAmountIn(address pair, uint stonkAmountOut) internal view returns (uint tokenAmountIn) {
-        (uint tokenReserve, uint stonkReserve) = getReserves(pair);
-        tokenAmountIn = getAmountIn(stonkAmountOut, tokenReserve, stonkReserve);
+    function getTokenAmountIn(address pair, uint baseTokenAmountOut) internal view returns (uint tokenAmountIn) {
+        (uint reserveA, uint reserveB) = getReserves(pair);
+        tokenAmountIn = getAmountIn(baseTokenAmountOut, reserveA, reserveB);
     }
 }

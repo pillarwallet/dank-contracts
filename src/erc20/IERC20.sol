@@ -65,8 +65,6 @@ interface IERC20 {
      */
     function approve(address spender, uint256 amount) external returns (bool);
 
-    function mint(address account, uint256 amount) external returns (bool);
-
     /**
      * @dev Moves `amount` tokens from `sender` to `recipient` using the
      * allowance mechanism. `amount` is then deducted from the caller's
@@ -91,11 +89,4 @@ interface IERC20 {
      * a call to {approve}. `value` is the new allowance.
      */
     event Approval(address indexed owner, address indexed spender, uint256 value);
-
-    /**
-     * @dev Emitted when minting new tokens
-     * a call to {mint}. `to` is the destination.
-     */
-    event Mint(address to, uint256 amount);
-
 }
