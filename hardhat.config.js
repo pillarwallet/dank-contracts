@@ -1,16 +1,28 @@
 require('hardhat-deploy');
 require('hardhat-deploy-ethers');
 
-const mnemonic = process.env.MNEMONIC || 'test test test test test test test test test test test junk';
-const accounts = mnemonic ? { mnemonic } : undefined;
+const defaultMnemonic = 'test test test test test test test test test test test junk';
+const getNetworkEnvName = (networkName) => networkName.replace(/([A-Z])+/, '_$1').toUpperCase();
+
+const getAccounts = (networkName) => {
+  const networkEnvName = getNetworkEnvName(networkName);
+  const mnemonic = process.env[`MNEMONIC_${networkEnvName}`] || defaultMnemonic;
+  const privateKey = process.env[`PK_${networkEnvName}`];
+
+  if (privateKey) {
+    return [privateKey];
+  }
+
+  return mnemonic ? { mnemonic } : undefined;
+}
 
 const infuraProvider = (networkName) => `https://${networkName}.infura.io/v3/${process.env.INFURA_TOKEN}`;
 
 const setupNetwork = (networkName, chainId, defaultProvider = '') => ({
   [networkName]: {
-    url: process.env[`PROVIDER_ENDPOINT_${networkName.toUpperCase()}`] || defaultProvider,
+    url: process.env[`PROVIDER_ENDPOINT_${getNetworkEnvName(networkName)}`] || defaultProvider,
     chainId,
-    accounts,
+    accounts: getAccounts(networkName),
   }
 });
 
@@ -23,7 +35,10 @@ const config = {
   },
   networks: {
     hardhat: {
-      accounts,
+      accounts: {
+        mnemonic: process.env.HARDHAT_MNEMONIC || defaultMnemonic,
+        count: 256,
+      },
       chainId: 9999,
       gasPrice: 20000000000,
     },
