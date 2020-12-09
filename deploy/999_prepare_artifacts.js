@@ -13,11 +13,15 @@ const func = async function (hre) {
   await fsExtra.ensureDir(config.artifactsPath);
 
   for(const contractName of Object.keys(all)) {
-    const artifact = await deployments.getArtifact(contractName);
-    const artifactPath = path.join(config.artifactsPath, `${contractName}.json`);
-    await fsExtra.writeJSON(artifactPath, artifact, {
-      spaces: 2,
-    });
+    try {
+      const artifact = await deployments.getArtifact(contractName);
+      const artifactPath = path.join(config.artifactsPath, `${contractName}.json`);
+      await fsExtra.writeJSON(artifactPath, artifact, {
+        spaces: 2,
+      });
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   console.log('artifacts saved');

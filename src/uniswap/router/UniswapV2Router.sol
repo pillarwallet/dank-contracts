@@ -63,7 +63,7 @@ contract UniswapV2Router is IUniswapV2Router {
     }
 
     function addLiquidity(
-        bytes32 tokenHash, // MEME TOKEN (1)
+        bytes32 tokenHash,
         uint amountADesired,
         uint amountBDesired,
         uint amountAMin,
@@ -71,7 +71,7 @@ contract UniswapV2Router is IUniswapV2Router {
         address to,
         uint deadline
     ) external virtual override ensure(deadline) returns (uint amountA, uint amountB, uint liquidity) {
-        address tokenB = IUniswapV2Factory(factory).baseToken(); // STONK (100)
+        address tokenB = IUniswapV2Factory(factory).baseToken();
         address dispenser = IUniswapV2Factory(factory).dispenser();
         address pair = IUniswapV2Factory(factory).getPair(tokenHash);
         (amountA, amountB) = _addLiquidity(tokenHash, amountADesired, amountBDesired, amountAMin, amountBMin);

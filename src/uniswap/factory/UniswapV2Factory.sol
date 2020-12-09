@@ -14,7 +14,7 @@ contract UniswapV2Factory is IUniswapV2Factory {
     mapping(bytes32 => address) public override getPair; // all pairs are token/baseToken (baseToken is not used in mapping)
     address[] public override allPairs;
 
-    event PairCreated(address sender, bytes32 tokenHash, address baseToken, address pair, uint allPairsLength);
+    event PairCreated(address indexed sender, bytes32 tokenHash, address indexed baseToken, address pair, uint allPairsLength);
 
     constructor(address _feeToSetter, address _baseToken, address _dispenser) public {
         feeToSetter = _feeToSetter;
