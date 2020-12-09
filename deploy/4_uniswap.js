@@ -8,10 +8,19 @@ const func = async function (hre) {
   const WrappedERC20 = await deployments.get('WrappedERC20');
   const ERC1155 = await deployments.get('ERC1155');
 
+  const UniswapV2Pair = await deploy('UniswapV2Pair', {
+    args: [],
+    from: deployer,
+    log: true,
+  });
+
   const UniswapV2Factory = await deploy('UniswapV2Factory', {
     args: [deployer, WrappedERC20.address, ERC1155.address],
     from: deployer,
     log: true,
+    libraries: {
+      UniswapV2Pair: UniswapV2Pair.address,
+    },
   });
 
   await deploy('UniswapV2Router', {
