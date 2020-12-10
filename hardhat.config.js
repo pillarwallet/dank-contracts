@@ -67,14 +67,14 @@ const config = {
     deploy: 'deploy',
     deployments: 'deployments',
   },
-  external: {
+  /*external: {
     contracts: [
       {
         artifacts: 'etherspot/artifacts',
         deploy: 'etherspot/deploy',
       },
     ],
-  },
+  },*/
 };
 
 module.exports = config;

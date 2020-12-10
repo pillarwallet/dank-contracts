@@ -35,7 +35,7 @@
     "hardhat:compile": "hardhat compile",
     "hardhat:start:node": "hardhat node --no-deploy",
     "hardhat:start:full": "hardhat node --export build/contracts-localhost.json",
-    "hardhat:deploy:local": "hardhat deploy --reset --export build/contracts-localhost.json --network localhost",
+    "hardhat:deploy:local": "PK_LOCALHOST=0x5504956d5f39cbe19c7303d5df78dc43599ba661afe67fec14eafd044e162bd6 hardhat deploy --reset --export build/contracts-localhost.json --network localhost",
     "hardhat:deploy:watch": "hardhat deploy --reset --watch --export build/contracts-localhost.json --network localhost",
     "hardhat:artifacts": "hardhat run scripts/artifacts.js --network localhost"
   },
