@@ -15,6 +15,15 @@ interface IUniswapV2Router {
         uint deadline
     ) external returns (uint amountA, uint amountB, uint liquidity);
 
+    function addLiquidityETH(
+        bytes32 tokenHash,
+        uint amountTokenDesired,
+        uint amountTokenMin,
+        uint amountETHMin,
+        address to,
+        uint deadline
+    ) external payable returns (uint amountToken, uint amountETH, uint liquidity);
+
     function removeLiquidity(
         bytes32 tokenHash,
         uint liquidity,
@@ -23,6 +32,15 @@ interface IUniswapV2Router {
         address to,
         uint deadline
     ) external returns (uint amountA, uint amountB);
+
+    function removeLiquidityETH(
+        bytes32 tokenHash,
+        uint liquidity,
+        uint amountTokenMin,
+        uint amountETHMin,
+        address to,
+        uint deadline
+    ) external returns (uint amountToken, uint amountETH);
 
     function removeLiquidityWithPermit(
         bytes32 tokenHash,
@@ -34,6 +52,16 @@ interface IUniswapV2Router {
         bool approveMax, uint8 v, bytes32 r, bytes32 s
     ) external returns (uint amountA, uint amountB);
 
+    function removeLiquidityETHWithPermit(
+        bytes32 tokenHash,
+        uint liquidity,
+        uint amountTokenMin,
+        uint amountETHMin,
+        address to,
+        uint deadline,
+        bool approveMax, uint8 v, bytes32 r, bytes32 s
+    ) external returns (uint amountToken, uint amountETH);
+
     function swapExactBaseTokensForTokens(
         uint baseTokenAmountIn,
         uint tokenAmountOutMin,
@@ -41,6 +69,13 @@ interface IUniswapV2Router {
         address to,
         uint deadline
     ) external returns (uint tokenAmountOut);
+
+    function swapExactETHForTokens(
+        uint tokenAmountOutMin,
+        bytes32 tokenHash,
+        address to,
+        uint deadline
+    ) external payable returns (uint tokenAmountOut);
 
     function swapBaseTokensForExactTokens(
         uint tokenAmountOut,
@@ -50,6 +85,13 @@ interface IUniswapV2Router {
         uint deadline
     ) external returns (uint baseTokenAmountIn);
 
+    function swapETHForExactTokens(
+        uint tokenAmountOut,
+        bytes32 tokenHash,
+        address to,
+        uint deadline
+    ) external payable returns (uint ethAmountIn);
+
     function swapExactTokensForBaseTokens(
         uint tokenAmountIn,
         uint baseTokenAmountOutMin,
@@ -58,8 +100,24 @@ interface IUniswapV2Router {
         uint deadline
     ) external returns (uint baseTokenAmountOut);
 
+    function swapExactTokensForETH(
+        uint tokenAmountIn,
+        uint ethAmountOutMin,
+        bytes32 tokenHash,
+        address to,
+        uint deadline
+    ) external returns (uint ethAmountOut);
+
     function swapTokensForExactBaseTokens(
         uint baseTokenAmountOut,
+        uint tokenAmountInMax,
+        bytes32 tokenHash,
+        address to,
+        uint deadline
+    ) external returns (uint tokenAmountIn);
+
+    function swapTokensForExactETH(
+        uint ethAmountOut,
         uint tokenAmountInMax,
         bytes32 tokenHash,
         address to,
