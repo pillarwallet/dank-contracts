@@ -4,11 +4,15 @@ require('hardhat-deploy-ethers');
 const mnemonic = process.env.MNEMONIC || 'test test test test test test test test test test test junk';
 const accounts = mnemonic ? { mnemonic } : undefined;
 
-const setupInfura = (networkName, chainId, accounts) => ({
-  url: `https://${networkName}.infura.io/v3/${process.env.INFURA_TOKEN}`,
-  chainId,
-  accounts,
-})
+const infuraProvider = (networkName) => `https://${networkName}.infura.io/v3/${process.env.INFURA_TOKEN}`;
+
+const setupNetwork = (networkName, chainId, defaultProvider = '') => ({
+  [networkName]: {
+    url: process.env[`PROVIDER_ENDPOINT_${networkName.toUpperCase()}`] || defaultProvider,
+    chainId,
+    accounts,
+  }
+});
 
 /**
  * @type import('hardhat/config').HardhatUserConfig
@@ -21,16 +25,16 @@ const config = {
     hardhat: {
       accounts,
       chainId: 9999,
+      gasPrice: 20000000000,
     },
-    localhost: {
-      url: 'http://localhost:8545',
-      accounts,
-    },
-    mainnet: setupInfura('mainnet', 1),
-    ropsten: setupInfura('ropsten', 3),
-    rinkeby: setupInfura('rinkeby', 4),
-    kovan: setupInfura('kovan', 42),
-    goerli: setupInfura('goerli', 5),
+    ...setupNetwork('localhost', 9999, 'http://localhost:8545'),
+    ...setupNetwork('mainnet', 1, infuraProvider('mainnet')),
+    ...setupNetwork('ropsten', 3, infuraProvider('ropsten')),
+    ...setupNetwork('rinkeby', 4, infuraProvider('rinkeby')),
+    ...setupNetwork('goerli', 5, infuraProvider('goerli')),
+    ...setupNetwork('kovan', 42, infuraProvider('kovan')),
+    ...setupNetwork('xdai', 100, 'https://dai.poa.network'),
+    ...setupNetwork('sokol', 77, 'https://sokol.poa.network'),
   },
   solidity: {
     version: '0.6.12',
@@ -43,10 +47,18 @@ const config = {
   },
   paths: {
     sources: 'src',
-    cache: './.hardhat/cache',
-    artifacts: './.hardhat/artifacts',
-    deploy: './deploy',
-    deployments: './.hardhat/deployments',
+    cache: '.hardhat/cache',
+    artifacts: '.hardhat/artifacts',
+    deploy: 'deploy',
+    deployments: 'deployments',
+  },
+  external: {
+    contracts: [
+      {
+        artifacts: 'etherspot/artifacts',
+        deploy: 'etherspot/deploy',
+      },
+    ],
   },
 };
 

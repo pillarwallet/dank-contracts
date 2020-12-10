@@ -1,5 +1,3 @@
-const config = require('../config');
-
 /**
  * @type import('hardhat/types').HardhatRuntimeEnvironment
  */
@@ -11,7 +9,7 @@ const func = async function (hre) {
   const ERC1155 = await deployments.get('ERC1155');
 
   const UniswapV2Factory = await deploy('UniswapV2Factory', {
-    args: [config.ownerAddress, ERC20.address, ERC1155.address],
+    args: [deployer, ERC20.address, ERC1155.address],
     from: deployer,
     log: true,
   });

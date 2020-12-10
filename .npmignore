@@ -1,3 +1,10 @@
 /*
+!/artifacts
 !/build
+/build/contracts-localhost.json
+!/deploy
+/deploy/999_prepare_artifacts.js
+!/deployments
+/deployments/localhost
+!/src
 !/LICENSE
