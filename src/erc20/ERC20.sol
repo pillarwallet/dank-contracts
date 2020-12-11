@@ -5,7 +5,6 @@ pragma solidity ^0.6.0;
 import "../common/GSN/Context.sol";
 import "./IERC20.sol";
 import "../common/math/SafeMath.sol";
-import "../common/utils/Address.sol";
 
 /**
  * @dev Implementation of the {IERC20} interface.
@@ -33,11 +32,10 @@ import "../common/utils/Address.sol";
  */
 contract ERC20 is Context, IERC20 {
     using SafeMath for uint256;
-    using Address for address;
 
-    mapping (address => uint256) private _balances;
+    mapping (address => uint256) internal _balances;
 
-    mapping (address => mapping (address => uint256)) private _allowances;
+    mapping (address => mapping (address => uint256)) internal _allowances;
 
     uint256 private _totalSupply;
 
@@ -215,54 +213,6 @@ contract ERC20 is Context, IERC20 {
         _balances[sender] = _balances[sender].sub(amount, "ERC20: transfer amount exceeds balance");
         _balances[recipient] = _balances[recipient].add(amount);
         emit Transfer(sender, recipient, amount);
-    }
-
-    // TODO: minting mechanism for testing remove after completed
-
-    function mint(address account, uint256 amount) external override returns (bool) {
-      _mint(account, amount);
-      emit Mint(account, amount);
-      return true;
-    }
-
-    /** @dev Creates `amount` tokens and assigns them to `account`, increasing
-     * the total supply.
-     *
-     * Emits a {Transfer} event with `from` set to the zero address.
-     *
-     * Requirements
-     *
-     * - `to` cannot be the zero address.
-     */
-    function _mint(address account, uint256 amount) internal virtual {
-        require(account != address(0), "ERC20: mint to the zero address");
-
-        _beforeTokenTransfer(address(0), account, amount);
-
-        _totalSupply = _totalSupply.add(amount);
-        _balances[account] = _balances[account].add(amount);
-        emit Transfer(address(0), account, amount);
-    }
-
-    /**
-     * @dev Destroys `amount` tokens from `account`, reducing the
-     * total supply.
-     *
-     * Emits a {Transfer} event with `to` set to the zero address.
-     *
-     * Requirements
-     *
-     * - `account` cannot be the zero address.
-     * - `account` must have at least `amount` tokens.
-     */
-    function _burn(address account, uint256 amount) internal virtual {
-        require(account != address(0), "ERC20: burn from the zero address");
-
-        _beforeTokenTransfer(account, address(0), amount);
-
-        _balances[account] = _balances[account].sub(amount, "ERC20: burn amount exceeds balance");
-        _totalSupply = _totalSupply.sub(amount);
-        emit Transfer(account, address(0), amount);
     }
 
     /**

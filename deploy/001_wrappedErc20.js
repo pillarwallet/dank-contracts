@@ -5,11 +5,11 @@ const func = async function (hre) {
   const { deployments: { deploy }, getNamedAccounts } = hre;
   const { deployer } = await getNamedAccounts();
 
-  await deploy('ERC20', {
-    args: ['Stonk', 'STNK'],
+  await deploy('WrappedERC20', {
+    args: ['Wrapped XDAI', 'WXDAI'],
     from: deployer,
     log: true,
   });
 };
 module.exports = func;
-module.exports.tags = ['ERC20'];
+module.exports.tags = ['WrappedERC20'];

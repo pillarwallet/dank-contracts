@@ -3,10 +3,10 @@
 pragma solidity ^0.6.6;
 
 interface IUniswapV2Factory {
-    event PairCreated(bytes32 indexed tokenHash, address indexed stonkToken, address pair, uint);
+    event PairCreated(address indexed sender, bytes32 tokenHash, address indexed baseToken, address pair, uint allPairsLength);
 
     function dispenser() external view returns (address);
-    function stonkToken() external view returns (address);
+    function baseToken() external view returns (address);
     function feeTo() external view returns (address);
     function feeToSetter() external view returns (address);
 

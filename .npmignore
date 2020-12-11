@@ -6,5 +6,4 @@
 /deploy/999_prepare_artifacts.js
 !/deployments
 /deployments/localhost
-!/src
 !/LICENSE

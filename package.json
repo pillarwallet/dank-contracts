@@ -35,7 +35,7 @@
     "hardhat:compile": "hardhat compile",
     "hardhat:start:node": "hardhat node --no-deploy",
     "hardhat:start:full": "hardhat node --export build/contracts-localhost.json",
-    "hardhat:deploy:local": "hardhat deploy --reset --export build/contracts-localhost.json --network localhost",
+    "hardhat:deploy:local": "PK_LOCALHOST=0x5504956d5f39cbe19c7303d5df78dc43599ba661afe67fec14eafd044e162bd6 hardhat deploy --reset --export build/contracts-localhost.json --network localhost",
     "hardhat:deploy:watch": "hardhat deploy --reset --watch --export build/contracts-localhost.json --network localhost",
     "hardhat:artifacts": "hardhat run scripts/artifacts.js --network localhost"
   },
@@ -45,9 +45,9 @@
     "cross-env": "^7.0.2",
     "ethers": "^5.0.14",
     "fs-extra": "^9.0.1",
-    "hardhat": "^2.0.3",
-    "hardhat-deploy": "^0.7.0-beta.28",
-    "hardhat-deploy-ethers": "^0.3.0-beta.6",
+    "hardhat": "^2.0.4",
+    "hardhat-deploy": "^0.7.0-beta.37",
+    "hardhat-deploy-ethers": "^0.3.0-beta.7",
     "request": "2.88.2",
     "request-promise-native": "1.0.8",
     "web3-eth-abi": "1.2.6"
