@@ -1,0 +1,4 @@
+.hardhat
+artifacts
+build
+deployments

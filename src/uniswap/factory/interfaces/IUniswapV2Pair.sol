@@ -21,7 +21,7 @@ interface IUniswapV2Pair {
     function MINIMUM_LIQUIDITY() external view returns (uint);
     function factory() external view returns (address);
     function dispenser() external view returns (address);
-    function baseTokenToken() external view returns (address);
+    function baseToken() external view returns (address);
     function tokenHash() external view returns (bytes32);
     function getReserves() external view returns (uint112 tokenReserve, uint112 baseTokenReserve, uint32 blockTimestampLast);
     function tokenCumulativeLast() external view returns (uint);

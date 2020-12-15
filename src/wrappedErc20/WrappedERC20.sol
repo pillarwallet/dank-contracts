@@ -22,7 +22,12 @@ contract WrappedERC20 is ERC20, IWrappedERC20 {
 
     function withdraw(uint value) virtual override external {
         _balances[_msgSender()] = _balances[_msgSender()].sub(value, "ERC20: withdrawal amount exceeds balance");
-        msg.sender.transfer(value);
+
+        require(
+            // solhint-disable-next-line check-send-result
+            payable(_msgSender()).send(value)
+        );
+
         Withdrawal(_msgSender(), value);
     }
 

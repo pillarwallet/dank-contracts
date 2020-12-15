@@ -1,0 +1,8 @@
+.hardhat/
+build/
+deploy/
+deployments/
+artifacts/
+scripts/
+coverage/
+node_modules/

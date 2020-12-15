@@ -1,3 +1,4 @@
+require('@nomiclabs/hardhat-waffle');
 require('hardhat-deploy');
 require('hardhat-deploy-ethers');
 
@@ -14,7 +15,7 @@ const getAccounts = (networkName) => {
   }
 
   return mnemonic ? { mnemonic } : undefined;
-}
+};
 
 const infuraProvider = (networkName) => `https://${networkName}.infura.io/v3/${process.env.INFURA_TOKEN}`;
 
@@ -23,7 +24,7 @@ const setupNetwork = (networkName, chainId, defaultProvider = '') => ({
     url: process.env[`PROVIDER_ENDPOINT_${getNetworkEnvName(networkName)}`] || defaultProvider,
     chainId,
     accounts: getAccounts(networkName),
-  }
+  },
 });
 
 /**
@@ -32,6 +33,7 @@ const setupNetwork = (networkName, chainId, defaultProvider = '') => ({
 const config = {
   namedAccounts: {
     deployer: 0,
+    account: 0,
   },
   networks: {
     hardhat: {
@@ -66,6 +68,10 @@ const config = {
     artifacts: '.hardhat/artifacts',
     deploy: 'deploy',
     deployments: 'deployments',
+    tests: 'test',
+  },
+  mocha: {
+    timeout: 0,
   },
   /*external: {
     contracts: [
