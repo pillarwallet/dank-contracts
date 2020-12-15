@@ -37,6 +37,11 @@ contract UniswapV2Router is IUniswapV2Router {
         factory = _factory;
     }
 
+    receive() external payable {
+        address baseToken = IUniswapV2Factory(factory).baseToken();
+        assert(msg.sender == baseToken); // only accept ETH via fallback from the WrappedERC20 contract
+    }
+
     // **** ADD LIQUIDITY ****
     function _addLiquidity(
         bytes32 tokenHash,
