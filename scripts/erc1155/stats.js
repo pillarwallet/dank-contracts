@@ -17,7 +17,7 @@ const contract = new ethers.Contract(
 
 async function main() {
   console.info('ERC1155 dispenser stats');
-  const packedParams = ethers.utils.solidityPack(['address', 'uint256'], [erc721Address, process.env.id])
+  const packedParams = ethers.utils.solidityPack(['address', 'uint256'], [erc721Address, process.env.id]);
   const hash = ethers.utils.keccak256(packedParams);
   const depositOf = await contract.dispensedOf(hash);
 

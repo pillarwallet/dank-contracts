@@ -14,7 +14,7 @@ const routerContract = new ethers.Contract(
 );
 
 async function main() {
-  console.info('Uniswap Router: get stonk amount out')
+  console.info('Uniswap Router: get stonk amount out');
   const stonkInputAmount = ethers.BigNumber.from(10).pow(6);
   const tokenAmountOut = await routerContract.getStonkAmountOut(ethers.utils.hexlify(stonkInputAmount), process.env.tokenHash || config.tokenHash);
   console.info('Amount: ', tokenAmountOut.toString());

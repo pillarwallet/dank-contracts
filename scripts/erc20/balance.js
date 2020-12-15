@@ -16,9 +16,9 @@ const contract = new ethers.Contract(
 async function main() {
   console.info('STONK balances');
   const ownerBalance = await contract.balanceOf(config.ownerAddress);
-  console.info(`Owner: `, ownerBalance.toString());
+  console.info('Owner: ', ownerBalance.toString());
   const traderBalance = await contract.balanceOf(config.traderAddress);
-  console.info(`Trader: `, traderBalance.toString());
+  console.info('Trader: ', traderBalance.toString());
 }
 
 main()

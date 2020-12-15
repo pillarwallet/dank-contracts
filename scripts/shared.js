@@ -10,16 +10,16 @@ const transactionParams = {
   gasPrice: '0xa',
   value: 0,
   chainId: config.networkId,
-}
+};
 
 async function sendOwnerEncodedFunction(encodedFunction, to) {
-  console.info('Making owner transaction')
+  console.info('Making owner transaction');
   const result = await sendEncodedFunction(encodedFunction, to, config.ownerPrivateKey);
   console.info(result);
 }
 
 async function sendTraderEncodedFunction (encodedFunction, to) {
-  console.info('Making trader transaction')
+  console.info('Making trader transaction');
   const result = await sendEncodedFunction(encodedFunction, to, config.traderPrivateKey);
   console.info(result);
 }

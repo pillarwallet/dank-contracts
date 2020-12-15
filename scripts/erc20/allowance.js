@@ -17,9 +17,9 @@ const contract = new ethers.Contract(
 async function main() {
   console.info('Uniswap router allowance');
   const ownerAllowance = await contract.allowance(config.ownerAddress, uniswapRouter);
-  console.info(`Owner: `, ownerAllowance.toString());
+  console.info('Owner: ', ownerAllowance.toString());
   const traderAllowance = await contract.allowance(config.traderAddress, uniswapRouter);
-  console.info(`Trader: `, traderAllowance.toString());
+  console.info('Trader: ', traderAllowance.toString());
 }
 
 main()
