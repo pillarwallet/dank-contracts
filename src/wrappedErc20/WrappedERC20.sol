@@ -17,7 +17,7 @@ contract WrappedERC20 is ERC20, IWrappedERC20 {
 
     function deposit() virtual override public payable {
         _balances[_msgSender()] = _balances[_msgSender()].add(msg.value);
-        Deposit(_msgSender(), msg.value);
+        emit Deposit(_msgSender(), msg.value);
     }
 
     function withdraw(uint value) virtual override external {
@@ -28,7 +28,7 @@ contract WrappedERC20 is ERC20, IWrappedERC20 {
             payable(_msgSender()).send(value)
         );
 
-        Withdrawal(_msgSender(), value);
+        emit Withdrawal(_msgSender(), value);
     }
 
     function transfer(address recipient, uint256 amount) public virtual override(ERC20, IWrappedERC20) returns (bool) {

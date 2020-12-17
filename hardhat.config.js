@@ -45,6 +45,7 @@ const config = {
       gasPrice: 20000000000,
     },
     ...setupNetwork('localhost', 9999, 'http://localhost:8545'),
+    ...setupNetwork('localB', 6666, 'http://localhost:9545'),
     ...setupNetwork('mainnet', 1, infuraProvider('mainnet')),
     ...setupNetwork('ropsten', 3, infuraProvider('ropsten')),
     ...setupNetwork('rinkeby', 4, infuraProvider('rinkeby')),
