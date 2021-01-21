@@ -83,7 +83,7 @@ describe('Meme actions', () => {
 
     await expect(addLiquidityETH) //
       .to.emit(UniswapV2Router, 'LiquidityAdded')
-      .withArgs(account, tokenHash, liquidityTokens, memeTokens, ethAmount);
+      .withArgs(account, tokenHash, liquidityTokens, ethAmount, memeTokens);
 
     // validate reserves
     const [tokenReserve, ethReserve] = await UniswapV2Pair.getReserves();
@@ -147,6 +147,138 @@ describe('Meme actions', () => {
 
     // validate account balances
     expect(await ERC1155.balanceOf(account, tokenHash)).to.equal(expectTokenAmount);
+
+    const { totalCost } = await processTx(removeLiquidityETH);
+    const ethBalanceAfter = await provider.getBalance(account);
+
+    expect(
+      ethBalanceBefore //
+        .sub(totalCost)
+        .add(BigNumber.from(expectEthAmount)),
+    ).to.equal(ethBalanceAfter);
+  });
+
+  it('Remove Liquidity by providing the number of tokens to receive', async function () {
+    const {
+      accounts: [account],
+      tokenHash,
+      UniswapV2Pair,
+      UniswapV2Router,
+      ERC1155,
+    } = await setup();
+
+    // add liquidity
+    const deadline = setDeadline(15); // 15min
+    const memeTokens = toWei(1);
+    const ethAmount = toWei(5);
+
+    UniswapV2Router.addLiquidityETH(tokenHash, memeTokens, 0, 0, account, deadline, {
+      value: ethAmount,
+    });
+
+    // set allowance
+    await UniswapV2Pair.approve(UniswapV2Router.address, hexlify(MaxUint256));
+
+    // remove liquidity
+    const liquidityBalanceBefore = await UniswapV2Pair.balanceOf(account);
+    const ethBalanceBefore = await provider.getBalance(account);
+    const expectLiquidityWithdrawn = '9999';
+    const getTokenAmount = '4472';
+    const expectEthAmount = '22358';
+
+    const removeLiquidityETH = UniswapV2Router.removeLiquidityGetExactTokensBack(
+      tokenHash,
+      getTokenAmount,
+      0,
+      true,
+      account,
+      deadline,
+    );
+
+    await expect(removeLiquidityETH) //
+      .to.emit(UniswapV2Router, 'LiquidityRemoved')
+      .withArgs(account, tokenHash, expectLiquidityWithdrawn, expectEthAmount, getTokenAmount);
+
+    // validate pair balance
+    expect(await UniswapV2Pair.balanceOf(account)).to.equal(
+      liquidityBalanceBefore.sub(BigNumber.from(expectLiquidityWithdrawn)),
+    );
+
+    // validate reserves
+    const [tokenReserve, ethReserve] = await UniswapV2Pair.getReserves();
+    expect(memeTokens.sub(tokenReserve)).to.equal(getTokenAmount);
+    expect(ethAmount.sub(ethReserve)).to.equal(expectEthAmount);
+
+    // validate account balances
+    expect(await ERC1155.balanceOf(account, tokenHash)).to.equal(getTokenAmount);
+
+    const { totalCost } = await processTx(removeLiquidityETH);
+    const ethBalanceAfter = await provider.getBalance(account);
+
+    expect(
+      ethBalanceBefore //
+        .sub(totalCost)
+        .add(BigNumber.from(expectEthAmount)),
+    ).to.equal(ethBalanceAfter);
+  });
+
+  it('Remove the whole Liquidity', async function () {
+    const {
+      accounts: [account],
+      tokenHash,
+      UniswapV2Pair,
+      UniswapV2Router,
+      ERC1155,
+    } = await setup();
+
+    // add liquidity
+    const deadline = setDeadline(15); // 15min
+    const memeTokens = toWei(1);
+    const ethAmount = toWei(5);
+
+    UniswapV2Router.addLiquidityETH(tokenHash, memeTokens, 0, 0, account, deadline, {
+      value: ethAmount,
+    });
+
+    // set allowance
+    await UniswapV2Pair.approve(UniswapV2Router.address, hexlify(MaxUint256));
+
+    // remove liquidity
+    const liquidityBalanceBefore = await UniswapV2Pair.balanceOf(account);
+    const ethBalanceBefore = await provider.getBalance(account);
+    const expectEthAmount = '4999999999999997763';
+
+    const expectLiquidityWithdrawn = await UniswapV2Router.calculateLiquidityNeededToGetTokensOut(
+      tokenHash,
+      memeTokens,
+      0,
+    ); // 2236067977499788696
+
+    const removeLiquidityETH = UniswapV2Router.removeLiquidityGetExactTokensBack(
+      tokenHash,
+      memeTokens,
+      0,
+      true,
+      account,
+      deadline,
+    );
+
+    await expect(removeLiquidityETH) //
+      .to.emit(UniswapV2Router, 'LiquidityRemoved')
+      .withArgs(account, tokenHash, expectLiquidityWithdrawn, expectEthAmount, memeTokens);
+
+    // validate pair balance
+    expect(await UniswapV2Pair.balanceOf(account)).to.equal(
+      liquidityBalanceBefore.sub(BigNumber.from(expectLiquidityWithdrawn)),
+    );
+
+    // validate reserves
+    const [tokenReserve, ethReserve] = await UniswapV2Pair.getReserves();
+    expect(tokenReserve).to.equal(0);
+    expect(ethReserve).to.equal(ethAmount.sub(BigNumber.from(expectEthAmount)));
+
+    // validate account balances
+    expect(await ERC1155.balanceOf(account, tokenHash)).to.equal(memeTokens);
 
     const { totalCost } = await processTx(removeLiquidityETH);
     const ethBalanceAfter = await provider.getBalance(account);

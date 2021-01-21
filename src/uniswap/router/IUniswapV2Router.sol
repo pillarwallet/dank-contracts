@@ -62,6 +62,15 @@ interface IUniswapV2Router {
         bool approveMax, uint8 v, bytes32 r, bytes32 s
     ) external returns (uint amountToken, uint amountETH);
 
+    function removeLiquidityGetExactTokensBack(
+        bytes32 tokenHash,
+        uint amountTokensToReturn,
+        uint amountBaseTokensToReturn,
+        bool returnETH,
+        address to,
+        uint deadline
+    ) external returns (uint amountToken, uint amountETH);
+
     function swapExactBaseTokensForTokens(
         uint baseTokenAmountIn,
         uint tokenAmountOutMin,
@@ -131,4 +140,10 @@ interface IUniswapV2Router {
     function getBaseTokenAmountOut(uint tokenAmountIn, bytes32 tokenHash) external view returns (uint amountOut);
     function getTokenAmountIn(uint baseTokenAmountIn, bytes32 tokenHash) external view returns (uint amountOut);
     function getBaseTokenAmountIn(uint tokenAmountIn, bytes32 tokenHash) external view returns (uint amountOut);
+
+    function calculateLiquidityNeededToGetTokensOut(
+        bytes32 tokenHash,
+        uint amountTokensToReturn,
+        uint amountBaseTokensToReturn
+    ) external view returns (uint);
 }

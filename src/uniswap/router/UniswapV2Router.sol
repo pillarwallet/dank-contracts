@@ -22,8 +22,8 @@ contract UniswapV2Router is IUniswapV2Router {
         _;
     }
 
-    event LiquidityAdded(address sender, bytes32 tokenHash, uint liquidity, uint amountB, uint amountA);
-    event LiquidityRemoved(address sender, bytes32 tokenHash, uint liquidity, uint amountB, uint amountA);
+    event LiquidityAdded(address sender, bytes32 tokenHash, uint liquidity, uint amountBaseToken, uint amountToken);
+    event LiquidityRemoved(address sender, bytes32 tokenHash, uint liquidity, uint amountBaseToken, uint amountToken);
     event SwapBaseTokensForExactTokens(address sender, bytes32 tokenHash, uint baseTokenAmountIn, uint tokenAmountOut);
     event SwapETHForExactTokens(address sender, bytes32 tokenHash, uint ethAmountIn, uint tokenAmountOut);
     event SwapTokensForExactBaseTokens(address sender, bytes32 tokenHash, uint baseTokenAmountOut, uint tokenAmountIn);
@@ -74,23 +74,30 @@ contract UniswapV2Router is IUniswapV2Router {
 
     function addLiquidity(
         bytes32 tokenHash,
-        uint amountADesired,
-        uint amountBDesired,
-        uint amountAMin,
-        uint amountBMin,
+        uint amountTokenDesired,
+        uint amountBaseTokenDesired,
+        uint amountTokenMin,
+        uint amountBaseTokenMin,
         address to,
         uint deadline
-    ) external virtual override ensure(deadline) returns (uint amountA, uint amountB, uint liquidity) {
+    ) external virtual override ensure(deadline) returns (uint amountToken, uint amountBaseToken, uint liquidity) {
         address tokenB = IUniswapV2Factory(factory).baseToken();
         address dispenser = IUniswapV2Factory(factory).dispenser();
         address pair = IUniswapV2Factory(factory).getPair(tokenHash);
-        (amountA, amountB) = _addLiquidity(tokenHash, amountADesired, amountBDesired, amountAMin, amountBMin);
 
-        TransferHelper.safeTransferFromERC1155(dispenser, tokenHash, msg.sender, pair, amountA);
-        TransferHelper.safeTransferFrom(tokenB, msg.sender, pair, amountB);
+        (amountToken, amountBaseToken) = _addLiquidity(
+            tokenHash,
+            amountTokenDesired,
+            amountBaseTokenDesired,
+            amountTokenMin,
+            amountBaseTokenMin
+        );
+
+        TransferHelper.safeTransferFromERC1155(dispenser, tokenHash, msg.sender, pair, amountToken);
+        TransferHelper.safeTransferFrom(tokenB, msg.sender, pair, amountBaseToken);
         liquidity = IUniswapV2Pair(pair).mint(to);
 
-        emit LiquidityAdded(msg.sender, tokenHash, liquidity, amountB, amountA);
+        emit LiquidityAdded(msg.sender, tokenHash, liquidity, amountBaseToken, amountToken);
     }
 
     function addLiquidityETH(
@@ -116,26 +123,26 @@ contract UniswapV2Router is IUniswapV2Router {
             TransferHelper.safeTransferETH(msg.sender, msg.value - amountETH);
         }
 
-        emit LiquidityAdded(msg.sender, tokenHash, liquidity, amountToken, amountETH);
+        emit LiquidityAdded(msg.sender, tokenHash, liquidity, amountETH, amountToken);
     }
 
     // **** REMOVE LIQUIDITY ****
     function removeLiquidity(
         bytes32 tokenHash,
         uint liquidity,
-        uint amountAMin,
-        uint amountBMin,
+        uint amountTokenMin,
+        uint amountBaseTokenMin,
         address to,
         uint deadline
-    ) public virtual override ensure(deadline) returns (uint amountA, uint amountB) {
+    ) public virtual override ensure(deadline) returns (uint amountToken, uint amountBaseToken) {
         address pair = IUniswapV2Factory(factory).getPair(tokenHash);
         IUniswapV2ERC20(pair).transferFrom(msg.sender, pair, liquidity); // send liquidity to pair
-        (amountA, amountB) = IUniswapV2Pair(pair).burn(to);
+        (amountToken, amountBaseToken) = IUniswapV2Pair(pair).burn(to, 0, 0);
 
-        require(amountA >= amountAMin, 'UniswapV2Router: INSUFFICIENT_A_AMOUNT');
-        require(amountB >= amountBMin, 'UniswapV2Router: INSUFFICIENT_B_AMOUNT');
+        require(amountToken >= amountTokenMin, 'UniswapV2Router: INSUFFICIENT_A_AMOUNT');
+        require(amountBaseToken >= amountBaseTokenMin, 'UniswapV2Router: INSUFFICIENT_B_AMOUNT');
 
-        emit LiquidityRemoved(msg.sender, tokenHash, liquidity, amountB, amountA);
+        emit LiquidityRemoved(msg.sender, tokenHash, liquidity, amountBaseToken, amountToken);
     }
 
     function removeLiquidityETH(
@@ -160,6 +167,36 @@ contract UniswapV2Router is IUniswapV2Router {
         TransferHelper.safeTransferFromERC1155(dispenser, tokenHash, address(this), to, amountToken);
         IWrappedERC20(baseToken).withdraw(amountETH);
         TransferHelper.safeTransferETH(to, amountETH);
+    }
+
+    function removeLiquidityGetExactTokensBack(
+        bytes32 tokenHash,
+        uint amountTokensToReturn,
+        uint amountBaseTokensToReturn,
+        bool returnETH,
+        address to,
+        uint deadline
+    ) public virtual override ensure(deadline) returns (uint amountToken, uint amountETH) {
+        uint liquidity = calculateLiquidityNeededToGetTokensOut(tokenHash, amountTokensToReturn, amountBaseTokensToReturn);
+        address pair = IUniswapV2Factory(factory).getPair(tokenHash);
+
+        IUniswapV2ERC20(pair).transferFrom(msg.sender, pair, liquidity); // send liquidity to pair
+        if (returnETH) {
+            (amountToken, amountETH) = IUniswapV2Pair(pair).burn(address(this), amountTokensToReturn, amountBaseTokensToReturn);
+        } else {
+            (amountToken, amountETH) = IUniswapV2Pair(pair).burn(to, amountTokensToReturn, amountBaseTokensToReturn);
+        }
+        require(amountToken == amountTokensToReturn, 'UniswapV2Router: WRONG_AMOUNT_BURNED');
+
+        emit LiquidityRemoved(msg.sender, tokenHash, liquidity, amountETH, amountToken);
+
+        if (returnETH) {
+            address baseToken = IUniswapV2Factory(factory).baseToken();
+            address dispenser = IUniswapV2Factory(factory).dispenser();
+            TransferHelper.safeTransferFromERC1155(dispenser, tokenHash, address(this), to, amountToken);
+            IWrappedERC20(baseToken).withdraw(amountETH);
+            TransferHelper.safeTransferETH(to, amountETH);
+        }
     }
 
     function removeLiquidityWithPermit(
@@ -421,7 +458,6 @@ contract UniswapV2Router is IUniswapV2Router {
         return UniswapV2Library.getBaseTokenAmountOut(pair, tokenAmountIn);
     }
 
-    // TODO currently unnecessary until initial working trade is made
     function getBaseTokenAmountIn(uint tokenAmountOut, bytes32 tokenHash)
       public
       view
@@ -442,5 +478,16 @@ contract UniswapV2Router is IUniswapV2Router {
     {
       address pair = IUniswapV2Factory(factory).getPair(tokenHash);
       return UniswapV2Library.getTokenAmountIn(pair, baseTokenAmountOut);
+    }
+
+    function calculateLiquidityNeededToGetTokensOut(bytes32 tokenHash, uint amountTokensToReturn, uint amountBaseTokensToReturn)
+        public
+        view
+        virtual
+        override
+        returns (uint liquidity)
+    {
+        address pair = IUniswapV2Factory(factory).getPair(tokenHash);
+        return UniswapV2Library.calculateLiquidityNeededToGetTokensOut(pair, amountTokensToReturn, amountBaseTokensToReturn);
     }
 }

@@ -3,7 +3,7 @@
 pragma solidity ^0.6.6;
 
 import "../interfaces/IUniswapV2Pair.sol";
-
+import "../interfaces/IUniswapV2ERC20.sol";
 import "../../../common/math/SafeMath.sol";
 
 library UniswapV2Library {
@@ -22,6 +22,16 @@ library UniswapV2Library {
     // fetches and sorts the reserves for a pair
     function getReserves(address pair) internal view returns (uint reserveA, uint reserveB) {
         (reserveA, reserveB,) = IUniswapV2Pair(pair).getReserves();
+    }
+
+    // fetches the total supply of a pair
+    function getTotalSupply(address pair) internal view returns (uint totalSupply) {
+        totalSupply = IUniswapV2ERC20(pair).totalSupply();
+    }
+
+    // fetches the minimum liquidity of a pair
+    function getMinimumLiquidity(address pair) internal view returns (uint minimumLiquidity) {
+        minimumLiquidity = IUniswapV2Pair(pair).MINIMUM_LIQUIDITY();
     }
 
     // given some amount of an asset and pair reserves, returns an equivalent amount of the other asset
@@ -50,7 +60,6 @@ library UniswapV2Library {
         amountIn = (numerator / denominator).add(1);
     }
 
-    // performs chained getAmountOut calculations on any number of pairs
     function getBaseTokenAmountOut(address pair, uint otherTokenAmountIn) internal view returns (uint amountOut) {
         (uint reserveA, uint reserveB) = getReserves(pair);
         amountOut = getAmountOut(otherTokenAmountIn, reserveA, reserveB);
@@ -69,5 +78,20 @@ library UniswapV2Library {
     function getTokenAmountIn(address pair, uint baseTokenAmountOut) internal view returns (uint tokenAmountIn) {
         (uint reserveA, uint reserveB) = getReserves(pair);
         tokenAmountIn = getAmountIn(baseTokenAmountOut, reserveA, reserveB);
+    }
+
+    function calculateLiquidityNeededToGetTokensOut(address pair, uint amountTokensToReturn, uint amountBaseTokensToReturn)
+        internal
+        view
+        returns (uint liquidity)
+    {
+        (uint tokenReserve, uint baseTokenReserve) = getReserves(pair);
+        uint totalSupply = getTotalSupply(pair);
+        uint minimumLiquidity = getMinimumLiquidity(pair);
+        if (amountTokensToReturn > 0) {
+            liquidity = totalSupply.sub(minimumLiquidity).mul(amountTokensToReturn).div(tokenReserve);
+        } else {
+            liquidity = totalSupply.sub(minimumLiquidity).mul(amountBaseTokensToReturn).div(baseTokenReserve);
+        }
     }
 }
