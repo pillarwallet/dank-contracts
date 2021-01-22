@@ -141,9 +141,14 @@ interface IUniswapV2Router {
     function getTokenAmountIn(uint baseTokenAmountIn, bytes32 tokenHash) external view returns (uint amountOut);
     function getBaseTokenAmountIn(uint tokenAmountIn, bytes32 tokenHash) external view returns (uint amountOut);
 
-    function calculateLiquidityNeededToGetTokensOut(
+    function calculateLiquidityRequiredToGetTokensOut(
         bytes32 tokenHash,
         uint amountTokensToReturn,
         uint amountBaseTokensToReturn
     ) external view returns (uint);
+
+    function quoteAddressLiquidity(
+        bytes32 tokenHash,
+        address addressToQuote
+    ) external view returns (uint addressLiquidity, uint tokenAmount, uint baseTokenAmount);
 }

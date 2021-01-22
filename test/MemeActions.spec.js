@@ -248,7 +248,7 @@ describe('Meme actions', () => {
     const ethBalanceBefore = await provider.getBalance(account);
     const expectEthAmount = '4999999999999997763';
 
-    const expectLiquidityWithdrawn = await UniswapV2Router.calculateLiquidityNeededToGetTokensOut(
+    const expectLiquidityWithdrawn = await UniswapV2Router.calculateLiquidityRequiredToGetTokensOut(
       tokenHash,
       memeTokens,
       0,

@@ -34,6 +34,11 @@ library UniswapV2Library {
         minimumLiquidity = IUniswapV2Pair(pair).MINIMUM_LIQUIDITY();
     }
 
+    // fetches the address balance of a pair
+    function getAddressBalance(address pair, address addressToQuote) internal view returns (uint balance) {
+        balance = IUniswapV2ERC20(pair).balanceOf(addressToQuote);
+    }
+
     // given some amount of an asset and pair reserves, returns an equivalent amount of the other asset
     function quote(uint amountA, uint reserveA, uint reserveB) internal pure returns (uint amountB) {
         require(amountA > 0, 'UniswapV2Library: INSUFFICIENT_AMOUNT');
@@ -80,7 +85,7 @@ library UniswapV2Library {
         tokenAmountIn = getAmountIn(baseTokenAmountOut, reserveA, reserveB);
     }
 
-    function calculateLiquidityNeededToGetTokensOut(address pair, uint amountTokensToReturn, uint amountBaseTokensToReturn)
+    function calculateLiquidityRequiredToGetTokensOut(address pair, uint amountTokensToReturn, uint amountBaseTokensToReturn)
         internal
         view
         returns (uint liquidity)
@@ -93,5 +98,23 @@ library UniswapV2Library {
         } else {
             liquidity = totalSupply.sub(minimumLiquidity).mul(amountBaseTokensToReturn).div(baseTokenReserve);
         }
+    }
+
+    function quoteAddressLiquidity(address pair, address addressToQuote)
+        internal
+        view
+        returns (uint addressLiquidity, uint tokenAmount, uint baseTokenAmount)
+    {
+        (uint tokenReserve, uint baseTokenReserve) = getReserves(pair);
+        uint totalSupply = getTotalSupply(pair);
+        uint minimumLiquidity = getMinimumLiquidity(pair);
+        addressLiquidity = getAddressBalance(pair, addressToQuote);
+
+        if (addressLiquidity == 0) {
+            return (0, 0, 0);
+        }
+
+        tokenAmount = addressLiquidity.mul(tokenReserve).div(totalSupply.sub(minimumLiquidity));
+        baseTokenAmount = addressLiquidity.mul(baseTokenReserve).div(totalSupply.sub(minimumLiquidity));
     }
 }

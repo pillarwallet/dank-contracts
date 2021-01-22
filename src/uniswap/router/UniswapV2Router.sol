@@ -177,7 +177,7 @@ contract UniswapV2Router is IUniswapV2Router {
         address to,
         uint deadline
     ) public virtual override ensure(deadline) returns (uint amountToken, uint amountETH) {
-        uint liquidity = calculateLiquidityNeededToGetTokensOut(tokenHash, amountTokensToReturn, amountBaseTokensToReturn);
+        uint liquidity = calculateLiquidityRequiredToGetTokensOut(tokenHash, amountTokensToReturn, amountBaseTokensToReturn);
         address pair = IUniswapV2Factory(factory).getPair(tokenHash);
 
         IUniswapV2ERC20(pair).transferFrom(msg.sender, pair, liquidity); // send liquidity to pair
@@ -480,7 +480,7 @@ contract UniswapV2Router is IUniswapV2Router {
       return UniswapV2Library.getTokenAmountIn(pair, baseTokenAmountOut);
     }
 
-    function calculateLiquidityNeededToGetTokensOut(bytes32 tokenHash, uint amountTokensToReturn, uint amountBaseTokensToReturn)
+    function calculateLiquidityRequiredToGetTokensOut(bytes32 tokenHash, uint amountTokensToReturn, uint amountBaseTokensToReturn)
         public
         view
         virtual
@@ -488,6 +488,17 @@ contract UniswapV2Router is IUniswapV2Router {
         returns (uint liquidity)
     {
         address pair = IUniswapV2Factory(factory).getPair(tokenHash);
-        return UniswapV2Library.calculateLiquidityNeededToGetTokensOut(pair, amountTokensToReturn, amountBaseTokensToReturn);
+        return UniswapV2Library.calculateLiquidityRequiredToGetTokensOut(pair, amountTokensToReturn, amountBaseTokensToReturn);
+    }
+
+    function quoteAddressLiquidity(bytes32 tokenHash, address addressToQuote)
+        public
+        view
+        virtual
+        override
+        returns (uint addressLiquidity, uint tokenAmount, uint baseTokenAmount)
+    {
+        address pair = IUniswapV2Factory(factory).getPair(tokenHash);
+        return UniswapV2Library.quoteAddressLiquidity(pair, addressToQuote);
     }
 }
