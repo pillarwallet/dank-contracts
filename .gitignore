@@ -23,4 +23,6 @@ node_modules
 # hardhat
 .hardhat
 deployments/localhost/
+deployments/localB/
 build/contracts-localhost.json
+build/contracts-localB.json

@@ -1,6 +1,6 @@
 {
   "name": "@dank-memes/contracts",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Smart contracts for Dank Memes",
   "main": "",
   "scripts": {
@@ -36,6 +36,7 @@
     "uniswap:getTokenAmountOut": "cross-env tokenHash=0x node ./scripts/uniswap/router/getTokenAmountOut.js",
     "uniswap:getStonkAmountOut": "cross-env tokenHash=0x node ./scripts/uniswap/router/getStonkAmountOut.js",
     "test": "hardhat test --deploy-fixture",
+    "deployemnts": "node ./scripts/deployments.js",
     "hardhat:compile": "hardhat compile",
     "hardhat:start:node": "hardhat node --no-deploy",
     "hardhat:start:full": "hardhat node --export build/contracts-localhost.json",

@@ -29,7 +29,7 @@ interface IUniswapV2Pair {
     function kLast() external view returns (uint);
 
     function mint(address to) external returns (uint liquidity);
-    function burn(address to) external returns (uint tokenAmount, uint baseTokenAmount);
+    function burn(address to, uint exactTokenAmountOut, uint exactBaseTokenAmountOut) external returns (uint tokenAmount, uint baseTokenAmount);
     function swap(uint tokenAmountOut, uint baseTokenAmountOut, address to, bytes calldata data) external;
     function skim(address to) external;
     function sync() external;

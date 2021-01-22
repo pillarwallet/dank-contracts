@@ -146,19 +146,38 @@ contract UniswapV2Pair is IUniswapV2Pair, UniswapV2ERC20 {
     }
 
     // this low-level function should be called from a contract which performs important safety checks
-    function burn(address to) external virtual override lock returns (uint tokenAmount, uint baseTokenAmount) {
-        // address dispenser = IUniswapV2Factory(factory).dispenser();
+    function burn(address to, uint exactTokenAmountOut, uint exactBaseTokenAmountOut) external virtual override lock returns (uint tokenAmount, uint baseTokenAmount) {
         (uint112 _tokenReserve, uint112 _baseTokenReserve,) = getReserves(); // gas savings
         bytes32 _tokenHash = tokenHash;                                // gas savings
-        // address baseToken = IUniswapV2Factory(factory).baseToken();
+
         uint tokenBalance = IERC1155(dispenser).balanceOf(address(this), tokenHash);
         uint baseTokenBalance = IERC20(baseToken).balanceOf(address(this));
-        uint liquidity = balanceOf[address(this)];
+        uint liquidityBalance = balanceOf[address(this)]; // the amount was asked to burn
 
         bool feeOn = _mintFee(_tokenReserve, _baseTokenReserve);
-        uint _totalSupply = totalSupply; // gas savings, must be defined here since totalSupply can update in _mintFee
-        tokenAmount = liquidity.mul(tokenBalance) / _totalSupply; // using balances ensures pro-rata distribution
-        baseTokenAmount = liquidity.mul(baseTokenBalance) / _totalSupply; // using balances ensures pro-rata distribution
+        uint _totalSupply = totalSupply; // gas savings, must be defined here since totalSupply can be updated in _mintFee
+
+        uint liquidity;
+        if (exactTokenAmountOut > 0) {
+            liquidity = _totalSupply.sub(MINIMUM_LIQUIDITY).mul(exactTokenAmountOut).div(tokenBalance);
+            require(liquidity == liquidityBalance, 'UniswapV2: INSUFFICIENT_LIQUIDITY_PROVIDED');
+
+            tokenAmount = exactTokenAmountOut;
+            baseTokenAmount = liquidity.mul(baseTokenBalance).div(_totalSupply);
+
+        } else if (exactBaseTokenAmountOut > 0) {
+            liquidity = _totalSupply.sub(MINIMUM_LIQUIDITY).mul(exactBaseTokenAmountOut).div(baseTokenBalance);
+            require(liquidity == liquidityBalance, 'UniswapV2: INSUFFICIENT_LIQUIDITY_PROVIDED');
+
+            baseTokenAmount = exactBaseTokenAmountOut;
+            tokenAmount = liquidity.mul(tokenBalance).div(_totalSupply);
+
+        } else {
+            liquidity = liquidityBalance;
+            tokenAmount = liquidity.mul(tokenBalance).div(_totalSupply);
+            baseTokenAmount = liquidity.mul(baseTokenBalance).div(_totalSupply); // using balances ensures pro-rata distribution
+        }
+
         require(tokenAmount > 0 && baseTokenAmount > 0, 'UniswapV2: INSUFFICIENT_LIQUIDITY_BURNED');
         _burn(address(this), liquidity);
 
