@@ -1,6 +1,6 @@
 {
   "name": "@dank-memes/contracts",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Smart contracts for Dank Memes",
   "main": "",
   "scripts": {
@@ -45,6 +45,7 @@
     "hardhat:deploy:localB": "PK_LOCAL_B=0x5504956d5f39cbe19c7303d5df78dc43599ba661afe67fec14eafd044e162bd6 hardhat deploy --reset --export build/contracts-localB.json --network localB",
     "hardhat:deploy:goerli": "hardhat deploy --export build/contracts-goerli.json --network goerli",
     "hardhat:deploy:rinkeby": "hardhat deploy --export build/contracts-rinkeby.json --network rinkeby",
+    "hardhat:deploy:bsc": "hardhat deploy --export build/contracts-bsc.json --network bsc",
     "hardhat:artifacts": "hardhat run scripts/artifacts.js --network localhost"
   },
   "author": "",
