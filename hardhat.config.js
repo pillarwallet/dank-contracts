@@ -53,6 +53,8 @@ const config = {
     ...setupNetwork('kovan', 42, infuraProvider('kovan')),
     ...setupNetwork('xdai', 100, 'https://dai.poa.network'),
     ...setupNetwork('sokol', 77, 'https://sokol.poa.network'),
+    ...setupNetwork('bsc', 56, 'https://bsc-dataseed1.binance.org'),
+    ...setupNetwork('bscTest', 97, 'https://data-seed-prebsc-1-s1.binance.org:8545'),
   },
   solidity: {
     version: '0.6.12',
