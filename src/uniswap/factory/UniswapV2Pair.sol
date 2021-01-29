@@ -163,19 +163,29 @@ contract UniswapV2Pair is IUniswapV2Pair, UniswapV2ERC20 {
             require(liquidity == liquidityBalance, 'UniswapV2: INSUFFICIENT_LIQUIDITY_PROVIDED');
 
             tokenAmount = exactTokenAmountOut;
-            baseTokenAmount = liquidity.mul(baseTokenBalance).div(_totalSupply);
+            baseTokenAmount = tokenAmount == tokenBalance
+                ? baseTokenBalance
+                : liquidity.mul(baseTokenBalance).div(_totalSupply);
 
         } else if (exactBaseTokenAmountOut > 0) {
             liquidity = _totalSupply.sub(MINIMUM_LIQUIDITY).mul(exactBaseTokenAmountOut).div(baseTokenBalance);
             require(liquidity == liquidityBalance, 'UniswapV2: INSUFFICIENT_LIQUIDITY_PROVIDED');
 
             baseTokenAmount = exactBaseTokenAmountOut;
-            tokenAmount = liquidity.mul(tokenBalance).div(_totalSupply);
+            tokenAmount = baseTokenAmount == baseTokenBalance
+                ? tokenBalance
+                : liquidity.mul(tokenBalance).div(_totalSupply);
 
         } else {
             liquidity = liquidityBalance;
             tokenAmount = liquidity.mul(tokenBalance).div(_totalSupply);
             baseTokenAmount = liquidity.mul(baseTokenBalance).div(_totalSupply); // using balances ensures pro-rata distribution
+        }
+
+        // we're removing the whole liquidity
+        if (tokenAmount == tokenBalance && baseTokenAmount == baseTokenBalance) {
+            liquidity = _totalSupply.sub(MINIMUM_LIQUIDITY);
+            _burn(address(0), MINIMUM_LIQUIDITY);
         }
 
         require(tokenAmount > 0 && baseTokenAmount > 0, 'UniswapV2: INSUFFICIENT_LIQUIDITY_BURNED');
