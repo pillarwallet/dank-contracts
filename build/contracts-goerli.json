@@ -504,7 +504,7 @@
       ]
     },
     "ERC721": {
-      "address": "0xedE450800259F13e3a2F985f5D13Cc859813C030",
+      "address": "0x2dC0d93Db39D13f92e7FcCeE04800CAE8599F8e0",
       "abi": [
         {
           "inputs": [
@@ -961,7 +961,7 @@
       ]
     },
     "UniswapV2Factory": {
-      "address": "0x77feA715DbE651BdAeE7C4f9C80a2479B01Bc86B",
+      "address": "0xB37807F1aA8159fe5371fE07Fd7eE4A0Ad9D39DA",
       "abi": [
         {
           "inputs": [
@@ -1172,7 +1172,7 @@
       ]
     },
     "UniswapV2Pair": {
-      "address": "0x89Ea4De4DdD7c79dC01A679F4636d8386B76FDd6",
+      "address": "0x796c92bA99A0c0C80CcE7Cffa28968ab538AA014",
       "abi": [
         {
           "inputs": [],
@@ -1900,7 +1900,7 @@
       ]
     },
     "UniswapV2Router": {
-      "address": "0xE38Cd3c4e1475A309dd8B8cF3945562bCBE28EC5",
+      "address": "0xcC93e90B4FEC985EF62F6aEc9da654129924aeA4",
       "abi": [
         {
           "inputs": [
