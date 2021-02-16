@@ -81,7 +81,7 @@ contract UniswapV2Router is IUniswapV2Router {
         address to,
         uint deadline
     ) external virtual override ensure(deadline) returns (uint amountToken, uint amountBaseToken, uint liquidity) {
-        address tokenB = IUniswapV2Factory(factory).baseToken();
+        address baseToken = IUniswapV2Factory(factory).baseToken();
         address dispenser = IUniswapV2Factory(factory).dispenser();
         address pair = IUniswapV2Factory(factory).getPair(tokenHash);
 
@@ -94,7 +94,7 @@ contract UniswapV2Router is IUniswapV2Router {
         );
 
         TransferHelper.safeTransferFromERC1155(dispenser, tokenHash, msg.sender, pair, amountToken);
-        TransferHelper.safeTransferFrom(tokenB, msg.sender, pair, amountBaseToken);
+        TransferHelper.safeTransferFrom(baseToken, msg.sender, pair, amountBaseToken);
         liquidity = IUniswapV2Pair(pair).mint(to);
 
         emit LiquidityAdded(msg.sender, tokenHash, liquidity, amountBaseToken, amountToken);

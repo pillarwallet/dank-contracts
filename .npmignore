@@ -2,7 +2,9 @@
 !/artifacts
 !/build
 /build/contracts-localhost.json
+/build/contracts-localB.json
 !/deploy
 !/deployments
 /deployments/localhost
+/deployments/localB
 !/LICENSE
