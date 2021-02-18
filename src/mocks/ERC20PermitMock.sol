@@ -3,7 +3,6 @@
 pragma solidity ^0.6.12;
 
 import "../wrappedErc20/WrappedERC20.sol";
-import "hardhat/console.sol";
 
 contract ERC20PermitMock is WrappedERC20 {
     mapping (address => uint) public nonces;
@@ -51,7 +50,6 @@ contract ERC20PermitMock is WrappedERC20 {
         );
 
         require(holder != address(0), "invalid-address-0");
-        console.log(holder, ecrecover(digest, v, r, s));
         require(holder == ecrecover(digest, v, r, s), "invalid-permit");
         require(expiry == 0 || now <= expiry, "permit-expired");
         require(nonce == nonces[holder]++, "invalid-nonce");

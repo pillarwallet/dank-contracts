@@ -11,13 +11,13 @@ const { expect } = require('chai');
 const { createTypedDataFactory, deployContract, toWei } = require('./utils');
 
 const setup = deployments.createFixture(async () => {
-  const daiToken = await deployContract('ERC20PermitMock', ['test', 'DAI']);
+  const daiToken = await deployContract('ERC20PermitMock', ['DAI', 'DAI']);
   const daiBridge = await deployContract('DaiBridgeMock', [daiToken.address]);
   const daiBridgeProxy = await deployContract('DaiBridgeProxy', [daiToken.address, daiBridge.address]);
   const { account } = await getNamedAccounts();
   const accounts = await getUnnamedAccounts();
 
-  const daiTokenTypedDataFactory = createTypedDataFactory(daiToken, 'Permit', [
+  const daiTokenTypedDataFactory = createTypedDataFactory(daiToken, 'DAI', 'Permit', [
     {
       name: 'holder',
       type: 'address',
@@ -77,32 +77,35 @@ describe('DaiBridgeProxy', () => {
       daiTokenTypedDataFactory,
     } = await setup();
 
-    // mint Dai tokens
-    const ethAmount = toWei(5);
+    const amount = toWei(5);
 
+    // mint tokens
     await daiToken.deposit({
-      value: ethAmount,
+      value: amount,
     });
 
-    expect(await daiToken.balanceOf(account)).to.equal(ethAmount);
+    expect(await daiToken.balanceOf(account)).to.equal(amount);
     expect(await daiToken.balanceOf(daiBridge.address)).to.equal(0);
 
     const nonce = (await daiToken.nonces(account)).toNumber();
-    const nextNonce = nonce + 1;
     const expiry = 0;
 
     const senderSignature = await daiTokenTypedDataFactory.signTypeData(account, {
       holder: account,
-      spender: daiBridgeProxy.address,
-      nonce: nextNonce,
+      spender: daiBridge.address,
+      nonce,
       expiry,
       allowed: true,
     });
 
     const sig = utils.splitSignature(senderSignature);
-    await daiBridgeProxy.depositFor(ethAmount, account, nextNonce, expiry, sig.v, sig.r, sig.s);
+    const depositFor = daiBridgeProxy.depositFor(amount, account, nonce, expiry, sig.v, sig.r, sig.s);
+
+    await expect(depositFor) //
+      .to.emit(daiBridge, 'UserRequestForAffirmation')
+      .withArgs(account, amount);
 
     expect(await daiToken.balanceOf(account)).to.equal(0);
-    expect(await daiToken.balanceOf(daiBridge.address)).to.equal(ethAmount);
+    expect(await daiToken.balanceOf(daiBridge.address)).to.equal(amount);
   });
 });

@@ -6,29 +6,10 @@ const {
     provider,
   },
 } = require('hardhat');
+const { buildTypedData } = require('ethers-typed-data-legacy');
 
 const { chainId } = config.networks.hardhat;
-const TYPED_DATA_DOMAIN_NAME = 'test';
 const TYPED_DATA_DOMAIN_VERSION = '1';
-const EIP712_DOMAIN_TYPE_NAME = 'EIP712Domain';
-const EIP712_DOMAIN_TYPE_PROPERTIES = [
-  {
-    name: 'name',
-    type: 'string',
-  },
-  {
-    name: 'version',
-    type: 'string',
-  },
-  {
-    name: 'chainId',
-    type: 'uint256',
-  },
-  {
-    name: 'verifyingContract',
-    type: 'address',
-  },
-];
 
 async function processTx(txPromise) {
   const tx = await txPromise;
@@ -42,24 +23,12 @@ async function processTx(txPromise) {
   };
 }
 
-function buildTypedData(domain, primaryType, types, message) {
-  return {
-    primaryType,
-    domain,
-    types: Object.assign(
-      { [EIP712_DOMAIN_TYPE_NAME]: EIP712_DOMAIN_TYPE_PROPERTIES },
-      Array.isArray(types) ? { [primaryType]: types } : types,
-    ),
-    message,
-  };
-}
-
-function createTypedDataFactory(contract, primaryType, types) {
+function createTypedDataFactory(contract, contractName, primaryType, types) {
   return {
     createTypedData(message) {
       return buildTypedData(
         {
-          name: TYPED_DATA_DOMAIN_NAME,
+          name: contractName,
           version: TYPED_DATA_DOMAIN_VERSION,
           chainId,
           verifyingContract: contract.address,
@@ -70,7 +39,6 @@ function createTypedDataFactory(contract, primaryType, types) {
       );
     },
     signTypeData(signer, message) {
-      // console.log(this.createTypedData(message).types);
       return provider.send('eth_signTypedData', [signer, this.createTypedData(message)]);
     },
   };

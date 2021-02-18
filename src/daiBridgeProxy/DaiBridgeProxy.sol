@@ -10,7 +10,7 @@ interface IERC20Permit {
 }
 
 interface IDaiBridge {
-    function relayTokens(address _receiver, uint256 _amount) external;
+    function relayTokens(address _from, address _receiver, uint256 _amount) external;
 }
 
 contract DaiBridgeProxy is Context {
@@ -38,6 +38,6 @@ contract DaiBridgeProxy is Context {
         uint8 v, bytes32 r, bytes32 s
     ) external {
         IERC20Permit(_daiToken).permit(_msgSender(), _daiBridge, permitNonce, permitExpiry, true, v, r, s);
-        IDaiBridge(_daiBridge).relayTokens(recipient, amount);
+        IDaiBridge(_daiBridge).relayTokens(_msgSender(), recipient, amount);
     }
 }
