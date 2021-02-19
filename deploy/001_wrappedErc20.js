@@ -2,7 +2,10 @@
  * @type import('hardhat/types').HardhatRuntimeEnvironment
  */
 const func = async function (hre) {
-  const { deployments: { deploy }, getNamedAccounts } = hre;
+  const {
+    deployments: { deploy },
+    getNamedAccounts,
+  } = hre;
   const { deployer } = await getNamedAccounts();
 
   await deploy('WrappedERC20', {
@@ -13,3 +16,4 @@ const func = async function (hre) {
 };
 module.exports = func;
 module.exports.tags = ['WrappedERC20'];
+module.exports.skip = async ({ network: { name: networkName } }) => networkName === 'mainnet';
