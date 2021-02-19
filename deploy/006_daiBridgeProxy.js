@@ -16,4 +16,4 @@ const func = async function (hre) {
 };
 module.exports = func;
 module.exports.tags = ['DaiBridgeProxy'];
-module.exports.skip = async ({ network: { name: networkName } }) => networkName !== 'mainnet';
+module.exports.skip = async ({ network: { name: networkName } }) => !['mainnet', 'localhost'].includes(networkName);
