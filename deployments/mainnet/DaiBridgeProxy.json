@@ -1,0 +1,151 @@
+{
+  "address": "0xA63187dFD32B24315e4b898CfC22a9aD45a89943",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "daiToken_",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "daiBridge_",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [],
+      "name": "daiBridge",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "daiToken",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "recipient",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "permitNonce",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "permitExpiry",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint8",
+          "name": "v",
+          "type": "uint8"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "r",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "s",
+          "type": "bytes32"
+        }
+      ],
+      "name": "depositFor",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0xa9b54f01963d307782803775ac9f78a32967a584e8d6b7e214c0a890a7257f9d",
+  "receipt": {
+    "to": null,
+    "from": "0xF4AcFa4926c6C75dc79E4c2E81CbF91Edf9bc9fA",
+    "contractAddress": "0xA63187dFD32B24315e4b898CfC22a9aD45a89943",
+    "transactionIndex": 185,
+    "gasUsed": "258473",
+    "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "blockHash": "0xcbc2168e0814a990b9f90b80dd64b948b8317c784bcbe3cd5d7c5dc83bc06218",
+    "transactionHash": "0xa9b54f01963d307782803775ac9f78a32967a584e8d6b7e214c0a890a7257f9d",
+    "logs": [],
+    "blockNumber": 11886942,
+    "cumulativeGasUsed": "12183590",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [
+    "0x6b175474e89094c44da98b954eedeac495271d0f",
+    "0x4aa42145aa6ebf72e164c9bbc74fbd3788045016"
+  ],
+  "solcInputHash": "65f58e582d08ab21dce78d867225b5ec",
+  "metadata": "{\"compiler\":{\"version\":\"0.6.12+commit.27d51765\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"daiToken_\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"daiBridge_\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[],\"name\":\"daiBridge\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"daiToken\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"recipient\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"permitNonce\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"permitExpiry\",\"type\":\"uint256\"},{\"internalType\":\"uint8\",\"name\":\"v\",\"type\":\"uint8\"},{\"internalType\":\"bytes32\",\"name\":\"r\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"s\",\"type\":\"bytes32\"}],\"name\":\"depositFor\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/daiBridgeProxy/DaiBridgeProxy.sol\":\"DaiBridgeProxy\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":2000},\"remappings\":[]},\"sources\":{\"src/common/GSN/Context.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n\\npragma solidity ^0.6.0;\\n\\n/*\\n * @dev Provides information about the current execution context, including the\\n * sender of the transaction and its data. While these are generally available\\n * via msg.sender and msg.data, they should not be accessed in such a direct\\n * manner, since when dealing with GSN meta-transactions the account sending and\\n * paying for execution may not be the actual sender (as far as an application\\n * is concerned).\\n *\\n * This contract is only required for intermediate, library-like contracts.\\n */\\nabstract contract Context {\\n    function _msgSender() internal view virtual returns (address payable) {\\n        return msg.sender;\\n    }\\n\\n    function _msgData() internal view virtual returns (bytes memory) {\\n        this; // silence state mutability warning without generating bytecode - see https://github.com/ethereum/solidity/issues/2691\\n        return msg.data;\\n    }\\n}\\n\",\"keccak256\":\"0xdb26cbf4d028490f49831a7865c2fe1b28db44b535ca8d343785a3b768aae183\",\"license\":\"MIT\"},\"src/daiBridgeProxy/DaiBridgeProxy.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n\\npragma solidity ^0.6.12;\\n\\nimport \\\"../common/GSN/Context.sol\\\";\\n\\ninterface IERC20Permit {\\n    function permit(address holder, address spender, uint256 nonce, uint256 expiry,\\n        bool allowed, uint8 v, bytes32 r, bytes32 s) external;\\n}\\n\\ninterface IDaiBridge {\\n    function relayTokens(address _from, address _receiver, uint256 _amount) external;\\n}\\n\\ncontract DaiBridgeProxy is Context {\\n    address private _daiToken;\\n    address private _daiBridge;\\n\\n    constructor(address daiToken_, address daiBridge_) public {\\n        _daiToken = daiToken_;\\n        _daiBridge = daiBridge_;\\n    }\\n\\n    function daiToken() public view returns (address) {\\n        return _daiToken;\\n    }\\n\\n    function daiBridge() public view returns (address) {\\n        return _daiBridge;\\n    }\\n\\n    function depositFor(\\n        uint amount,\\n        address recipient,\\n        uint256 permitNonce,\\n        uint256 permitExpiry,\\n        uint8 v, bytes32 r, bytes32 s\\n    ) external {\\n        IERC20Permit(_daiToken).permit(_msgSender(), _daiBridge, permitNonce, permitExpiry, true, v, r, s);\\n        IDaiBridge(_daiBridge).relayTokens(_msgSender(), recipient, amount);\\n    }\\n}\\n\",\"keccak256\":\"0x663b4e8cbaecac5cc7f632de9e38da7b03f8b0ea11ca6d090a8478a5284d7d3b\",\"license\":\"MIT\"}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b506040516103663803806103668339818101604052604081101561003357600080fd5b508051602090910151600080546001600160a01b039384166001600160a01b031991821617909155600180549390921692169190911790556102ec8061007a6000396000f3fe608060405234801561001057600080fd5b50600436106100415760003560e01c80634c52144d1461004657806363c4475214610077578063be22f546146100d3575b600080fd5b61004e6100db565b6040805173ffffffffffffffffffffffffffffffffffffffff9092168252519081900360200190f35b6100d1600480360360e081101561008d57600080fd5b5080359073ffffffffffffffffffffffffffffffffffffffff6020820135169060408101359060608101359060ff6080820135169060a08101359060c001356100f7565b005b61004e610296565b60015473ffffffffffffffffffffffffffffffffffffffff1690565b60005473ffffffffffffffffffffffffffffffffffffffff16638fcbaf0c61011d6102b2565b60018054604080517fffffffff0000000000000000000000000000000000000000000000000000000060e087901b16815273ffffffffffffffffffffffffffffffffffffffff9485166004820152939091166024840152604483018a905260648301899052608483019190915260ff871660a483015260c4820186905260e482018590525161010480830192600092919082900301818387803b1580156101c357600080fd5b505af11580156101d7573d6000803e3d6000fd5b505060015473ffffffffffffffffffffffffffffffffffffffff16915063ad58bdd190506102036102b2565b888a6040518463ffffffff1660e01b8152600401808473ffffffffffffffffffffffffffffffffffffffff1681526020018373ffffffffffffffffffffffffffffffffffffffff1681526020018281526020019350505050600060405180830381600087803b15801561027557600080fd5b505af1158015610289573d6000803e3d6000fd5b5050505050505050505050565b60005473ffffffffffffffffffffffffffffffffffffffff1690565b339056fea26469706673582212209b93a662d239cd23200c2ff2de8e4ea49fec3325748e5ad45c2ecb26240c6dcf64736f6c634300060c0033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106100415760003560e01c80634c52144d1461004657806363c4475214610077578063be22f546146100d3575b600080fd5b61004e6100db565b6040805173ffffffffffffffffffffffffffffffffffffffff9092168252519081900360200190f35b6100d1600480360360e081101561008d57600080fd5b5080359073ffffffffffffffffffffffffffffffffffffffff6020820135169060408101359060608101359060ff6080820135169060a08101359060c001356100f7565b005b61004e610296565b60015473ffffffffffffffffffffffffffffffffffffffff1690565b60005473ffffffffffffffffffffffffffffffffffffffff16638fcbaf0c61011d6102b2565b60018054604080517fffffffff0000000000000000000000000000000000000000000000000000000060e087901b16815273ffffffffffffffffffffffffffffffffffffffff9485166004820152939091166024840152604483018a905260648301899052608483019190915260ff871660a483015260c4820186905260e482018590525161010480830192600092919082900301818387803b1580156101c357600080fd5b505af11580156101d7573d6000803e3d6000fd5b505060015473ffffffffffffffffffffffffffffffffffffffff16915063ad58bdd190506102036102b2565b888a6040518463ffffffff1660e01b8152600401808473ffffffffffffffffffffffffffffffffffffffff1681526020018373ffffffffffffffffffffffffffffffffffffffff1681526020018281526020019350505050600060405180830381600087803b15801561027557600080fd5b505af1158015610289573d6000803e3d6000fd5b5050505050505050505050565b60005473ffffffffffffffffffffffffffffffffffffffff1690565b339056fea26469706673582212209b93a662d239cd23200c2ff2de8e4ea49fec3325748e5ad45c2ecb26240c6dcf64736f6c634300060c0033",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [
+      {
+        "astId": 1922,
+        "contract": "src/daiBridgeProxy/DaiBridgeProxy.sol:DaiBridgeProxy",
+        "label": "_daiToken",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_address"
+      },
+      {
+        "astId": 1924,
+        "contract": "src/daiBridgeProxy/DaiBridgeProxy.sol:DaiBridgeProxy",
+        "label": "_daiBridge",
+        "offset": 0,
+        "slot": "1",
+        "type": "t_address"
+      }
+    ],
+    "types": {
+      "t_address": {
+        "encoding": "inplace",
+        "label": "address",
+        "numberOfBytes": "20"
+      }
+    }
+  }
+}

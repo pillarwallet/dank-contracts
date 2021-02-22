@@ -46,3 +46,4 @@ const func = async function (hre) {
 module.exports = func;
 module.exports.tags = ['UNISWAP'];
 module.exports.dependencies = ['WrappedERC20', 'ERC1155'];
+module.exports.skip = async ({ network: { name: networkName } }) => networkName === 'mainnet';

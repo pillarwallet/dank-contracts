@@ -14,5 +14,7 @@ const func = async function (hre) {
     log: true,
   });
 };
+
 module.exports = func;
 module.exports.tags = ['ERC721'];
+module.exports.skip = async ({ network: { name: networkName } }) => networkName === 'mainnet';

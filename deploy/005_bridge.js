@@ -16,3 +16,4 @@ const func = async function (hre) {
 };
 module.exports = func;
 module.exports.tags = ['Bridge'];
+module.exports.skip = async ({ network: { name: networkName } }) => networkName === 'mainnet';
