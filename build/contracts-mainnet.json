@@ -3,7 +3,7 @@
   "chainId": "1",
   "contracts": {
     "DaiBridgeProxy": {
-      "address": "0xA63187dFD32B24315e4b898CfC22a9aD45a89943",
+      "address": "0xc6c9274d415Cba866022cD5AB2CA29C4b964c372",
       "abi": [
         {
           "inputs": [
@@ -26,7 +26,7 @@
           "name": "daiBridge",
           "outputs": [
             {
-              "internalType": "address",
+              "internalType": "contract DaiPartialBridge",
               "name": "",
               "type": "address"
             }
@@ -39,12 +39,30 @@
           "name": "daiToken",
           "outputs": [
             {
-              "internalType": "address",
+              "internalType": "contract DaiPartialToken",
               "name": "",
               "type": "address"
             }
           ],
           "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256"
+            },
+            {
+              "internalType": "address",
+              "name": "recipient",
+              "type": "address"
+            }
+          ],
+          "name": "depositFor",
+          "outputs": [],
+          "stateMutability": "nonpayable",
           "type": "function"
         },
         {
@@ -71,21 +89,21 @@
             },
             {
               "internalType": "uint8",
-              "name": "v",
+              "name": "permitV",
               "type": "uint8"
             },
             {
               "internalType": "bytes32",
-              "name": "r",
+              "name": "permitR",
               "type": "bytes32"
             },
             {
               "internalType": "bytes32",
-              "name": "s",
+              "name": "permitS",
               "type": "bytes32"
             }
           ],
-          "name": "depositFor",
+          "name": "depositWithPermit",
           "outputs": [],
           "stateMutability": "nonpayable",
           "type": "function"
