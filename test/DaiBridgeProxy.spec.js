@@ -68,7 +68,7 @@ describe('DaiBridgeProxy', () => {
     expect(daiBridgeSetUpAddress).to.equal(daiBridgeRealAddress);
   });
 
-  it('depositFor()', async function () {
+  it('depositWithPermit()', async function () {
     const {
       accounts: [account],
       daiToken,
@@ -92,14 +92,14 @@ describe('DaiBridgeProxy', () => {
 
     const senderSignature = await daiTokenTypedDataFactory.signTypeData(account, {
       holder: account,
-      spender: daiBridge.address,
+      spender: daiBridgeProxy.address,
       nonce,
       expiry,
       allowed: true,
     });
 
     const sig = utils.splitSignature(senderSignature);
-    const depositFor = daiBridgeProxy.depositFor(amount, account, nonce, expiry, sig.v, sig.r, sig.s);
+    const depositFor = daiBridgeProxy.depositWithPermit(amount, account, nonce, expiry, sig.v, sig.r, sig.s);
 
     await expect(depositFor) //
       .to.emit(daiBridge, 'UserRequestForAffirmation')

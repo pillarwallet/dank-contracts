@@ -1,6 +1,6 @@
 {
   "name": "@dank-memes/contracts",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "Smart contracts for Dank Memes",
   "main": "",
   "scripts": {
@@ -47,6 +47,7 @@
     "hardhat:deploy:rinkeby": "hardhat deploy --export build/contracts-rinkeby.json --network rinkeby",
     "hardhat:deploy:bsc": "hardhat deploy --export build/contracts-bsc.json --network bsc",
     "hardhat:deploy:xdai": "hardhat deploy --export build/contracts-xdai.json --network xdai",
+    "hardhat:deploy:mainnet": "hardhat deploy --export build/contracts-mainnet.json --network mainnet",
     "hardhat:artifacts": "hardhat run scripts/artifacts.js --network localhost"
   },
   "author": "",
