@@ -1900,7 +1900,7 @@
       ]
     },
     "UniswapV2Router": {
-      "address": "0xcC93e90B4FEC985EF62F6aEc9da654129924aeA4",
+      "address": "0x27DDb045dEC8e22B0C7b6d97621B5C0B5116bd67",
       "abi": [
         {
           "inputs": [
