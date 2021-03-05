@@ -48,11 +48,14 @@
     "hardhat:deploy:bsc": "hardhat deploy --export build/contracts-bsc.json --network bsc",
     "hardhat:deploy:xdai": "hardhat deploy --export build/contracts-xdai.json --network xdai",
     "hardhat:deploy:mainnet": "hardhat deploy --export build/contracts-mainnet.json --network mainnet",
-    "hardhat:artifacts": "hardhat run scripts/artifacts.js --network localhost"
+    "hardhat:list:deployments": "hardhat list-deployments --network xdai",
+    "hardhat:artifacts": "hardhat run scripts/artifacts.js --network localhost",
+    "hardhat:verify:bsc": "hardhat verify-all --network bsc"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@nomiclabs/hardhat-etherscan": "2.1.1",
     "@nomiclabs/hardhat-waffle": "^2.0.1",
     "chai": "^4.2.0",
     "cross-env": "^7.0.2",

@@ -1,6 +1,8 @@
 require('@nomiclabs/hardhat-waffle');
 require('hardhat-deploy');
 require('hardhat-deploy-ethers');
+require('@nomiclabs/hardhat-etherscan');
+require('./extensions');
 
 const defaultMnemonic = 'test test test test test test test test test test test junk';
 const getNetworkEnvName = (networkName) => networkName.replace(/([A-Z])+/, '_$1').toUpperCase();
@@ -75,6 +77,9 @@ const config = {
   },
   mocha: {
     timeout: 0,
+  },
+  etherscan: {
+    apiKey: '',
   },
   /*external: {
     contracts: [
