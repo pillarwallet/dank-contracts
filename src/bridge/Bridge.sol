@@ -14,7 +14,7 @@ contract Bridge is Ownable {
     event Withdrawal(address indexed src, uint value);
     event WithdrawalTo(address indexed sender, uint value, address indexed recipient);
     event DepositTokenFor(address indexed sender, uint amount, address indexed recipient, address indexed tokenAddress);
-    event TokenWithdrawal(address indexed sender, address indexed token, uint value);
+    event TokenWithdrawal(address indexed sender, address indexed token, uint value, address indexed recipient);
 
     mapping (address => uint256) internal _balances;
 
@@ -65,7 +65,7 @@ contract Bridge is Ownable {
             if (tokens[i] != address(0x0)) {
                 result[i] = _getBalance(address(this), tokens[i]);
             } else {
-                result[i] = _balances[address(this)];
+                result[i] = _balances[owner()];
             }
         }
 
@@ -123,7 +123,7 @@ contract Bridge is Ownable {
             } else {
                 _withdraw(values[i], recipient);
             }
-            emit TokenWithdrawal(msg.sender, tokens[i], values[i]);
+            emit TokenWithdrawal(msg.sender, tokens[i], values[i], recipient);
         }
     }
 
