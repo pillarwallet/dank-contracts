@@ -44,6 +44,30 @@ function createTypedDataFactory(contract, contractName, primaryType, types) {
   };
 }
 
+function createDaiTokenTypedDataFactory(tokenContract) {
+  return createTypedDataFactory(tokenContract, 'DAI', 'Permit', [
+    {
+      name: 'holder',
+      type: 'address',
+    },
+    {
+      name: 'spender',
+      type: 'address',
+    },
+    {
+      name: 'nonce',
+      type: 'uint256',
+    },
+    {
+      name: 'expiry',
+      type: 'uint256',
+    },
+    {
+      name: 'allowed',
+      type: 'bool',
+    },
+  ]);
+}
 async function deployContract(name, args = [], deployer = null) {
   let factory = await ethers.getContractFactory(name);
 
@@ -74,7 +98,7 @@ function toWei(number) {
 module.exports = {
   ZERO_ADDRESS: `0x${'0'.repeat(40)}`,
   processTx,
-  createTypedDataFactory,
+  createDaiTokenTypedDataFactory,
   deployContract,
   getMemeTokenHash,
   setDeadline,

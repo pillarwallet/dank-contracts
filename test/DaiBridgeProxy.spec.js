@@ -8,7 +8,7 @@ const {
   getUnnamedAccounts,
 } = require('hardhat');
 const { expect } = require('chai');
-const { createTypedDataFactory, deployContract, toWei } = require('./utils');
+const { createDaiTokenTypedDataFactory, deployContract, toWei } = require('./utils');
 
 const setup = deployments.createFixture(async () => {
   const daiToken = await deployContract('ERC20PermitMock', ['DAI', 'DAI']);
@@ -17,28 +17,7 @@ const setup = deployments.createFixture(async () => {
   const { account } = await getNamedAccounts();
   const accounts = await getUnnamedAccounts();
 
-  const daiTokenTypedDataFactory = createTypedDataFactory(daiToken, 'DAI', 'Permit', [
-    {
-      name: 'holder',
-      type: 'address',
-    },
-    {
-      name: 'spender',
-      type: 'address',
-    },
-    {
-      name: 'nonce',
-      type: 'uint256',
-    },
-    {
-      name: 'expiry',
-      type: 'uint256',
-    },
-    {
-      name: 'allowed',
-      type: 'bool',
-    },
-  ]);
+  const daiTokenTypedDataFactory = createDaiTokenTypedDataFactory(daiToken);
 
   return {
     daiToken,
