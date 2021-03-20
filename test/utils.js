@@ -45,7 +45,7 @@ function createTypedDataFactory(contract, contractName, primaryType, types) {
 }
 
 function createDaiTokenTypedDataFactory(tokenContract) {
-  return createTypedDataFactory(tokenContract, 'DAI', 'Permit', [
+  return createTypedDataFactory(tokenContract, 'Permittable DAI', 'Permit', [
     {
       name: 'holder',
       type: 'address',

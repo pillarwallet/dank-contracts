@@ -4,7 +4,7 @@ pragma solidity ^0.6.6;
 
 import "../common/math/SafeMath.sol";
 import "../common/access/Ownable.sol";
-import "../permittable/IPermittableToken.sol";
+import "../permittableErc20/IPermittableToken.sol";
 
 contract Bridge is Ownable {
     using SafeMath for uint256;

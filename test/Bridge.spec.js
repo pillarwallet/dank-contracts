@@ -17,20 +17,20 @@ const {
   waffle: { provider },
 } = require('hardhat');
 const { expect } = require('chai');
-const { createDaiTokenTypedDataFactory, deployContract, toWei, processTx, ZERO_ADDRESS } = require('./utils');
+const { createDaiTokenTypedDataFactory, toWei, processTx, ZERO_ADDRESS } = require('./utils');
 
 const setup = deployments.createFixture(async () => {
   await deployments.fixture();
-  const daiToken = await deployContract('ERC20PermitMock', ['DAI', 'DAI']);
   const { account } = await getNamedAccounts();
   const accounts = await getUnnamedAccounts();
 
-  const daiTokenTypedDataFactory = createDaiTokenTypedDataFactory(daiToken);
+  const DaiToken = await ethers.getContract('PermittableERC20');
+  const daiTokenTypedDataFactory = createDaiTokenTypedDataFactory(DaiToken);
 
   return {
-    daiToken,
     daiTokenTypedDataFactory,
     Bridge: await ethers.getContract('Bridge'),
+    DaiToken,
     accounts: [account, ...accounts],
   };
 });
@@ -130,7 +130,7 @@ describe('Bridge', () => {
 
   it('depositWithPermit()', async function () {
     const {
-      daiToken,
+      DaiToken,
       Bridge,
       accounts: [account, Alice],
       daiTokenTypedDataFactory,
@@ -139,12 +139,12 @@ describe('Bridge', () => {
     const amount = toWei(5);
 
     // mint tokens
-    await daiToken.deposit({ value: amount });
+    await DaiToken.deposit({ value: amount });
 
-    expect(await daiToken.balanceOf(account)).to.equal(amount);
-    expect(await daiToken.balanceOf(Bridge.address)).to.equal(0);
+    expect(await DaiToken.balanceOf(account)).to.equal(amount);
+    expect(await DaiToken.balanceOf(Bridge.address)).to.equal(0);
 
-    const nonce = (await daiToken.nonces(account)).toNumber();
+    const nonce = (await DaiToken.nonces(account)).toNumber();
     const expiry = 0;
 
     const senderSignature = await daiTokenTypedDataFactory.signTypeData(account, {
@@ -156,19 +156,19 @@ describe('Bridge', () => {
     });
 
     const sig = utils.splitSignature(senderSignature);
-    const depositFor = Bridge.depositWithPermit(daiToken.address, amount, Alice, nonce, expiry, sig.v, sig.r, sig.s);
+    const depositFor = Bridge.depositWithPermit(DaiToken.address, amount, Alice, nonce, expiry, sig.v, sig.r, sig.s);
 
     await expect(depositFor) //
       .to.emit(Bridge, 'DepositTokenFor')
-      .withArgs(account, amount, Alice, daiToken.address);
+      .withArgs(account, amount, Alice, DaiToken.address);
 
-    expect(await daiToken.balanceOf(account)).to.equal(0);
-    expect(await daiToken.balanceOf(Bridge.address)).to.equal(amount);
+    expect(await DaiToken.balanceOf(account)).to.equal(0);
+    expect(await DaiToken.balanceOf(Bridge.address)).to.equal(amount);
   });
 
   it('depositTokenFor()', async function () {
     const {
-      daiToken: daiTokenSrc,
+      DaiToken: DaiTokenSrc,
       Bridge: BridgeSrc,
       accounts: [, Alice],
     } = await setup();
@@ -176,28 +176,28 @@ describe('Bridge', () => {
     const amount = toWei(5);
     const signer = await getSigner(Alice);
     const Bridge = await getContractAt('Bridge', BridgeSrc.address, signer);
-    const daiToken = await getContractAt('ERC20PermitMock', daiTokenSrc.address, signer);
+    const DaiToken = await getContractAt('PermittableERC20', DaiTokenSrc.address, signer);
 
-    await daiToken.deposit({ value: amount }); // will mint dai tokens
+    await DaiToken.deposit({ value: amount }); // will mint dai tokens
 
     // it should fail without pre-approval
-    await expect(Bridge.depositTokenFor(daiToken.address, amount, Alice)) //
+    await expect(Bridge.depositTokenFor(DaiToken.address, amount, Alice)) //
       .to.be.revertedWith('ERC20: transfer amount exceeds allowance');
 
-    await daiToken.approve(Bridge.address, hexlify(MaxUint256));
-    const depositTokenFor = Bridge.depositTokenFor(daiToken.address, amount, Alice);
+    await DaiToken.approve(Bridge.address, hexlify(MaxUint256));
+    const depositTokenFor = Bridge.depositTokenFor(DaiToken.address, amount, Alice);
 
     await expect(depositTokenFor) //
       .to.emit(Bridge, 'DepositTokenFor')
-      .withArgs(Alice, amount, Alice, daiToken.address);
+      .withArgs(Alice, amount, Alice, DaiToken.address);
 
-    expect(await daiToken.balanceOf(Alice)).to.equal(0);
-    expect(await daiToken.balanceOf(Bridge.address)).to.equal(amount);
+    expect(await DaiToken.balanceOf(Alice)).to.equal(0);
+    expect(await DaiToken.balanceOf(Bridge.address)).to.equal(amount);
   });
 
   it('withdrawTokens()', async function () {
     const {
-      daiToken: daiTokenSrc,
+      DaiToken: DaiTokenSrc,
       Bridge: BridgeSrc,
       accounts: [deployer, Alice, Bob],
     } = await setup();
@@ -206,24 +206,24 @@ describe('Bridge', () => {
     const daiAmount = toWei(6);
     const signer = await getSigner(Alice);
     const Bridge = await getContractAt('Bridge', BridgeSrc.address, signer);
-    const daiToken = await getContractAt('ERC20PermitMock', daiTokenSrc.address, signer);
+    const DaiToken = await getContractAt('PermittableERC20', DaiTokenSrc.address, signer);
 
     await Bridge.depositFor(Alice, { value: ethAmount });
-    await daiToken.deposit({ value: daiAmount }); // will mint dai tokens
-    await daiToken.approve(Bridge.address, hexlify(MaxUint256));
-    await Bridge.depositTokenFor(daiToken.address, daiAmount, Alice);
+    await DaiToken.deposit({ value: daiAmount }); // will mint dai tokens
+    await DaiToken.approve(Bridge.address, hexlify(MaxUint256));
+    await Bridge.depositTokenFor(DaiToken.address, daiAmount, Alice);
 
-    const balances = await Bridge.balanceOfBatch([ZERO_ADDRESS, daiToken.address]);
+    const balances = await Bridge.balanceOfBatch([ZERO_ADDRESS, DaiToken.address]);
     expect(balances[0]).to.equal(ethAmount);
     expect(balances[1]).to.equal(daiAmount);
 
     const BobEthBalanceBefore = await provider.getBalance(Bob);
 
     // try to withdraw from the wrong account
-    await expect(Bridge.withdrawTokens([ZERO_ADDRESS, daiToken.address], balances, Bob)) //
+    await expect(Bridge.withdrawTokens([ZERO_ADDRESS, DaiToken.address], balances, Bob)) //
       .to.be.revertedWith('Ownable: caller is not the owner');
 
-    const tokensToWithdraw = [ZERO_ADDRESS, daiToken.address];
+    const tokensToWithdraw = [ZERO_ADDRESS, DaiToken.address];
     const withdrawTokens = BridgeSrc.withdrawTokens(tokensToWithdraw, balances, Bob);
 
     await expect(withdrawTokens) //
@@ -233,7 +233,7 @@ describe('Bridge', () => {
       .withArgs(deployer, tokensToWithdraw[1], balances[1], Bob);
 
     expect(await provider.getBalance(Bob)).to.equal(BobEthBalanceBefore.add(balances[0]));
-    expect(await daiToken.balanceOf(Bob)).to.equal(balances[1]);
+    expect(await DaiToken.balanceOf(Bob)).to.equal(balances[1]);
 
     expect(await Bridge.balanceOfBatch(tokensToWithdraw)) //
       .to.deep.equal([BigNumber.from(0), BigNumber.from(0)]);

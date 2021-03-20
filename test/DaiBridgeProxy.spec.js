@@ -11,7 +11,7 @@ const { expect } = require('chai');
 const { createDaiTokenTypedDataFactory, deployContract, toWei } = require('./utils');
 
 const setup = deployments.createFixture(async () => {
-  const daiToken = await deployContract('ERC20PermitMock', ['DAI', 'DAI']);
+  const daiToken = await deployContract('PermittableERC20', ['Permittable DAI', 'PDAI']);
   const daiBridge = await deployContract('DaiBridgeMock', [daiToken.address]);
   const daiBridgeProxy = await deployContract('DaiBridgeProxy', [daiToken.address, daiBridge.address]);
   const { account } = await getNamedAccounts();
