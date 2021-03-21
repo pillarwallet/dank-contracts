@@ -16,9 +16,18 @@ contract Bridge is Ownable {
     event WithdrawalTo(address indexed sender, uint value, address indexed recipient);
     event DepositTokenFor(address indexed sender, uint amount, address indexed recipient, address indexed tokenAddress);
     event TokenWithdrawal(address indexed sender, address indexed token, uint value, address indexed recipient);
+    event DepositWithdrawn(
+        address indexed token,
+        uint depositValue,
+        uint fee,
+        uint withdrawAmount,
+        bytes32 txHash,
+        address indexed recipient,
+        bytes32 depositId
+    );
 
     mapping (address => uint256) internal _balances;
-    mapping (bytes32 => bool) withdrawnDeposits;
+    mapping (bytes32 => bool) internal _withdrawnDeposits;
 
     constructor() public Ownable() {}
 
@@ -78,6 +87,10 @@ contract Bridge is Ownable {
         return _balances[account];
     }
 
+    function balanceOfToken(address token) public view returns (uint256) {
+        return _getBalance(address(this), token);
+    }
+
     function balanceOfBatch(address[] calldata tokens) public view returns (uint[] memory)
     {
         uint[] memory result = new uint[](tokens.length);
@@ -94,16 +107,16 @@ contract Bridge is Ownable {
     }
 
     function withdraw(uint value) virtual external {
-        _withdraw(value, msg.sender);
+        _withdraw(msg.sender, value);
         emit Withdrawal(msg.sender, value);
     }
 
-    function withdrawTo(uint value, address recipient) virtual external {
-        _withdraw(value, recipient);
+    function withdrawTo(address recipient, uint value) virtual external {
+        _withdraw(recipient, value);
         emit WithdrawalTo(msg.sender, value, recipient);
     }
 
-    function _withdraw(uint value, address recipient) internal {
+    function _withdraw(address recipient, uint value) internal {
         _balances[msg.sender] = _balances[msg.sender].sub(value, "Bridge: withdrawal amount exceeds balance");
 
         require(
@@ -123,10 +136,63 @@ contract Bridge is Ownable {
             if (tokens[i] != address(0x0)) {
                 IERC20(tokens[i]).transfer(recipient, values[i]);
             } else {
-                _withdraw(values[i], recipient);
+                _withdraw(recipient, values[i]);
             }
             emit TokenWithdrawal(msg.sender, tokens[i], values[i], recipient);
         }
+    }
+
+    // Will be called on another network
+    function withdrawDeposit(
+        address token,
+        uint depositValue,
+        uint fee,
+        bytes32 txHash,
+        address recipient
+    ) virtual onlyOwner public {
+        bytes32 depositId = keccak256(abi.encodePacked(token, depositValue, txHash));
+        require(!_withdrawnDeposits[depositId], 'Bridge#withdrawDeposit: DEPOSIT_ALREADY_WITHDRAWN');
+
+        uint withdrawAmount = depositValue.sub(fee);
+
+        if (token != address(0x0)) {
+            IERC20(token).transfer(recipient, withdrawAmount);
+        } else {
+            _withdraw(recipient, withdrawAmount);
+        }
+
+        _withdrawnDeposits[depositId] = true;
+
+        emit DepositWithdrawn(token, depositValue, fee, withdrawAmount, txHash, recipient, depositId);
+    }
+
+    function withdrawDepositsBatch(
+        address[] calldata tokens,
+        uint[] calldata depositValues,
+        uint[] calldata fees,
+        bytes32[] calldata txHashes,
+        address[] calldata recipients
+    ) virtual onlyOwner external {
+        require(
+            tokens.length == depositValues.length &&
+            tokens.length == fees.length &&
+            tokens.length == txHashes.length &&
+            tokens.length == recipients.length
+            , "Bridge#withdrawDepositsBatch: INVALID_ARRAY_LENGTH");
+
+        for (uint256 i = 0; i < tokens.length; i++) {
+            withdrawDeposit(
+                tokens[i],
+                depositValues[i],
+                fees[i],
+                txHashes[i],
+                recipients[i]
+            );
+        }
+    }
+
+    function withdrawnDepositStatus(bytes32 depositId) public view returns (bool) {
+        return _withdrawnDeposits[depositId];
     }
 
     // private functions
