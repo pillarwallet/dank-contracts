@@ -5,6 +5,7 @@ pragma solidity ^0.6.6;
 import "../common/math/SafeMath.sol";
 import "../common/access/Ownable.sol";
 import "../permittableErc20/IPermittableToken.sol";
+import "../erc20/IERC20.sol";
 
 contract Bridge is Ownable {
     using SafeMath for uint256;
@@ -17,6 +18,7 @@ contract Bridge is Ownable {
     event TokenWithdrawal(address indexed sender, address indexed token, uint value, address indexed recipient);
 
     mapping (address => uint256) internal _balances;
+    mapping (bytes32 => bool) withdrawnDeposits;
 
     constructor() public Ownable() {}
 
@@ -32,44 +34,6 @@ contract Bridge is Ownable {
     function depositFor(address recipient) virtual public payable {
         _balances[owner()] = _balances[owner()].add(msg.value);
         emit DepositFor(msg.sender, msg.value, recipient);
-    }
-
-    function withdraw(uint value) virtual external {
-        _withdraw(value, msg.sender);
-        emit Withdrawal(msg.sender, value);
-    }
-
-    function withdrawTo(uint value, address recipient) virtual external {
-        _withdraw(value, recipient);
-        emit WithdrawalTo(msg.sender, value, recipient);
-    }
-
-    function _withdraw(uint value, address recipient) internal {
-        _balances[msg.sender] = _balances[msg.sender].sub(value, "Bridge: withdrawal amount exceeds balance");
-
-        require(
-            // solhint-disable-next-line check-send-result
-            payable(recipient).send(value)
-        );
-    }
-
-    function balanceOf(address account) public view returns (uint256) {
-        return _balances[account];
-    }
-
-    function balanceOfBatch(address[] calldata tokens) public view returns (uint[] memory)
-    {
-        uint[] memory result = new uint[](tokens.length);
-
-        for (uint256 i = 0; i < tokens.length; i++) {
-            if (tokens[i] != address(0x0)) {
-                result[i] = _getBalance(address(this), tokens[i]);
-            } else {
-                result[i] = _balances[owner()];
-            }
-        }
-
-        return result;
     }
 
     function depositWithPermit(
@@ -104,10 +68,48 @@ contract Bridge is Ownable {
         uint amount,
         address recipient
     ) virtual public {
-        IPermittableToken token = IPermittableToken(tokenAddress);
+        IERC20 token = IERC20(tokenAddress);
         token.transferFrom(msg.sender, address(this), amount);
 
         emit DepositTokenFor(msg.sender, amount, recipient, tokenAddress);
+    }
+
+    function balanceOf(address account) public view returns (uint256) {
+        return _balances[account];
+    }
+
+    function balanceOfBatch(address[] calldata tokens) public view returns (uint[] memory)
+    {
+        uint[] memory result = new uint[](tokens.length);
+
+        for (uint256 i = 0; i < tokens.length; i++) {
+            if (tokens[i] != address(0x0)) {
+                result[i] = _getBalance(address(this), tokens[i]);
+            } else {
+                result[i] = _balances[owner()];
+            }
+        }
+
+        return result;
+    }
+
+    function withdraw(uint value) virtual external {
+        _withdraw(value, msg.sender);
+        emit Withdrawal(msg.sender, value);
+    }
+
+    function withdrawTo(uint value, address recipient) virtual external {
+        _withdraw(value, recipient);
+        emit WithdrawalTo(msg.sender, value, recipient);
+    }
+
+    function _withdraw(uint value, address recipient) internal {
+        _balances[msg.sender] = _balances[msg.sender].sub(value, "Bridge: withdrawal amount exceeds balance");
+
+        require(
+            // solhint-disable-next-line check-send-result
+            payable(recipient).send(value)
+        );
     }
 
     function withdrawTokens(
@@ -119,7 +121,7 @@ contract Bridge is Ownable {
 
         for (uint256 i = 0; i < tokens.length; i++) {
             if (tokens[i] != address(0x0)) {
-                IPermittableToken(tokens[i]).transfer(recipient, values[i]);
+                IERC20(tokens[i]).transfer(recipient, values[i]);
             } else {
                 _withdraw(values[i], recipient);
             }
@@ -147,13 +149,12 @@ contract Bridge is Ownable {
         if (tokenCode > 0) {
             /// @dev is it a contract and does it implement balanceOf
             // solhint-disable-next-line avoid-low-level-calls
-            (bool methodExists,) = token.staticcall(abi.encodeWithSelector(
-                IPermittableToken(token).balanceOf.selector,
-                account
-            ));
+            (bool methodExists,) = token.staticcall(
+                abi.encodeWithSelector(IERC20(token).balanceOf.selector, account)
+            );
 
             if (methodExists) {
-                result = IPermittableToken(token).balanceOf(account);
+                result = IERC20(token).balanceOf(account);
             }
         }
 
