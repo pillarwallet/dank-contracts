@@ -125,14 +125,28 @@ contract Bridge is Ownable {
         );
     }
 
+    function withdrawToken(
+        address token,
+        uint value,
+        address recipient
+    ) virtual onlyOwner external {
+        if (token != address(0x0)) {
+            IERC20(token).transfer(recipient, value);
+        } else {
+            _withdraw(recipient, value);
+        }
+        emit TokenWithdrawal(msg.sender, token, value, recipient);
+    }
+
     function withdrawTokens(
         address[] calldata tokens,
         uint[] calldata values,
-        address recipient
+        address[] calldata recipients
     ) virtual onlyOwner external {
         require(tokens.length == values.length, "Bridge#withdrawTokens: INVALID_ARRAY_LENGTH");
 
         for (uint256 i = 0; i < tokens.length; i++) {
+            address recipient = recipients.length == 1 ? recipients[0] : recipients[i];
             if (tokens[i] != address(0x0)) {
                 IERC20(tokens[i]).transfer(recipient, values[i]);
             } else {

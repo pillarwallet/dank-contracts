@@ -196,6 +196,37 @@ describe('Bridge', () => {
     expect(await DaiToken.balanceOf(Bridge.address)).to.equal(amount);
   });
 
+  it('withdrawToken()', async function () {
+    const {
+      DaiToken: DaiTokenSrc,
+      Bridge: BridgeSrc,
+      accounts: [bridgeOwner, Alice, Bob],
+    } = await setup();
+
+    const ethAmount = toWei(5);
+    const daiAmount = toWei(6);
+    const signer = await getSigner(Alice);
+    const Bridge = await getContractAt('Bridge', BridgeSrc.address, signer);
+    const DaiToken = await getContractAt('PermittableERC20', DaiTokenSrc.address, signer);
+
+    await Bridge.depositFor(Alice, { value: ethAmount });
+    await DaiToken.deposit({ value: daiAmount }); // will mint dai tokens
+    await DaiToken.approve(Bridge.address, hexlify(MaxUint256));
+    await Bridge.depositTokenFor(DaiToken.address, daiAmount, Alice);
+
+    const balance = await Bridge.balanceOfToken(DaiToken.address);
+    expect(balance).to.equal(daiAmount);
+
+    const withdrawToken = BridgeSrc.withdrawToken(DaiToken.address, balance, Bob);
+
+    await expect(withdrawToken) //
+      .to.emit(BridgeSrc, 'TokenWithdrawal')
+      .withArgs(bridgeOwner, DaiToken.address, balance, Bob);
+
+    expect(await DaiToken.balanceOf(Bob)).to.equal(balance);
+    expect(await Bridge.balanceOfToken(DaiToken.address)).to.equal(0);
+  });
+
   it('withdrawTokens()', async function () {
     const {
       DaiToken: DaiTokenSrc,
@@ -221,11 +252,11 @@ describe('Bridge', () => {
     const BobEthBalanceBefore = await provider.getBalance(Bob);
 
     // try to withdraw from the wrong account
-    await expect(Bridge.withdrawTokens([ZERO_ADDRESS, DaiToken.address], balances, Bob)) //
+    await expect(Bridge.withdrawTokens([ZERO_ADDRESS, DaiToken.address], balances, [Bob])) //
       .to.be.revertedWith('Ownable: caller is not the owner');
 
     const tokensToWithdraw = [ZERO_ADDRESS, DaiToken.address];
-    const withdrawTokens = BridgeSrc.withdrawTokens(tokensToWithdraw, balances, Bob);
+    const withdrawTokens = BridgeSrc.withdrawTokens(tokensToWithdraw, balances, [Bob]);
 
     await expect(withdrawTokens) //
       .to.emit(BridgeSrc, 'TokenWithdrawal')
@@ -238,6 +269,40 @@ describe('Bridge', () => {
 
     expect(await Bridge.balanceOfBatch(tokensToWithdraw)) //
       .to.deep.equal([BigNumber.from(0), BigNumber.from(0)]);
+  });
+
+  it('withdrawTokens to different accounts', async function () {
+    const {
+      DaiToken: DaiTokenSrc,
+      Bridge: BridgeSrc,
+      accounts: [bridgeOwner, Alice, Bob, John],
+    } = await setup();
+
+    const ethAmount = toWei(5);
+    const daiAmount = toWei(6);
+    const signer = await getSigner(Alice);
+    const Bridge = await getContractAt('Bridge', BridgeSrc.address, signer);
+    const DaiToken = await getContractAt('PermittableERC20', DaiTokenSrc.address, signer);
+
+    await Bridge.depositFor(Alice, { value: ethAmount });
+    await DaiToken.deposit({ value: daiAmount }); // will mint dai tokens
+    await DaiToken.approve(Bridge.address, hexlify(MaxUint256));
+    await Bridge.depositTokenFor(DaiToken.address, daiAmount, Alice);
+
+    const tokens = [ZERO_ADDRESS, DaiToken.address];
+    const balances = await Bridge.balanceOfBatch(tokens);
+    const BobEthBalanceBefore = await provider.getBalance(Bob);
+
+    const withdrawTokens = BridgeSrc.withdrawTokens(tokens, balances, [Bob, John]);
+
+    await expect(withdrawTokens) //
+      .to.emit(BridgeSrc, 'TokenWithdrawal')
+      .withArgs(bridgeOwner, tokens[0], balances[0], Bob)
+      .to.emit(BridgeSrc, 'TokenWithdrawal')
+      .withArgs(bridgeOwner, tokens[1], balances[1], John);
+
+    expect(await provider.getBalance(Bob)).to.equal(BobEthBalanceBefore.add(balances[0]));
+    expect(await DaiToken.balanceOf(John)).to.equal(balances[1]);
   });
 
   it('withdrawDeposit()', async function () {
