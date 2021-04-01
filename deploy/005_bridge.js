@@ -29,7 +29,9 @@ const func = async function (hre) {
       owner = '0x5cCA0E658c05482a4569c12487E3D6e51Fe28b28';
   }
 
-  await execute('Bridge', { from: deployer }, 'transferOwnership', owner);
+  if (networkName !== 'hardhat') {
+    await execute('Bridge', { from: deployer }, 'transferOwnership', owner);
+  }
 };
 module.exports = func;
 module.exports.tags = ['Bridge'];
