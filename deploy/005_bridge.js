@@ -3,7 +3,7 @@
  */
 const func = async function (hre) {
   const {
-    deployments: { deploy, execute },
+    deployments: { deploy, execute, read },
     getNamedAccounts,
     network: { name: networkName },
   } = hre;
@@ -30,9 +30,11 @@ const func = async function (hre) {
   }
 
   if (networkName !== 'hardhat') {
-    await execute('Bridge', { from: deployer }, 'transferOwnership', owner);
+    const currentOwner = await read('Bridge', 'owner');
+    if (currentOwner.toLowerCase() !== owner.toLowerCase()) {
+      await execute('Bridge', { from: deployer }, 'transferOwnership', owner);
+    }
   }
 };
 module.exports = func;
 module.exports.tags = ['Bridge'];
-module.exports.skip = async ({ network: { name: networkName } }) => networkName === 'mainnet';
