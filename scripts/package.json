@@ -1,0 +1,13 @@
+{
+  "name": "contracts-scripts",
+  "version": "0.0.4",
+  "main": "",
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@nomiclabs/hardhat-etherscan": "^2.1.1",
+    "etherspot": "1.0.0-rc.6",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^6.6.3"
+  }
+}

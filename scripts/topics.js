@@ -7,7 +7,16 @@ const convertToKeccak = (s) => {
 
 async function main() {
   console.info('calculated topics');
-	
+
+  // random
+  console.info('AccountOwnerAdded: ', convertToKeccak('AccountOwnerAdded(address,address)'));
+  console.info('AccountOwnerRemoved: ', convertToKeccak('AccountOwnerRemoved(address,address)'));
+  console.info('AccountCallRefunded: ', convertToKeccak('AccountCallRefunded(address,address,address,uint256)'));
+  console.info(
+    'swapExactTokensForETHSupportingFeeOnTransferTokens: ',
+    convertToKeccak('swapExactTokensForETHSupportingFeeOnTransferTokens(uint256,uint256,address[],address,uint256)'),
+  );
+
   // router
   console.info('Uniswap Router--------');
   const swapStonksToExactTokens = convertToKeccak('SwapStonksToExactTokens(address,bytes32,uint256,uint256)');
@@ -41,7 +50,11 @@ async function main() {
   console.info('Uniswap Factory--------');
   const createPair = convertToKeccak('PairCreated(address,bytes32,address,address,uint256)');
   console.info('CreatePair', createPair);
-
 }
 
-main();
+main()
+  .then(() => process.exit(0))
+  .catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
