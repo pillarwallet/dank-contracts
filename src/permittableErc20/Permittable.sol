@@ -4,7 +4,7 @@ pragma solidity ^0.6.12;
 
 import "../wrappedErc20/WrappedERC20.sol";
 
-contract ERC20PermitMock is WrappedERC20 {
+contract PermittableERC20 is WrappedERC20 {
     mapping (address => uint) public nonces;
 
     // --- EIP712 niceties ---
