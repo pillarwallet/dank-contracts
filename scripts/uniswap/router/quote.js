@@ -1,6 +1,6 @@
 const { ethers } = require('ethers');
 const config = require('../../../config');
-const { ContractNames, getContractAddress, getContractAbi } = require('../../build/');
+const { ContractNames, getContractAddress, getContractAbi } = require('../../../build/');
 const { ethProvider } = require('../../shared');
 
 const { networkId } = config;
@@ -8,16 +8,8 @@ const routerAbi = getContractAbi(ContractNames.UniswapV2Router);
 const pairAbi = getContractAbi(ContractNames.UniswapV2Pair);
 const uniswapRouter = getContractAddress(ContractNames.UniswapV2Router, networkId);
 
-const routerContract = new ethers.Contract(
-  uniswapRouter,
-  routerAbi,
-  ethProvider
-);
-const pairContract = new ethers.Contract(
-  process.env.pair || config.pair,
-  pairAbi,
-  ethProvider
-);
+const routerContract = new ethers.Contract(uniswapRouter, routerAbi, ethProvider);
+const pairContract = new ethers.Contract(process.env.pair || config.pair, pairAbi, ethProvider);
 
 async function main() {
   console.info('Pair quote');

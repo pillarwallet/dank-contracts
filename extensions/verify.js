@@ -20,6 +20,7 @@ task(TASK_VERIFY_ALL, 'Verify all contracts').setAction(async (args, hre) => {
     case 'rinkeby':
     case 'goerli':
     case 'kovan': {
+      // eslint-disable-next-line no-unused-vars
       for (const [name, { address, args }] of entries) {
         const verifyArgs = {
           address,
