@@ -9,7 +9,7 @@ const getNetworkEnvName = (networkName) => networkName.replace(/([A-Z])+/, '_$1'
 
 const getAccounts = (networkName) => {
   const networkEnvName = getNetworkEnvName(networkName);
-  const mnemonic = process.env[`MNEMONIC_${networkEnvName}`] || defaultMnemonic;
+  const mnemonic = process.env[`MNEMONIC_${networkEnvName}`];
   const privateKey = process.env[`PK_${networkEnvName}`];
 
   if (privateKey) {

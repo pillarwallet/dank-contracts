@@ -1,6 +1,6 @@
 {
   "name": "@dank-memes/contracts",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Smart contracts for Dank Memes",
   "main": "",
   "scripts": {
@@ -48,11 +48,11 @@
     "hardhat:deploy:bsc": "hardhat deploy --export build/contracts-bsc.json --network bsc",
     "hardhat:deploy:xdai": "hardhat deploy --export build/contracts-xdai.json --network xdai",
     "hardhat:deploy:mainnet": "hardhat deploy --export build/contracts-mainnet.json --network mainnet",
-    "hardhat:list:deployments": "hardhat list-deployments --network xdai",
+    "hardhat:list:deployments": "cross-env INFURA_TOKEN= hardhat list-deployments --network goerli",
     "hardhat:artifacts": "hardhat run scripts/artifacts.js --network localhost",
     "hardhat:verify:bsc": "hardhat verify-all --network bsc"
   },
-  "author": "",
+  "author": "Pillar team",
   "license": "ISC",
   "devDependencies": {
     "@nomiclabs/hardhat-etherscan": "2.1.1",
