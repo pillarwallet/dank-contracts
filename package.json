@@ -14,6 +14,7 @@
     "erc20:balance": "node ./scripts/erc20/balance.js",
     "erc721:mint": "cross-env id=1 node ./scripts/erc721/mint.js",
     "erc721:deposit": "cross-env id=1 node ./scripts/erc721/deposit.js",
+    "erc721:lastMemeId": "cross-env owner=0x node ./scripts/erc721/lastMemeId.js",
     "erc1155:approve": "node ./scripts/erc1155/approve.js",
     "erc1155:stats": "cross-env id=1 node ./scripts/erc1155/stats.js",
     "erc1155:safeSend": "cross-env to=0x tokenHash=0x node ./scripts/erc1155/safeSend.js",
